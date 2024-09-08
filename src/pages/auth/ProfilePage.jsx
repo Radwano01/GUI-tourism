@@ -145,7 +145,7 @@ function ProfilePage() {
         </div>
         <div className="mb-4">
           <img
-            src={`${process.env.REACT_APP_IMAGES_URL}/${user.image}`}
+            src={user.image != null ? `${process.env.REACT_APP_IMAGES_URL}/${user.image}` : `${process.env.REACT_APP_DEFAULT_USER_IMAGE}`}
             alt={user.username}
             className="w-24 h-24 bg-gray-300 rounded-full mx-auto"
           />

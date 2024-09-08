@@ -9,7 +9,6 @@ const RegisterUser = () => {
     email: '',
     username: '',
     password: '',
-    image: null,
     fullName: '',
     country: '',
     phoneNumber: '',
@@ -32,13 +31,7 @@ const RegisterUser = () => {
     });
   };
 
-  const handleFileChange = (e) => {
-    setFormData({
-      ...formData,
-      image: e.target.files[0]
-    });
-  };
-
+  
   const handlePhoneChange = (value) => {
     setFormData({ ...formData, phoneNumber: value });
     setIsVerificationSent(false);
@@ -119,6 +112,7 @@ const RegisterUser = () => {
       }
     } catch (error) {
       console.error('Error registering user:', error);
+      console.log(userFormData);
       alert("Failed to register user. Please try again later.");
     }
   };
@@ -162,16 +156,6 @@ const RegisterUser = () => {
               className="w-full px-3 py-2 border border-gray-300 rounded-md"
               placeholder="Password"
               required
-            />
-          </div>
-          <div>
-            <label htmlFor="image" className="block text-gray-700">Image:</label>
-            <input
-              type="file"
-              name="image"
-              onChange={handleFileChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md"
-              accept="image/*"
             />
           </div>
           <div>
