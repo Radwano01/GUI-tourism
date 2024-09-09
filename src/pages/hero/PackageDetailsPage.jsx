@@ -116,7 +116,7 @@ const PackageDetailsPage = () => {
             <div className="flex gap-4">
               <div className="w-2/3">
                 <img
-                  src={`${process.env.REACT_APP_IMAGES_URL}/${packageDetails.packageDetails?.imageOne}`}
+                  src={`${process.env.REACT_APP_IMAGES_URL}/${packageDetails?.imageOne}`}
                   alt="Package Image One"
                   className="w-full rounded-md shadow-lg"
                   style={{ height: 400 }}
@@ -124,13 +124,13 @@ const PackageDetailsPage = () => {
               </div>
               <div className="flex flex-col w-1/3 gap-4">
                 <img
-                  src={`${process.env.REACT_APP_IMAGES_URL}/${packageDetails.packageDetails?.imageTwo}`}
+                  src={`${process.env.REACT_APP_IMAGES_URL}/${packageDetails?.imageTwo}`}
                   alt="Package Image Two"
                   className="w-full rounded-md shadow-lg"
                   style={{ height: 192 }}
                 />
                 <img
-                  src={`${process.env.REACT_APP_IMAGES_URL}/${packageDetails.packageDetails?.imageThree}`}
+                  src={`${process.env.REACT_APP_IMAGES_URL}/${packageDetails?.imageThree}`}
                   alt="Package Image Three"
                   className="w-full rounded-md shadow-lg"
                   style={{ height: 192 }}
@@ -141,7 +141,7 @@ const PackageDetailsPage = () => {
             <h2 className="text-3xl font-bold mt-5">
               {packageDetails.packageName}
             </h2>
-            <p className="mt-3">{packageDetails.packageDetails?.description}</p>
+            <p className="mt-3">{packageDetails?.description}</p>
 
             <PackageEvaluation packageId={id} userId={userId} />
 
