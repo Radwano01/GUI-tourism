@@ -25,18 +25,22 @@ function EditDetailsPage() {
   const [originalPhoneNumber, setOriginalPhoneNumber] = useState("");
 
   useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_BASE_API}/users/${userId}/details`)
-      .then((response) => {
+    const fetchUserDetails = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_BASE_API}/users/${userId}/details`
+        );
         setUser(response.data);
         setOriginalPhoneNumber(response.data.phoneNumber); // Store original phone number
         setLoading(false);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error("Error fetching user details:", error);
         setError(error);
         setLoading(false);
-      });
+      }
+    };
+
+    fetchUserDetails();
   }, [userId]);
 
   const handleChange = (e) => {
@@ -53,92 +57,110 @@ function EditDetailsPage() {
     setIsVerified(false);
   };
 
-  const handleSendVerification = () => {
-    axios
-      .post(`${process.env.REACT_APP_BASE_API}/verify/phone_number`, {
-        phoneNumber: "+" + user.phoneNumber,
-      })
-      .then(() => {
-        setIsVerificationSent(true);
-        alert("Verification code sent to your phone.");
-      })
-      .catch((error) => {
-        console.error("Error sending verification code:", error);
-        alert("Failed to send verification code. Please try again later.");
-      });
+  const handleSendVerification = async () => {
+    try {
+      await axios.post(
+        `${process.env.REACT_APP_BASE_API}/verify/phoneNumber/+${user.phoneNumber}`
+      );
+      setIsVerificationSent(true);
+      alert("Verification code sent to your phone.");
+    } catch (error) {
+      console.error("Error sending verification code:", error);
+      alert("Failed to send verification code. Please try again later.");
+    }
   };
 
-  const handleVerifyCode = () => {
+  const handleVerifyCode = async () => {
     const verifyPhoneNumberDto = {
       phoneNumber: "+" + user.phoneNumber,
       code: verificationCode,
     };
 
-    axios
-      .post(`${process.env.REACT_APP_BASE_API}/verifyCode`, verifyPhoneNumberDto)
-      .then((response) => {
-        if (response.data) {
-          setIsVerified(true);
-          alert("Phone number verified successfully!");
-        } else {
-          alert("Verification failed. Please check the code and try again.");
-        }
-      })
-      .catch((error) => {
-        console.error("Error verifying code:", error);
-        alert("Failed to verify code. Please try again.");
-      });
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_BASE_API}/verifyCode`,
+        verifyPhoneNumberDto
+      );
+      if (response.data) {
+        setIsVerified(true);
+        alert("Phone number verified successfully!");
+      } else {
+        alert("Verification failed. Please check the code and try again.");
+      }
+    } catch (error) {
+      console.error("Error verifying code:", error);
+      alert("Failed to verify code. Please try again.");
+    }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!isVerified && user.phoneNumber !== originalPhoneNumber) {
-      alert("Please verify the new phone number before updating details.");
-      return;
+    const formData = new FormData();
+
+    const formatDate = (date) => {
+      const d = new Date(date);
+      const year = d.getFullYear();
+      const month = (`0${d.getMonth() + 1}`).slice(-2); // Months are zero-based
+      const day = (`0${d.getDate()}`).slice(-2);
+      return `${year}-${month}-${day}`;
+    };
+    
+    const formattedDateOfBirth = formatDate(user.dateOfBirth);
+    
+
+    formData.append("fullName", user.fullName);
+    formData.append("country", user.country);
+    formData.append("address", user.address);
+    formData.append("dateOfBirth", formattedDateOfBirth);
+    formData.append("phoneNumber", user.phoneNumber);
+
+    // Append the image file only if it's selected
+    if (imageFile) {
+      formData.append("file", imageFile);
     }
 
-    if (imageFile) {
-      const formData = new FormData();
-      formData.append("file", imageFile);
+    const accessToken = localStorage.getItem("accessToken");
+    try {
+      const imageResponse = imageFile
+        ? await axios.post(
+            `${process.env.REACT_APP_BASE_API}/image`,
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data"
+              },
+            }
+          )
+        : { data: "" }; // Mock response if no image is uploaded
 
-      axios
-        .post(`${process.env.REACT_APP_BASE_API}/image`, formData, {
+      const imageName = imageResponse.data; // Assuming backend returns the filename
+
+      const updateData = new FormData();
+      updateData.append("fullName", user.fullName);
+      updateData.append("country", user.country);
+      updateData.append("address", user.address);
+      updateData.append("dateOfBirth", formattedDateOfBirth);
+      updateData.append("phoneNumber", user.phoneNumber);
+      if (imageName) {
+        updateData.append("image", imageName);
+      }
+
+      await axios.put(
+        `${process.env.REACT_APP_BASE_API}/users/${userId}/details`,
+        updateData,
+        {
           headers: {
-            "Content-Type": "multipart/form-data",
+            "Content-Type": "multipart/form-data"
           },
-        })
-        .then((response) => {
-          const imageName = response.data; // Assuming backend returns the filename
-          const updatedUser = { ...user, image: imageName };
+        }
+      );
 
-          return axios.put(
-            `${process.env.REACT_APP_BASE_API}/users/${userId}/details`,
-            updatedUser
-          );
-        })
-        .then(() => {
-          alert("User details updated successfully!");
-          navigate(`/profile`);
-        })
-        .catch((error) => {
-          console.error("Error updating user details:", error);
-          alert("Failed to update user details. Please try again later.");
-        });
-    } else {
-      axios
-        .put(
-          `${process.env.REACT_APP_BASE_API}/users/${userId}/details`,
-          user
-        )
-        .then(() => {
-          alert("User details updated successfully!");
-          navigate(`/profile`);
-        })
-        .catch((error) => {
-          console.error("Error updating user details:", error);
-          alert("Failed to update user details. Please try again later.");
-        });
+      alert("User details updated successfully!");
+      navigate(`/profile`);
+    } catch (error) {
+      console.error("Error updating user details:", error);
+      alert("Failed to update user details. Please try again later.");
     }
   };
 

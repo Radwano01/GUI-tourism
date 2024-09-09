@@ -19,6 +19,7 @@ import FlightPaymentPage from "./components/FlightPaymentPage";
 import VerificationSuccess from "./pages/auth/VerificationSuccess";
 import EditUserDetailsPage from "./pages/auth/EditUserDetailsPage";
 import PaymentSuccessPage from "./components/PaymentSuccessPage";
+import AddPhoneNumberPage from "./pages/auth/AddPhoneNumberPage";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/verification/:email/:token" element={<VerificationSuccess/>} />
           <Route path="/edit-user-details/:userId" element={<EditUserDetailsPage/>} />
+          <Route path="/add-phone-number" element={<AddPhoneNumberPage />} />
 
           <Route path="/" element={<HeroPage />} />
           <Route path="/country/details/:id" element={<CountryDetailsPage />} />

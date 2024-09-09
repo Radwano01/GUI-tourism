@@ -31,7 +31,6 @@ const RegisterUser = () => {
     });
   };
 
-  
   const handlePhoneChange = (value) => {
     setFormData({ ...formData, phoneNumber: value });
     setIsVerificationSent(false);
@@ -39,16 +38,18 @@ const RegisterUser = () => {
   };
 
   const handleVerification = () => {
-    axios
-      .post(`${process.env.REACT_APP_BASE_API}/verify/phoneNumber/${`+${formData.phoneNumber}`}`)
-      .then(() => {
-        setIsVerificationSent(true);
-        alert("Verification code sent to your phone.");
-      })
-      .catch((error) => {
-        console.error("Error sending verification code:", error);
-        alert("Failed to send verification code. Please try again later.");
-      });
+    if (formData.phoneNumber) {
+      axios
+        .post(`${process.env.REACT_APP_BASE_API}/verify/phoneNumber/${`+${formData.phoneNumber}`}`)
+        .then(() => {
+          setIsVerificationSent(true);
+          alert("Verification code sent to your phone.");
+        })
+        .catch((error) => {
+          console.error("Error sending verification code:", error);
+          alert("Failed to send verification code. Please try again later.");
+        });
+    }
   };
 
   const handleVerifyCode = () => {
@@ -76,17 +77,12 @@ const RegisterUser = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!isVerified) {
-      alert("Please verify your phone number using the code sent.");
-      return;
-    }
-
     let imageUrl = formData.image ? '' : DEFAULT_USER_IMAGE;
 
     if (formData.image) {
       const imageData = new FormData();
       imageData.append('file', formData.image);
-      
+
       try {
         const uploadResponse = await axios.post(`${process.env.REACT_APP_BASE_API}/image`, imageData, {
           headers: {
@@ -112,7 +108,6 @@ const RegisterUser = () => {
       }
     } catch (error) {
       console.error('Error registering user:', error);
-      console.log(userFormData);
       alert("Failed to register user. Please try again later.");
     }
   };
@@ -183,7 +178,7 @@ const RegisterUser = () => {
             />
           </div>
           <div>
-            <label htmlFor="phoneNumber" className="block text-gray-700">Phone Number:</label>
+            <label htmlFor="phoneNumber" className="block text-gray-700">Phone Number (optional):</label>
             <PhoneInput
               country={'us'}
               value={formData.phoneNumber}
@@ -192,7 +187,7 @@ const RegisterUser = () => {
               containerClass="w-full"
               inputStyle={{width:"100%"}}
             />
-            {!isVerificationSent && (
+            {formData.phoneNumber && !isVerificationSent && (
               <button type="button" onClick={handleVerification} className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
                 Verify Phone Number
               </button>
@@ -208,7 +203,6 @@ const RegisterUser = () => {
                   onChange={(e) => setVerificationCode(e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   placeholder="Enter verification code"
-                  required
                 />
                 <button type="button" onClick={handleVerifyCode} className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
                   Verify Code

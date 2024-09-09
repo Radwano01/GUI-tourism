@@ -6,6 +6,8 @@ function ProfilePage() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isAddingPhone, setIsAddingPhone] = useState(false);
+  const [newPhoneNumber, setNewPhoneNumber] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -75,13 +77,44 @@ function ProfilePage() {
   const handleEditDetails = () => {
     const storedUser = localStorage.getItem("user");
     const parsedUser = JSON.parse(storedUser);
-    navigate(`/edit-user-details/${parsedUser.userId}`, { state: { user: parsedUser } });
+    navigate(`/edit-user-details/${parsedUser.userId}`, {
+      state: { user: parsedUser },
+    });
   };
 
   const handleResetPassword = () => {
     const storedUser = localStorage.getItem("user");
     const parsedUser = JSON.parse(storedUser);
     navigate(`/reset-password/${parsedUser.userId}`);
+  };
+
+  const handleNavigateAddPhoneNumber = () => {
+    navigate("/add-phone-number");
+  };
+
+  const handleAddPhoneNumber = () => {
+    if (newPhoneNumber) {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        const parsedUser = JSON.parse(storedUser);
+        axios
+          .put(
+            `${process.env.REACT_APP_BASE_API}/users/${parsedUser.userId}/phone`,
+            { phoneNumber: newPhoneNumber }
+          )
+          .then((response) => {
+            setUser({ ...user, phoneNumber: newPhoneNumber });
+            setIsAddingPhone(false);
+            alert("Phone number added successfully!");
+          })
+          .catch((error) => {
+            console.error("Error adding phone number:", error);
+            alert("Failed to add phone number. Please try again later.");
+          });
+      }
+    } else {
+      alert("Please enter a phone number.");
+    }
   };
 
   const formatDate = (date) => {
@@ -145,7 +178,11 @@ function ProfilePage() {
         </div>
         <div className="mb-4">
           <img
-            src={user.image != null ? `${process.env.REACT_APP_IMAGES_URL}/${user.image}` : `${process.env.REACT_APP_DEFAULT_USER_IMAGE}`}
+            src={
+              user.image != null
+                ? `${process.env.REACT_APP_IMAGES_URL}/${user.image}`
+                : `${process.env.REACT_APP_DEFAULT_USER_IMAGE}`
+            }
             alt={user.username}
             className="w-24 h-24 bg-gray-300 rounded-full mx-auto"
           />
@@ -161,7 +198,7 @@ function ProfilePage() {
           </p>
           <p className="text-gray-600">
             <span className="font-semibold">Phone Number:</span>{" "}
-            +{user.phoneNumber}
+            {user.phoneNumber ? `${user.phoneNumber}` : "Not Provided"}
           </p>
           <p className="text-gray-600">
             <span className="font-semibold">Address:</span> {user.address}
@@ -176,29 +213,62 @@ function ProfilePage() {
           </p>
         </div>
       </div>
-      <div className="flex justify-center items-center space-x-4">
+      <div className="flex flex-wrap justify-center gap-4">
         {!user.verificationStatus && (
           <button
-            className="bg-yellow-500 text-white py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200"
+            className="bg-yellow-500 text-white py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-200 w-full max-w-[300px]"
             onClick={handleVerifyEmail}
           >
             Verify Email
           </button>
         )}
+        {!user.phoneNumber && (
+          <>
+            <button
+              className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200 w-full max-w-[300px]"
+              onClick={handleNavigateAddPhoneNumber}
+            >
+              Add Phone Number
+            </button>
+            {isAddingPhone && (
+              <div className="mt-4 w-full max-w-[300px]">
+                <input
+                  type="text"
+                  value={newPhoneNumber}
+                  onChange={(e) => setNewPhoneNumber(e.target.value)}
+                  placeholder="Enter phone number"
+                  className="px-3 py-2 border border-gray-300 rounded-md w-full"
+                />
+                <button
+                  className="ml-2 bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200"
+                  onClick={handleAddPhoneNumber}
+                >
+                  Save
+                </button>
+                <button
+                  className="ml-2 bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition duration-200"
+                  onClick={() => setIsAddingPhone(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
+          </>
+        )}
         <button
-          className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-200"
-          onClick={handleResetPassword}
-        >
-          Reset Password
-        </button>
-        <button
-          className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200"
+          className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-200 w-full max-w-[300px]"
           onClick={handleEditDetails}
         >
           Edit Details
         </button>
         <button
-          className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition duration-200"
+          className="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 transition duration-200 w-full max-w-[300px]"
+          onClick={handleResetPassword}
+        >
+          Reset Password
+        </button>
+        <button
+          className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition duration-200 w-full max-w-[300px]"
           onClick={handleDeleteProfile}
         >
           Delete Profile
