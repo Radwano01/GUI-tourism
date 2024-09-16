@@ -51,7 +51,7 @@ const EditPackageDetailsPage = () => {
 
     try {
       await axios.put(`${process.env.REACT_APP_BASE_API}/admin/packages/${packageId}/details`, form);
-      navigate(`/admin/countries/${countrtId}/packages/${packageId}/details`);
+      navigate(`/admin/countries/${countryId}/packages/${packageId}/details`);
     } catch (error) {
       console.error('Error updating package details:', error);
     }
