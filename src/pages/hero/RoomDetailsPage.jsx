@@ -29,7 +29,7 @@ const RoomDetailsPage = () => {
     const fetchRoomDetails = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/hotels/${id}/rooms/details`
+          `${process.env.REACT_APP_BASE_API}/public/hotels/${id}/rooms/details`
         );
         setRoomDetails(response.data);
         setLoading(false);

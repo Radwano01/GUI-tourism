@@ -28,7 +28,7 @@ function EditDetailsPage() {
     const fetchUserDetails = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/users/${userId}/details`
+          `${process.env.REACT_APP_BASE_API}/public/users/${userId}/details`
         );
         setUser(response.data);
         setOriginalPhoneNumber(response.data.phoneNumber); // Store original phone number
@@ -60,7 +60,7 @@ function EditDetailsPage() {
   const handleSendVerification = async () => {
     try {
       await axios.post(
-        `${process.env.REACT_APP_BASE_API}/verify/phoneNumber/+${user.phoneNumber}`
+        `${process.env.REACT_APP_BASE_API}/public/verify/phoneNumber/+${user.phoneNumber}`
       );
       setIsVerificationSent(true);
       alert("Verification code sent to your phone.");
@@ -107,7 +107,6 @@ function EditDetailsPage() {
     };
     
     const formattedDateOfBirth = formatDate(user.dateOfBirth);
-    
 
     formData.append("fullName", user.fullName);
     formData.append("country", user.country);
@@ -115,40 +114,15 @@ function EditDetailsPage() {
     formData.append("dateOfBirth", formattedDateOfBirth);
     formData.append("phoneNumber", user.phoneNumber);
 
-    // Append the image file only if it's selected
+    // Append the image file if it's selected
     if (imageFile) {
-      formData.append("file", imageFile);
+      formData.append("image", imageFile);
     }
 
-    const accessToken = localStorage.getItem("accessToken");
     try {
-      const imageResponse = imageFile
-        ? await axios.post(
-            `${process.env.REACT_APP_BASE_API}/image`,
-            formData,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data"
-              },
-            }
-          )
-        : { data: "" }; // Mock response if no image is uploaded
-
-      const imageName = imageResponse.data; // Assuming backend returns the filename
-
-      const updateData = new FormData();
-      updateData.append("fullName", user.fullName);
-      updateData.append("country", user.country);
-      updateData.append("address", user.address);
-      updateData.append("dateOfBirth", formattedDateOfBirth);
-      updateData.append("phoneNumber", user.phoneNumber);
-      if (imageName) {
-        updateData.append("image", imageName);
-      }
-
       await axios.put(
         `${process.env.REACT_APP_BASE_API}/users/${userId}/details`,
-        updateData,
+        formData,
         {
           headers: {
             "Content-Type": "multipart/form-data"

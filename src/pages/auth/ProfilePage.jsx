@@ -16,7 +16,7 @@ function ProfilePage() {
       const parsedUser = JSON.parse(storedUser);
       axios
         .get(
-          `${process.env.REACT_APP_BASE_API}/users/${parsedUser.userId}/details`
+          `${process.env.REACT_APP_BASE_API}/public/users/${parsedUser.userId}/details`
         )
         .then((response) => {
           setUser(response.data);
@@ -38,7 +38,7 @@ function ProfilePage() {
       const parsedUser = JSON.parse(storedUser);
       axios
         .post(
-          `${process.env.REACT_APP_BASE_API}/users/verification/users/${parsedUser.userId}/${parsedUser.accessToken}`
+          `${process.env.REACT_APP_BASE_API}/public/users/verification/users/${parsedUser.userId}/${parsedUser.accessToken}`
         )
         .then(() => {
           const updatedUser = { ...parsedUser, verificationStatus: true };
@@ -60,7 +60,7 @@ function ProfilePage() {
         const parsedUser = JSON.parse(storedUser);
         axios
           .delete(
-            `${process.env.REACT_APP_BASE_API}/users/${parsedUser.userId}`
+            `${process.env.REACT_APP_BASE_API}/public/users/${parsedUser.userId}`
           )
           .then(() => {
             localStorage.removeItem("user");
@@ -99,7 +99,7 @@ function ProfilePage() {
         const parsedUser = JSON.parse(storedUser);
         axios
           .put(
-            `${process.env.REACT_APP_BASE_API}/users/${parsedUser.userId}/phone`,
+            `${process.env.REACT_APP_BASE_API}/public/users/${parsedUser.userId}/phone`,
             { phoneNumber: newPhoneNumber }
           )
           .then((response) => {

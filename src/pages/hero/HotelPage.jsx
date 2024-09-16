@@ -16,7 +16,7 @@ const HotelPage = () => {
     const fetchHotels = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/hotels/hotel/places/${id}?page=${totalPages}&size=${hotelsPerPage}`
+          `${process.env.REACT_APP_BASE_API}/public/hotels/hotel/places/${id}?page=${totalPages}&size=${hotelsPerPage}`
         );
         const hotelData = response.data;
         setHotels(hotelData);

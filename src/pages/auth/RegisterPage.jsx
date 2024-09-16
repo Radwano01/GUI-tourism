@@ -40,7 +40,7 @@ const RegisterUser = () => {
   const handleVerification = () => {
     if (formData.phoneNumber) {
       axios
-        .post(`${process.env.REACT_APP_BASE_API}/verify/phoneNumber/${`+${formData.phoneNumber}`}`)
+        .post(`${process.env.REACT_APP_BASE_API}/public/verify/phoneNumber/${`+${formData.phoneNumber}`}`)
         .then(() => {
           setIsVerificationSent(true);
           alert("Verification code sent to your phone.");
@@ -59,7 +59,7 @@ const RegisterUser = () => {
     };
 
     axios
-      .post(`${process.env.REACT_APP_BASE_API}/verifyCode`, verifyPhoneNumberDto)
+      .post(`${process.env.REACT_APP_BASE_API}/public/verifyCode`, verifyPhoneNumberDto)
       .then((response) => {
         if (response.data) {
           setIsVerified(true);
@@ -102,7 +102,7 @@ const RegisterUser = () => {
     };
 
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BASE_API}/users/register`, userFormData);
+      const response = await axios.post(`${process.env.REACT_APP_BASE_API}/public/users/register`, userFormData);
       if (response.status === 200) {
         navigate("/login");
       }

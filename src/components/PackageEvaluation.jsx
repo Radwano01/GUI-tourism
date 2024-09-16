@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const BASE_URL = `${process.env.REACT_APP_BASE_API}/packages`;
-
 const PackageEvaluation = ({ packageId, userId }) => {
   const [evaluations, setEvaluations] = useState([]);
   const [editCommentId, setEditCommentId] = useState(null);
@@ -13,7 +11,7 @@ const PackageEvaluation = ({ packageId, userId }) => {
 
   const fetchEvaluations = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/${packageId}/comments`);
+      const response = await axios.get(`${process.env.REACT_APP_BASE_API}/packages/${packageId}/comments`);
       setEvaluations(response.data);
 
       const userComment = response.data.find(
@@ -27,7 +25,7 @@ const PackageEvaluation = ({ packageId, userId }) => {
 
   const addPackageEvaluation = async () => {
     try {
-      await axios.post(`${BASE_URL}/${packageId}/users/${userId}/comment`, {
+      await axios.post(`${process.env.REACT_APP_BASE_API}/packages/${packageId}/users/${userId}/comment`, {
         comment: newComment,
         rate: newRate,
       });
@@ -43,7 +41,7 @@ const PackageEvaluation = ({ packageId, userId }) => {
 
   const editPackageEvaluation = async (commentId, updatedComment) => {
     try {
-      await axios.put(`${BASE_URL}/comments/${commentId}`, {
+      await axios.put(`${process.env.REACT_APP_BASE_API}/packages/${packageId}/comments/${commentId}`, {
         comment: updatedComment,
         rate: newRate,
       });
@@ -60,7 +58,7 @@ const PackageEvaluation = ({ packageId, userId }) => {
 
   const removePackageEvaluation = async (commentId) => {
     try {
-      await axios.delete(`${BASE_URL}/comments/${commentId}`);
+      await axios.delete(`${process.env.REACT_APP_BASE_API}/packages/${packageId}/comments/${commentId}`);
 
       await fetchEvaluations();
     } catch (error) {
@@ -131,7 +129,7 @@ const PackageEvaluation = ({ packageId, userId }) => {
           <li key={evaluation.id} className="mb-4 border rounded p-4">
             <div className="flex items-start">
               <img
-                src={`${process.env.REACT_APP_IMAGES_URL}/${evaluation.userImage}`}
+                src={evaluation.userImage != null ? `${process.env.REACT_APP_IMAGES_URL}/${evaluation.userImage}` : process.env.REACT_APP_DEFAULT_USER_IMAGE}
                 alt="User Avatar"
                 className="h-12 w-12 rounded-full mr-4"
               />

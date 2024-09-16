@@ -19,7 +19,7 @@ const AddPhoneNumberPage = () => {
       setLoading(true);
       axios
         .post(
-          `${process.env.REACT_APP_BASE_API}/verify/phoneNumber/+${phoneNumber}`
+          `${process.env.REACT_APP_BASE_API}/public/verify/phoneNumber/+${phoneNumber}`
         )
         .then(() => {
           setLoading(false);
@@ -50,7 +50,7 @@ const AddPhoneNumberPage = () => {
     setIsVerifying(true); // Start verifying
     axios
       .post(
-        `${process.env.REACT_APP_BASE_API}/users/${parsedUser.userId}/verifyCode`,
+        `${process.env.REACT_APP_BASE_API}/public/users/${parsedUser.userId}/verifyCode`,
         verifyPhoneNumberDto
       )
       .then((response) => {

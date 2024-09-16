@@ -31,13 +31,13 @@ const FlightSearchPage = () => {
     const fetchImmediately = async (place) => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/places/place?place=${place}`
+          `${process.env.REACT_APP_BASE_API}/public/places/place?place=${place}`
         );
         setGoingToAvailableAirports(response.data);
 
         // Fetch airports immediately for "Going To" place
         const airportsResponse = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/places/${response.data[0].placeId}/airports`
+          `${process.env.REACT_APP_BASE_API}/public/places/${response.data[0].placeId}/airports`
         );
         setToAirportId(airportsResponse.data[0]?.airPortId); // Assuming there's one airport for simplicity
       } catch (error) {
@@ -53,7 +53,7 @@ const FlightSearchPage = () => {
   const fetchPlaceId = async (placeName) => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BASE_API}/places/place?place=${placeName}`
+        `${process.env.REACT_APP_BASE_API}/public/places/place?place=${placeName}`
       );
       if (response.data && response.data.length > 0) {
         const place = response.data[0];
@@ -71,7 +71,7 @@ const FlightSearchPage = () => {
   const fetchAirportsByPlaceId = async (placeId) => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BASE_API}/places/${placeId}/airports`
+        `${process.env.REACT_APP_BASE_API}/public/places/${placeId}/airports`
       );
       return response.data;
     } catch (error) {
@@ -89,7 +89,7 @@ const FlightSearchPage = () => {
   ) => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BASE_API}/flights/flight/departures/${fromAirportId}/destinations/${toAirportId}?page=${page}&size=${size}`
+        `${process.env.REACT_APP_BASE_API}/public/flights/flight/departures/${fromAirportId}/destinations/${toAirportId}?page=${page}&size=${size}`
       );
       return response.data;
     } catch (error) {

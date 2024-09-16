@@ -13,21 +13,22 @@ function LoginPage() {
     e.preventDefault();
 
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BASE_API}/users/login`, {
+      const response = await axios.post(`${process.env.REACT_APP_BASE_API}/public/users/login`, {
         username,
         password,
       });
 
       if (response.status === 200) {
         const { accessToken, essentialUserDto } = response.data;
-        const { id, username, image, verificationStatus } = essentialUserDto;
+        const { id, username, image, verificationStatus, role } = essentialUserDto;
 
         const user = {
           userId: id,
           username: username,
           userImage: image,
           accessToken: accessToken,
-          status: verificationStatus
+          status: verificationStatus,
+          role: role,
         };
 
         // Store user data and token in localStorage

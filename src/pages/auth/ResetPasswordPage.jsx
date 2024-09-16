@@ -26,14 +26,14 @@ function ResetPasswordPage() {
 
     try {
       // Fetch userId by email
-      const userIdResponse = await axios.get(`${process.env.REACT_APP_BASE_API}/users`, {
+      const userIdResponse = await axios.get(`${process.env.REACT_APP_BASE_API}/public/users`, {
         params: { email },
       });
 
       const userId = userIdResponse.data.userId;
 
       // Reset password using the userId
-      const response = await axios.put(`${process.env.REACT_APP_BASE_API}/users/${userId}`, {
+      const response = await axios.put(`${process.env.REACT_APP_BASE_API}/public/users/${userId}`, {
         password: newPassword,
       });
 

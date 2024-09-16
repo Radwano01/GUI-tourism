@@ -13,7 +13,7 @@ const PlaceDetailsPage = () => {
     const fetchPlaceDetails = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/places/${id}/details`
+          `${process.env.REACT_APP_BASE_API}/public/places/${id}/details`
         );
         setPlace(response.data);
       } catch (error) {

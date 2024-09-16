@@ -27,7 +27,7 @@ const PackageDetailsPage = () => {
     const fetchPackageDetails = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/packages/${id}/details`
+          `${process.env.REACT_APP_BASE_API}/public/packages/${id}/details`
         );
         setPackageDetails(response.data);
         setComments(response.data.comments || []);
@@ -41,34 +41,6 @@ const PackageDetailsPage = () => {
 
     fetchPackageDetails();
   }, [id]);
-
-  const handleCommentChange = (event) => {
-    setComment(event.target.value);
-  };
-
-  const handleSubmitComment = async () => {
-    try {
-      if (!userId) {
-        alert("You need to sign in to add a comment.");
-        return;
-      }
-
-      const response = await axios.post(
-        `${process.env.REACT_APP_BASE_API}/packages/${id}/comments`,
-        {
-          userId: userId,
-          comment: comment,
-        }
-      );
-
-      const newComment = response.data; // Assuming response.data contains the newly added comment
-      setComments([...comments, newComment]); // Update comments state with new comment
-      setComment(""); // Clear comment input after submission
-    } catch (error) {
-      console.error("Error submitting comment:", error);
-      alert("Error submitting comment. Please try again later.");
-    }
-  };
 
   const handlePayNow = async () => {
     try {

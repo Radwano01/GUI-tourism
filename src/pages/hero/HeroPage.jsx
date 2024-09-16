@@ -8,7 +8,7 @@ function HeroPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_BASE_API}/countries`)
+    axios.get(`${process.env.REACT_APP_BASE_API}/public/countries`)
       .then(response => {
         const formattedData = response.data.map(country => ({
           id: country.id,

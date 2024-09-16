@@ -15,7 +15,7 @@ const CountryDetailsPage = () => {
     const fetchCountryDetails = async () => {
       try {
         const countryResponse = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/countries/${id}/details`
+          `${process.env.REACT_APP_BASE_API}/public/countries/${id}/details`
         );
         setCountry(countryResponse.data);
         setLoading(false);
@@ -28,7 +28,7 @@ const CountryDetailsPage = () => {
     const fetchPlaces = async () => {
       try {
         const placesResponse = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/countries/${id}/places`
+          `${process.env.REACT_APP_BASE_API}/public/countries/${id}/places`
         );
         setPlaces(placesResponse.data);
       } catch (error) {
@@ -39,7 +39,7 @@ const CountryDetailsPage = () => {
     const fetchPackages = async () => {
       try {
         const packagesResponse = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/countries/${id}/packages`
+          `${process.env.REACT_APP_BASE_API}/public/countries/${id}/packages`
         );
         setPackages(packagesResponse.data);
       } catch (error) {
