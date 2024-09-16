@@ -9,6 +9,7 @@ const DeletePackagePage = () => {
 
   const handleDelete = async () => {
     try {
+      const token = localStorage.getItem("accessToken");
       await axios.delete(`${process.env.REACT_APP_BASE_API}/admin/countries/${countryId}/packages/${packageId}`, {
         headers:{
           Authorization: `Bearer ${token}`
