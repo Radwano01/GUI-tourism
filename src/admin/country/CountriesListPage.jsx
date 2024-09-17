@@ -29,7 +29,7 @@ const CountriesListPage = () => {
     if (window.confirm("Are you sure you want to delete this country?")) {
       try {
         const token = localStorage.getItem("accessToken");
-        await axios.delete(`/admin/countries/${id}`,
+        await axios.delete(`${process.env.REACT_APP_BASE_API}/admin/countries/${id}`,
           {headers:{
             Authorization:`Bearer ${token}`
           }}
