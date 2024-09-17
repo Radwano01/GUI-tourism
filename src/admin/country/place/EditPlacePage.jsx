@@ -12,6 +12,7 @@ const EditPlacePage = () => {
   useEffect(() => {
     const fetchPlaceDetails = async () => {
       try {
+        const token = localStorage.getItem("accessToken");
         const response = await axios.get(`${process.env.REACT_APP_BASE_API}/countries/${countryId}/places/${placeId}`, {
           headers:{
             Authorization: `Bearer ${token}`
@@ -38,6 +39,7 @@ const EditPlacePage = () => {
     formData.append('mainImage', mainImage);
 
     try {
+      const token = localStorage.getItem("accessToken");
       await axios.put(`${process.env.REACT_APP_BASE_API}/admin/countries/${countryId}/places/${placeId}`, {
         headers:{
           Authorization: `Bearer ${token}`
