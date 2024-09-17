@@ -23,7 +23,6 @@ import AddPhoneNumberPage from "./pages/auth/AddPhoneNumberPage";
 import CountriesListPage from "./admin/country/CountriesListPage";
 import AddCountryPage from "./admin/country/AddCountryPage";
 import EditCountryPage from "./admin/country/EditCountryPage";
-import DeleteCountryPage from "./admin/country/DeleteCountryPage";
 import Dashboard from "./admin/Dashboard";
 import EditCountryDetailsPage from "./admin/country/details/EditCountryDetailsPage";
 import GetCountryDetailsPage from "./admin/country/details/GetCountryDetailsPage";
@@ -31,7 +30,6 @@ import AddPlacePage from "./admin/country/place/AddPlacePage";
 import GetPlacesPage from "./admin/country/place/GetPlacesPage";
 import GetPlaceDetailsPage from "./admin/country/place/details/GetPlaceDetailsPage";
 import EditPlacePage from "./admin/country/place/EditPlacePage";
-import DeletePlacePage from "./admin/country/place/DeletePlaceButton";
 import EditPlaceDetailsPage from "./admin/country/place/details/EditPlaceDetailsPage";
 import GetPackageDetailsPage from "./admin/country/package/details/GetPackageDetailsPage";
 import CreatePackagePage from "./admin/country/package/CreatePackagePage";
@@ -51,7 +49,6 @@ import GetAirportsPage from "./admin/country/place/airports/GetAirportsPage";
 import CreateAirportPage from "./admin/country/place/airports/CreateAirportPage";
 import EditAirportPage from "./admin/country/place/airports/EditAirportPage";
 import CreatePlanePage from "./admin/plane/CreatePlanePage";
-import GetPlanesPage from "./admin/plane/GetPlanesPage";
 import EditPlanePage from "./admin/plane/EditPlanePage";
 import AddFlightPage from "./admin/plane/flight/AddFlightPage";
 import GetFlightsPage from "./admin/plane/flight/GetFlightsPage";
@@ -150,15 +147,6 @@ function App() {
           />
 
           <Route
-            path="/admin/countries/:countryId/delete"
-            element={
-              <ProtectedRoute>
-                <DeleteCountryPage />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
             path="/admin/countries/:countryId/details"
             element={
               <ProtectedRoute>
@@ -199,15 +187,6 @@ function App() {
             element={
               <ProtectedRoute>
                 <EditPlacePage />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/admin/countries/:countryId/places/:placeId"
-            element={
-              <ProtectedRoute>
-                <DeletePlacePage />
               </ProtectedRoute>
             }
           />

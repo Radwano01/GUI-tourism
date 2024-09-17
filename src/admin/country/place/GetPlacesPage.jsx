@@ -11,8 +11,13 @@ const GetPlacesPage = () => {
   useEffect(() => {
     const fetchPlaces = async () => {
       try {
+        const token = localStorage.getItem("accessToken");
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/countries/${countryId}/places`
+          `${process.env.REACT_APP_BASE_API}/countries/${countryId}/places`,{
+            headers:{
+              Authorization: `Bearer ${token}`
+            }
+          }
         );
         setPlaces(response.data);
       } catch (error) {
@@ -33,8 +38,13 @@ const GetPlacesPage = () => {
     );
     if (confirmed) {
       try {
+        const token = localStorage.getItem("accessToken");
         await axios.delete(
-          `${process.env.REACT_APP_BASE_API}/admin/countries/${countryId}/places/${placeId}`
+          `${process.env.REACT_APP_BASE_API}/admin/countries/${countryId}/places/${placeId}`,{
+            headers:{
+              Authorization: `Bearer ${token}`
+            }
+          }
         );
         setPlaces(places.filter((place) => place.id !== placeId));
       } catch (error) {

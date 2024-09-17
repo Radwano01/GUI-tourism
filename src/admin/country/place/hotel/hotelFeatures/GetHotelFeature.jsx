@@ -11,8 +11,13 @@ const GetHotelFeaturesPage = () => {
   useEffect(() => {
     const fetchHotelFeatures = async () => {
       try {
+        const token = localStorage.getItem("accessToken");
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/hotels/features`
+          `${process.env.REACT_APP_BASE_API}/hotels/features`,{
+            headers:{
+              Authorization: `Bearer ${token}`
+            }
+          }
         );
         setHotelFeatures(response.data || []);
       } catch (error) {
@@ -24,7 +29,9 @@ const GetHotelFeaturesPage = () => {
   }, [placeId]);
 
   const handleEdit = (featureId) => {
-    navigate(`/admin/countries/${countryId}/places/${placeId}/hotels/features/${featureId}/edit`);
+    navigate(
+      `/admin/countries/${countryId}/places/${placeId}/hotels/features/${featureId}/edit`
+    );
   };
 
   const handleDelete = async (featureId) => {
@@ -33,10 +40,17 @@ const GetHotelFeaturesPage = () => {
     );
     if (confirmed) {
       try {
+        const token = localStorage.getItem("accessToken");
         await axios.delete(
-          `${process.env.REACT_APP_BASE_API}/admin/hotels/features/${featureId}`
+          `${process.env.REACT_APP_BASE_API}/admin/hotels/features/${featureId}`,{
+            headers:{
+              Authorization: `Bearer ${token}`
+            }
+          }
         );
-        setHotelFeatures(hotelFeatures.filter((feature) => feature.featureId !== featureId));
+        setHotelFeatures(
+          hotelFeatures.filter((feature) => feature.featureId !== featureId)
+        );
         window.location.reload();
       } catch (error) {
         console.error("Error deleting feature:", error);
@@ -45,12 +59,16 @@ const GetHotelFeaturesPage = () => {
   };
 
   const handleCreateFeature = () => {
-    navigate(`/admin/countries/${countryId}/places/${placeId}/hotels/features/create`);
+    navigate(
+      `/admin/countries/${countryId}/places/${placeId}/hotels/features/create`
+    );
   };
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <BackButton direction={`/admin/countries/${countryId}/places/${placeId}/hotels`} />
+      <BackButton
+        direction={`/admin/countries/${countryId}/places/${placeId}/hotels`}
+      />
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-3xl font-bold">Hotel Features</h1>
         <button
@@ -66,7 +84,9 @@ const GetHotelFeaturesPage = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {hotelFeatures.map((feature) => (
           <div key={feature.id} className="bg-white p-4 rounded-lg shadow-md">
-            <h2 className="text-xl font-bold mb-2">Feature {feature.featureId}</h2>
+            <h2 className="text-xl font-bold mb-2">
+              Feature {feature.featureId}
+            </h2>
             <p className="text-gray-700 mb-4">{feature.hotelFeature}</p>
             <div className="flex">
               <button

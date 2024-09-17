@@ -10,7 +10,12 @@ const CreateRoomFeaturePage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const token = localStorage.getItem("accessToken");
       await axios.post(`${process.env.REACT_APP_BASE_API}/admin/rooms/feature`, {
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
+      }, {
         roomFeature,
       });
       navigate(`/admin/countries/${countryId}/places/${placeId}/rooms/features`); // Redirect to the room features list

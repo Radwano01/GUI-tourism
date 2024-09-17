@@ -38,9 +38,11 @@ const CreateHotelPage = () => {
     formData.append("price", price);
 
     try {
+      const token = localStorage.getItem("accessToken");
       await axios.post(`${process.env.REACT_APP_BASE_API}/admin/places/${placeId}/hotel`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`
         },
       });
       navigate(`/admin/places/${placeId}/hotels`);

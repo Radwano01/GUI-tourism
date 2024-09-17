@@ -19,8 +19,13 @@ const EditHotelPage = () => {
   useEffect(() => {
     const fetchHotel = async () => {
       try {
+        const token = localStorage.getItem("accessToken");
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/places/${placeId}/hotels/${hotelId}`
+          `${process.env.REACT_APP_BASE_API}/places/${placeId}/hotels/${hotelId}`,{
+            headers:{
+              Authorization: `Bearer ${token}`
+            }
+          }
         );
         setHotel(response.data);
       } catch (error) {
@@ -49,8 +54,13 @@ const EditHotelPage = () => {
     }
 
     try {
+      const token = localStorage.getItem("accessToken");
       await axios.put(
-        `${process.env.REACT_APP_BASE_API}/places/${placeId}/hotels/${hotelId}`,
+        `${process.env.REACT_APP_BASE_API}/places/${placeId}/hotels/${hotelId}`, {
+          headers:{
+            Authorization: `Bearer ${token}`
+          }
+        },
         formData
       );
       navigate(`/admin/countries/${countryId}/places/${placeId}/hotels`);

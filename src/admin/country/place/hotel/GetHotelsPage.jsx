@@ -14,8 +14,13 @@ const GetHotelsPage = () => {
   useEffect(() => {
     const fetchHotels = async () => {
       try {
+        const token = localStorage.getItem("accessToken");
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/places/${placeId}/hotels`,
+          `${process.env.REACT_APP_BASE_API}/places/${placeId}/hotels`,{
+            headers:{
+              Authorization: `Bearer ${token}`
+            }
+          },
           {
             params: { page, size },
           }
@@ -36,8 +41,13 @@ const GetHotelsPage = () => {
     );
     if (confirmed) {
       try {
+        const token = localStorage.getItem("accessToken");
         await axios.delete(
-          `${process.env.REACT_APP_BASE_API}/admin/places/${placeId}/hotels/${hotelId}`
+          `${process.env.REACT_APP_BASE_API}/admin/places/${placeId}/hotels/${hotelId}`,{
+            headers:{
+              Authorization: `Bearer ${token}`
+            }
+          }
         );
         setHotels(hotels.filter((hotel) => hotel.id !== hotelId));
       } catch (error) {

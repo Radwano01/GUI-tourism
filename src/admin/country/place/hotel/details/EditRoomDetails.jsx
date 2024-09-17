@@ -35,9 +35,14 @@ const EditRoomDetailsPage = () => {
     form.append("description", formData.description);
     form.append("price", formData.price);
 
+    const token = localStorage.getItem("accessToken");
     axios
       .put(
-        `${process.env.REACT_APP_BASE_API}/admin/hotels/${hotelId}/rooms/details`,
+        `${process.env.REACT_APP_BASE_API}/admin/hotels/${hotelId}/rooms/details`, {
+          headers:{
+            Authorization: `Bearer ${token}`
+          }
+        },
         form
       )
       .then(() => {

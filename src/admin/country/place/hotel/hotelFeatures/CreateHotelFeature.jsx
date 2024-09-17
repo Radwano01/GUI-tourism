@@ -12,8 +12,13 @@ const CreateHotelFeaturePage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const token = localStorage.getItem("accessToken");
       await axios.post(
-        `${process.env.REACT_APP_BASE_API}/admin/hotels/feature`,
+        `${process.env.REACT_APP_BASE_API}/admin/hotels/feature`, {
+          headers:{
+            Authorization: `Bearer ${token}`
+          }
+        },
         { hotelFeature }
       );
       navigate(

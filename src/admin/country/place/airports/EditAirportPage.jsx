@@ -22,9 +22,13 @@ const EditAirportPage = () => {
       airPortCode,
     };
 
-    // Send request to update the airport details
+    const token = localStorage.getItem("accessToken");
     axios
-      .put(`${process.env.REACT_APP_BASE_API}/admin/places/${placeId}/airports/${airPortId}`, updatedAirport)
+      .put(`${process.env.REACT_APP_BASE_API}/admin/places/${placeId}/airports/${airPortId}`, {
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
+      }, updatedAirport)
       .then(() => {
         navigate(`/admin/countries/${countryId}/places/${placeId}/airports`); // Redirect to the airport list after editing
       })

@@ -14,7 +14,12 @@ const EditPlaceDetailsPage = () => {
   useEffect(() => {
     const fetchPlaceDetails = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BASE_API}/places/${placeId}/details`);
+        const token = localStorage.getItem("accessToken");
+        const response = await axios.get(`${process.env.REACT_APP_BASE_API}/places/${placeId}/details`, {
+          headers:{
+            Authorization: `Bearer ${token}`
+          }
+        });
         setImageOne(response.data.imageOne);
         setImageTwo(response.data.imageTwo);
         setImageThree(response.data.imageThree);
@@ -40,7 +45,12 @@ const EditPlaceDetailsPage = () => {
     formData.append('description', description);
 
     try {
-      await axios.put(`${process.env.REACT_APP_BASE_API}/admin/places/${placeId}/details`, formData);
+      const token = localStorage.getItem("accessToken");
+      await axios.put(`${process.env.REACT_APP_BASE_API}/admin/places/${placeId}/details`, {
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
+      }, formData);
       navigate(`/admin/countries/${countryId}/places/${placeId}`);
     } catch (error) {
       console.error('Error updating place details:', error);

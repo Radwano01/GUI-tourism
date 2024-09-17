@@ -8,9 +8,13 @@ const GetRoomDetailsPage = () => {
   const [roomDetails, setRoomDetails] = useState(null);
 
   useEffect(() => {
-    // Fetch the room details
+    const token = localStorage.getItem("accessToken");
     axios
-      .get(`${process.env.REACT_APP_BASE_API}/hotels/${hotelId}/rooms/details`)
+      .get(`${process.env.REACT_APP_BASE_API}/hotels/${hotelId}/rooms/details`, {
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
+      })
       .then((response) => {
         setRoomDetails(response.data);
       })

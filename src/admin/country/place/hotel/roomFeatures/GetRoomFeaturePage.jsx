@@ -11,7 +11,12 @@ const RoomFeaturesListPage = () => {
   useEffect(() => {
     const fetchRoomFeatures = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BASE_API}/rooms/features`);
+        const token = localStorage.getItem("accessToken");
+        const response = await axios.get(`${process.env.REACT_APP_BASE_API}/rooms/features`, {
+          headers:{
+            Authorization: `Bearer ${token}`
+          }
+        });
         setRoomFeatures(response.data);
       } catch (error) {
         console.error('Error fetching room features:', error);
@@ -30,7 +35,12 @@ const RoomFeaturesListPage = () => {
 
   const handleDelete = async (featureId) => {
     try {
-      await axios.delete(`${process.env.REACT_APP_BASE_API}/admin/rooms/features/${featureId}`);
+      const token = localStorage.getItem("accessToken");
+      await axios.delete(`${process.env.REACT_APP_BASE_API}/admin/rooms/features/${featureId}`, {
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
+      });
       setRoomFeatures(roomFeatures.filter((feature) => feature.id !== featureId));
       window.location.reload();
     } catch (error) {

@@ -28,8 +28,13 @@ const AddPlacePage = () => {
     formData.append("description", description);
 
     try {
+      const token = localStorage.getItem("accessToken");
       await axios.post(
-        `${process.env.REACT_APP_BASE_API}/admin/countries/${countryId}/place`,
+        `${process.env.REACT_APP_BASE_API}/admin/countries/${countryId}/place`, {
+          headers:{
+            Authorization: `Bearer ${token}`
+          }
+        },
         formData
       );
       navigate(`/admin/countries/${countryId}/places`);

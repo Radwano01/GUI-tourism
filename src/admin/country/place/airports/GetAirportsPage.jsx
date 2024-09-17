@@ -9,9 +9,13 @@ const GetAirportsPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch the airports for the specific place
+    const token = localStorage.getItem("accessToken");
     axios
-      .get(`${process.env.REACT_APP_BASE_API}/places/${placeId}/airports`)
+      .get(`${process.env.REACT_APP_BASE_API}/places/${placeId}/airports`, {
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
+      })
       .then((response) => {
         setAirports(response.data);
       })
@@ -22,9 +26,14 @@ const GetAirportsPage = () => {
 
   const handleDelete = (airPortId) => {
     if (window.confirm("Are you sure you want to delete this airport?")) {
+      const token = localStorage.getItem("accessToken");
       axios
         .delete(
-          `${process.env.REACT_APP_BASE_API}/admin/places/${placeId}/airports/${airPortId}`
+          `${process.env.REACT_APP_BASE_API}/admin/places/${placeId}/airports/${airPortId}`,{
+            headers:{
+              Authorization: `Bearer ${token}`
+            }
+          }
         )
         .then(() => {
           // After successful deletion, refetch the list of airports

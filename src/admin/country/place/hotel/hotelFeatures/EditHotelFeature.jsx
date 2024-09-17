@@ -13,8 +13,13 @@ const EditHotelFeaturePage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const token = localStorage.getItem("accessToken");
       await axios.put(
-        `${process.env.REACT_APP_BASE_API}/admin/hotels/features/${featureId}`,
+        `${process.env.REACT_APP_BASE_API}/admin/hotels/features/${featureId}`, {
+          headers:{
+            Authorization: `Bearer ${token}`
+          }
+        },
         { hotelFeature }
       );
       navigate("/admin/hotels/features");

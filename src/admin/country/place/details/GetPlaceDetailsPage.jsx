@@ -10,7 +10,12 @@ const GetPlaceDetailsPage = () => {
   useEffect(() => {
     const fetchPlaceDetails = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BASE_API}/places/${placeId}/details`);
+        const token = localStorage.getItem("accessToken");
+        const response = await axios.get(`${process.env.REACT_APP_BASE_API}/places/${placeId}/details`,{
+          headers:{
+            Authorization: `Bearer ${token}`
+          }
+        });
         setPlaceDetails(response.data);
       } catch (error) {
         console.error('Error fetching place details:', error);
