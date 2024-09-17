@@ -25,11 +25,11 @@ const CountriesListPage = () => {
     fetchCountries();
   }, []);
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (countryId) => {
     if (window.confirm("Are you sure you want to delete this country?")) {
       try {
         const token = localStorage.getItem("accessToken");
-        await axios.delete(`${process.env.REACT_APP_BASE_API}/admin/countries/${id}`,
+        await axios.delete(`${process.env.REACT_APP_BASE_API}/admin/countries/${countryId}`,
           {headers:{
             Authorization:`Bearer ${token}`
           }}
