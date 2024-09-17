@@ -34,7 +34,7 @@ const CountriesListPage = () => {
             Authorization:`Bearer ${token}`
           }}
         );
-        setCountries(countries.filter((country) => country.id !== id));
+        setCountries(countries.filter((country) => country.id !== countryId));
         alert("Country deleted successfully!");
       } catch (error) {
         console.error("Error deleting country:", error);
