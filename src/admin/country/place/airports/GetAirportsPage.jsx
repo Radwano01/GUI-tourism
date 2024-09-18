@@ -11,7 +11,7 @@ const GetAirportsPage = () => {
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     axios
-      .get(`${process.env.REACT_APP_BASE_API}/places/${placeId}/airports`, {
+      .get(`${process.env.REACT_APP_BASE_API}/public/places/${placeId}/airports`, {
         headers:{
           Authorization: `Bearer ${token}`
         }

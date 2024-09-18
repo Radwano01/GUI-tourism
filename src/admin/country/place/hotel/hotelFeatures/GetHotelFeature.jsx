@@ -11,13 +11,8 @@ const GetHotelFeaturesPage = () => {
   useEffect(() => {
     const fetchHotelFeatures = async () => {
       try {
-        const token = localStorage.getItem("accessToken");
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/hotels/features`,{
-            headers:{
-              Authorization: `Bearer ${token}`
-            }
-          }
+          `${process.env.REACT_APP_BASE_API}/public/hotels/features`
         );
         setHotelFeatures(response.data || []);
       } catch (error) {
@@ -40,13 +35,8 @@ const GetHotelFeaturesPage = () => {
     );
     if (confirmed) {
       try {
-        const token = localStorage.getItem("accessToken");
         await axios.delete(
-          `${process.env.REACT_APP_BASE_API}/admin/hotels/features/${featureId}`,{
-            headers:{
-              Authorization: `Bearer ${token}`
-            }
-          }
+          `${process.env.REACT_APP_BASE_API}/admin/hotels/features/${featureId}`
         );
         setHotelFeatures(
           hotelFeatures.filter((feature) => feature.featureId !== featureId)

@@ -4,13 +4,13 @@ import axios from "axios";
 import BackButton from "../../../../../components/BackButton";
 
 const GetRoomDetailsPage = () => {
-  const { placeId, hotelId } = useParams();
+  const { countryId, placeId, hotelId } = useParams();
   const [roomDetails, setRoomDetails] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     axios
-      .get(`${process.env.REACT_APP_BASE_API}/hotels/${hotelId}/rooms/details`, {
+      .get(`${process.env.REACT_APP_BASE_API}/public/hotels/${hotelId}/rooms/details`, {
         headers:{
           Authorization: `Bearer ${token}`
         }
@@ -27,7 +27,7 @@ const GetRoomDetailsPage = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <BackButton direction={`/admin/places/${placeId}/hotels`} />
+      <BackButton direction={`/admin/countries/${countryId}/places/${placeId}/hotels`} />
       <h1 className="text-3xl font-bold mb-4">Room Details</h1>
 
       <div className="bg-white p-6 rounded-lg shadow-lg">

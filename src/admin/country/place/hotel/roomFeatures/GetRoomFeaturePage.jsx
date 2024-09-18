@@ -12,7 +12,7 @@ const RoomFeaturesListPage = () => {
     const fetchRoomFeatures = async () => {
       try {
         const token = localStorage.getItem("accessToken");
-        const response = await axios.get(`${process.env.REACT_APP_BASE_API}/rooms/features`, {
+        const response = await axios.get(`${process.env.REACT_APP_BASE_API}/public/rooms/features`, {
           headers:{
             Authorization: `Bearer ${token}`
           }

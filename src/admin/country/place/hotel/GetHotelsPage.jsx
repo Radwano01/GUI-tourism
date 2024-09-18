@@ -16,12 +16,10 @@ const GetHotelsPage = () => {
       try {
         const token = localStorage.getItem("accessToken");
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/places/${placeId}/hotels`,{
-            headers:{
-              Authorization: `Bearer ${token}`
-            }
-          },
-          {
+          `${process.env.REACT_APP_BASE_API}/public/places/${placeId}/hotels`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
             params: { page, size },
           }
         );
@@ -58,17 +56,17 @@ const GetHotelsPage = () => {
 
   const handleEditHotel = (hotelId) => {
     navigate(
-      `/admin/places/${placeId}/hotels/${hotelId}/edit`
+      `/admin/countries/${countryId}/places/${placeId}/hotels/${hotelId}/edit`
     );
   };
 
   const handleEditRoomDetails = (hotelId) => {
-    navigate(`/admin/places/${placeId}/hotels/${hotelId}/rooms/details/edit`);
+    navigate(`/admin/countries/${countryId}/places/${placeId}/hotels/${hotelId}/rooms/details/edit`);
   };
 
   const handleDetails = (hotelId) => {
     navigate(
-      `/admin/places/${placeId}/hotels/${hotelId}/details`
+      `/admin/countries/${countryId}/places/${placeId}/hotels/${hotelId}/details`
     );
   };
 

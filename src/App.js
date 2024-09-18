@@ -417,7 +417,7 @@ function App() {
           />
 
           <Route
-            path="/admin/places/:placeId/hotels/:hotelId/edit"
+            path="/admin/countries/:countryId/places/:placeId/hotels/:hotelId/edit"
             element={
               <ProtectedRoute>
                 <EditHotelPage />
@@ -426,7 +426,7 @@ function App() {
           />
 
           <Route
-            path="/admin/places/:placeId/hotels/:hotelId/details"
+            path="/admin/countries/:countryId/places/:placeId/hotels/:hotelId/details"
             element={
               <ProtectedRoute>
                 <GetRoomDetailsPage />
@@ -435,7 +435,7 @@ function App() {
           />
 
           <Route
-            path="/admin/places/:placeId/hotels/:hotelId/rooms/details/edit"
+            path="/admin/countries/:countryId/places/:placeId/hotels/:hotelId/rooms/details/edit"
             element={
               <ProtectedRoute>
                 <EditRoomDetailsPage />

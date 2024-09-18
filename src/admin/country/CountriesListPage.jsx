@@ -12,9 +12,11 @@ const CountriesListPage = () => {
       try {
         const response = await axios.get(
           `${process.env.REACT_APP_BASE_API}/public/countries`,
-          {headers: {
-            Authorization: `Bearer ${token}`
-          }}
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         setCountries(response.data);
       } catch (error) {
@@ -29,10 +31,13 @@ const CountriesListPage = () => {
     if (window.confirm("Are you sure you want to delete this country?")) {
       try {
         const token = localStorage.getItem("accessToken");
-        await axios.delete(`${process.env.REACT_APP_BASE_API}/admin/countries/${countryId}`,
-          {headers:{
-            Authorization:`Bearer ${token}`
-          }}
+        await axios.delete(
+          `${process.env.REACT_APP_BASE_API}/admin/countries/${countryId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            }
+          }
         );
         setCountries(countries.filter((country) => country.id !== countryId));
         alert("Country deleted successfully!");

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import BackButton from "../../../../components/BackButton";
@@ -15,26 +15,6 @@ const EditHotelPage = () => {
     price: "",
     rate: "",
   });
-
-  useEffect(() => {
-    const fetchHotel = async () => {
-      try {
-        const token = localStorage.getItem("accessToken");
-        const response = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/places/${placeId}/hotels/${hotelId}`,{
-            headers:{
-              Authorization: `Bearer ${token}`
-            }
-          }
-        );
-        setHotel(response.data);
-      } catch (error) {
-        console.error("Error fetching hotel:", error);
-      }
-    };
-
-    fetchHotel();
-  }, [hotelId, placeId]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -56,10 +36,11 @@ const EditHotelPage = () => {
     try {
       const token = localStorage.getItem("accessToken");
       await axios.put(
-        `${process.env.REACT_APP_BASE_API}/places/${placeId}/hotels/${hotelId}`, {
-          headers:{
-            Authorization: `Bearer ${token}`
-          }
+        `${process.env.REACT_APP_BASE_API}/admin/places/${placeId}/hotels/${hotelId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
         formData
       );
@@ -72,7 +53,7 @@ const EditHotelPage = () => {
   return (
     <div className="flex flex-col items-center h-screen bg-gray-100">
       <div className="w-full max-w-lg px-4 py-8 max-h-screen overflow-auto">
-        <BackButton direction={`/admin/places/${placeId}/hotels`} />
+        <BackButton direction={`/admin/countries/${countryId}/places/${placeId}/hotels`} />
         <form
           onSubmit={handleSubmit}
           encType="multipart/form-data"

@@ -13,7 +13,7 @@ const GetPlacesPage = () => {
       try {
         const token = localStorage.getItem("accessToken");
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/countries/${countryId}/places`,{
+          `${process.env.REACT_APP_BASE_API}/public/countries/${countryId}/places`,{
             headers:{
               Authorization: `Bearer ${token}`
             }
@@ -125,7 +125,7 @@ const GetPlacesPage = () => {
 
                 {/* View Airports Button */}
                 <button
-                  onClick={() => navigate(`/admin/places/${place.id}/airports`)}
+                  onClick={() => navigate(`/admin/countries/${countryId}/places/${place.id}/airports`)}
                   className="flex-1 bg-purple-500 text-white py-2 px-3 rounded-md hover:bg-purple-600 min-w-[150px]"
                 >
                   View Airports

@@ -4,7 +4,7 @@ import axios from "axios";
 import BackButton from "../../../../../components/BackButton";
 
 const EditRoomDetailsPage = () => {
-  const { placeId, hotelId } = useParams();
+  const { countryId, placeId, hotelId } = useParams();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -58,7 +58,7 @@ const EditRoomDetailsPage = () => {
   return (
     <div className="flex flex-col items-center h-screen bg-gray-100">
       <div className="w-full max-w-lg px-4 py-8 max-h-screen overflow-auto">
-        <BackButton direction={`/admin/places/${placeId}/hotels`} />
+        <BackButton direction={`/admin/countries/${countryId}/places/${placeId}/hotels`} />
 
         <form
           onSubmit={handleSubmit}
