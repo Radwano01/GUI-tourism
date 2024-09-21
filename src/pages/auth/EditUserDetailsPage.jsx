@@ -85,7 +85,7 @@ function EditDetailsPage() {
     try {
       const token = localStorage.getItem("accessToken");
       const response = await axios.post(
-        `${process.env.REACT_APP_BASE_API}/verifyCode`,
+        `${process.env.REACT_APP_BASE_API}/public/verifyCode`,
         verifyPhoneNumberDto,{
           Authorization: `Bearer ${token}`
         },
@@ -131,7 +131,7 @@ function EditDetailsPage() {
     try {
       const token = localStorage.getItem("accessToken");
       await axios.put(
-        `${process.env.REACT_APP_BASE_API}/users/${userId}/details`,
+        `${process.env.REACT_APP_BASE_API}/public/users/${userId}/details`,
         formData,
         {
           headers: {
