@@ -39,8 +39,13 @@ const RegisterUser = () => {
 
   const handleVerification = () => {
     if (formData.phoneNumber) {
+      const token = localStorage.getItem("accessToken");
       axios
-        .post(`${process.env.REACT_APP_BASE_API}/public/verify/phoneNumber/${`+${formData.phoneNumber}`}`)
+        .post(`${process.env.REACT_APP_BASE_API}/public/verify/phoneNumber/${`+${formData.phoneNumber}`}`,{
+          headers:{
+            Authorization: `Bearer ${token}`
+          },
+        })
         .then(() => {
           setIsVerificationSent(true);
           alert("Verification code sent to your phone.");
@@ -57,9 +62,13 @@ const RegisterUser = () => {
       phoneNumber: "+" + formData.phoneNumber,
       code: verificationCode,
     };
-
+    const token = localStorage.getItem("accessToken");
     axios
-      .post(`${process.env.REACT_APP_BASE_API}/public/verifyCode`, verifyPhoneNumberDto)
+      .post(`${process.env.REACT_APP_BASE_API}/public/verifyCode`, verifyPhoneNumberDto,{
+        headers:{
+          Authorization: `Bearer ${token}`
+        },
+      })
       .then((response) => {
         if (response.data) {
           setIsVerified(true);
@@ -84,9 +93,11 @@ const RegisterUser = () => {
       imageData.append('file', formData.image);
 
       try {
+        const token = localStorage.getItem("accessToken");
         const uploadResponse = await axios.post(`${process.env.REACT_APP_BASE_API}/image`, imageData, {
           headers: {
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`
           }
         });
         imageUrl = uploadResponse.data;
@@ -102,7 +113,12 @@ const RegisterUser = () => {
     };
 
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BASE_API}/public/users/register`, userFormData);
+      const token = localStorage.getItem("accessToken");
+      const response = await axios.post(`${process.env.REACT_APP_BASE_API}/public/users/register`, userFormData, {
+        headers:{
+          Authorization: `Bearer ${token}`
+        },
+      });
       if (response.status === 200) {
         navigate("/login");
       }

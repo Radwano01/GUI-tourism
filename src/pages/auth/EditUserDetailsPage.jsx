@@ -27,8 +27,11 @@ function EditDetailsPage() {
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
+        const token = localStorage.getItem("accessToken");
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/public/users/${userId}/details`
+          `${process.env.REACT_APP_BASE_API}/public/users/${userId}/details`,{
+            Authorization: `Bearer ${token}`
+          },
         );
         setUser(response.data);
         setOriginalPhoneNumber(response.data.phoneNumber); // Store original phone number
@@ -59,8 +62,11 @@ function EditDetailsPage() {
 
   const handleSendVerification = async () => {
     try {
+      const token = localStorage.getItem("accessToken");
       await axios.post(
-        `${process.env.REACT_APP_BASE_API}/public/verify/phoneNumber/+${user.phoneNumber}`
+        `${process.env.REACT_APP_BASE_API}/public/verify/phoneNumber/+${user.phoneNumber}`,{
+          Authorization: `Bearer ${token}`
+        },
       );
       setIsVerificationSent(true);
       alert("Verification code sent to your phone.");
@@ -77,9 +83,12 @@ function EditDetailsPage() {
     };
 
     try {
+      const token = localStorage.getItem("accessToken");
       const response = await axios.post(
         `${process.env.REACT_APP_BASE_API}/verifyCode`,
-        verifyPhoneNumberDto
+        verifyPhoneNumberDto,{
+          Authorization: `Bearer ${token}`
+        },
       );
       if (response.data) {
         setIsVerified(true);
@@ -120,12 +129,14 @@ function EditDetailsPage() {
     }
 
     try {
+      const token = localStorage.getItem("accessToken");
       await axios.put(
         `${process.env.REACT_APP_BASE_API}/users/${userId}/details`,
         formData,
         {
           headers: {
-            "Content-Type": "multipart/form-data"
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`
           },
         }
       );

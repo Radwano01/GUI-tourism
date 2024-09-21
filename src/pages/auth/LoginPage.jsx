@@ -13,9 +13,14 @@ function LoginPage() {
     e.preventDefault();
 
     try {
+      const token = localStorage.getItem("accessToken");
       const response = await axios.post(`${process.env.REACT_APP_BASE_API}/public/users/login`, {
         username,
         password,
+      },{
+        headers:{
+          Authorization: `Bearer ${token}`
+        },
       });
 
       if (response.status === 200) {
