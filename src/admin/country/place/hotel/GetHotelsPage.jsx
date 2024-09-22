@@ -16,7 +16,8 @@ const GetHotelsPage = () => {
       try {
         const token = localStorage.getItem("accessToken");
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/public/places/${placeId}/hotels`, {
+          `${process.env.REACT_APP_BASE_API}/public/places/${placeId}/hotels`,
+          {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -41,10 +42,11 @@ const GetHotelsPage = () => {
       try {
         const token = localStorage.getItem("accessToken");
         await axios.delete(
-          `${process.env.REACT_APP_BASE_API}/admin/places/${placeId}/hotels/${hotelId}`,{
-            headers:{
-              Authorization: `Bearer ${token}`
-            }
+          `${process.env.REACT_APP_BASE_API}/admin/places/${placeId}/hotels/${hotelId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
         setHotels(hotels.filter((hotel) => hotel.id !== hotelId));
@@ -61,7 +63,9 @@ const GetHotelsPage = () => {
   };
 
   const handleEditRoomDetails = (hotelId) => {
-    navigate(`/admin/countries/${countryId}/places/${placeId}/hotels/${hotelId}/rooms/details/edit`);
+    navigate(
+      `/admin/countries/${countryId}/places/${placeId}/hotels/${hotelId}/rooms/details/edit`
+    );
   };
 
   const handleDetails = (hotelId) => {
@@ -120,16 +124,30 @@ const GetHotelsPage = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {hotels.length > 0 ? (
             hotels.map((hotel) => (
-              <div key={hotel.id} className="p-4 bg-white rounded-lg shadow-md">
+              <div
+                key={hotel.id}
+                className="p-4 bg-white rounded-lg shadow-md flex flex-col"
+              >
                 <h3 className="text-lg font-semibold">{hotel.hotelName}</h3>
                 <img
                   src={`${process.env.REACT_APP_IMAGES_URL}/${hotel.mainImage}`}
                   alt={hotel.hotelName}
                   className="w-full h-32 object-cover mb-2"
                 />
-                <p>Description: {hotel.description}</p>
-                <p>Address: {hotel.address}</p>
-                <p>Rate: {hotel.rate}</p>
+                <div className="flex-grow">
+                  <div className="min-h-[60px]">
+                    <p className="font-semibold">Description:</p>
+                    <p>{hotel.description}</p>
+                  </div>
+                  <div className="min-h-[60px]">
+                    <p className="font-semibold">Address:</p>
+                    <p>{hotel.address}</p>
+                  </div>
+                  <div className="min-h-[60px]">
+                    <p className="font-semibold">Rate:</p>
+                    <p>{hotel.rate}</p>
+                  </div>
+                </div>
                 <div className="flex flex-wrap gap-2 py-2">
                   <button
                     onClick={() => handleDetails(hotel.id)}

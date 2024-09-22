@@ -45,7 +45,7 @@ const CreateHotelPage = () => {
           Authorization: `Bearer ${token}`
         },
       });
-      navigate(`/admin/places/${placeId}/hotels`);
+      navigate(`/admin/countries/${countryId}/places/${placeId}/hotels`);
     } catch (error) {
       console.error("Error creating hotel:", error);
     }

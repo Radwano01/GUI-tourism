@@ -20,9 +20,7 @@ const AddPhoneNumberPage = () => {
       setLoading(true);
       axios
         .post(
-          `${process.env.REACT_APP_BASE_API}/public/verify/phoneNumber/+${phoneNumber}`,{
-            Authorization: `Bearer ${token}`
-          },
+          `${process.env.REACT_APP_BASE_API}/public/verify/phoneNumber/+${phoneNumber}`
         )
         .then(() => {
           setLoading(false);
@@ -51,13 +49,10 @@ const AddPhoneNumberPage = () => {
     };
 
     setIsVerifying(true); // Start verifying
-    const token = localStorage.getItem("accessToken");
     axios
       .post(
         `${process.env.REACT_APP_BASE_API}/public/users/${parsedUser.userId}/verifyCode`,
-        verifyPhoneNumberDto,{
-          Authorization: `Bearer ${token}`
-        },
+        verifyPhoneNumberDto
       )
       .then((response) => {
         if (response.data) {

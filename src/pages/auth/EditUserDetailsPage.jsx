@@ -29,9 +29,7 @@ function EditDetailsPage() {
       try {
         const token = localStorage.getItem("accessToken");
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/public/users/${userId}/details`,{
-            Authorization: `Bearer ${token}`
-          },
+          `${process.env.REACT_APP_BASE_API}/public/users/${userId}/details`
         );
         setUser(response.data);
         setOriginalPhoneNumber(response.data.phoneNumber); // Store original phone number
@@ -62,11 +60,8 @@ function EditDetailsPage() {
 
   const handleSendVerification = async () => {
     try {
-      const token = localStorage.getItem("accessToken");
       await axios.post(
-        `${process.env.REACT_APP_BASE_API}/public/verify/phoneNumber/+${user.phoneNumber}`,{
-          Authorization: `Bearer ${token}`
-        },
+        `${process.env.REACT_APP_BASE_API}/public/verify/phoneNumber/+${user.phoneNumber}`
       );
       setIsVerificationSent(true);
       alert("Verification code sent to your phone.");
@@ -86,9 +81,7 @@ function EditDetailsPage() {
       const token = localStorage.getItem("accessToken");
       const response = await axios.post(
         `${process.env.REACT_APP_BASE_API}/public/verifyCode`,
-        verifyPhoneNumberDto,{
-          Authorization: `Bearer ${token}`
-        },
+        verifyPhoneNumberDto
       );
       if (response.data) {
         setIsVerified(true);
@@ -110,11 +103,11 @@ function EditDetailsPage() {
     const formatDate = (date) => {
       const d = new Date(date);
       const year = d.getFullYear();
-      const month = (`0${d.getMonth() + 1}`).slice(-2); // Months are zero-based
-      const day = (`0${d.getDate()}`).slice(-2);
+      const month = `0${d.getMonth() + 1}`.slice(-2); // Months are zero-based
+      const day = `0${d.getDate()}`.slice(-2);
       return `${year}-${month}-${day}`;
     };
-    
+
     const formattedDateOfBirth = formatDate(user.dateOfBirth);
 
     formData.append("fullName", user.fullName);
@@ -136,7 +129,7 @@ function EditDetailsPage() {
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
           },
         }
       );

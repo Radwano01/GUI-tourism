@@ -41,11 +41,7 @@ const RegisterUser = () => {
     if (formData.phoneNumber) {
       const token = localStorage.getItem("accessToken");
       axios
-        .post(`${process.env.REACT_APP_BASE_API}/public/verify/phoneNumber/${`+${formData.phoneNumber}`}`,{
-          headers:{
-            Authorization: `Bearer ${token}`
-          },
-        })
+        .post(`${process.env.REACT_APP_BASE_API}/public/verify/phoneNumber/${`+${formData.phoneNumber}`}`)
         .then(() => {
           setIsVerificationSent(true);
           alert("Verification code sent to your phone.");
@@ -62,13 +58,8 @@ const RegisterUser = () => {
       phoneNumber: "+" + formData.phoneNumber,
       code: verificationCode,
     };
-    const token = localStorage.getItem("accessToken");
     axios
-      .post(`${process.env.REACT_APP_BASE_API}/public/verifyCode`, verifyPhoneNumberDto,{
-        headers:{
-          Authorization: `Bearer ${token}`
-        },
-      })
+      .post(`${process.env.REACT_APP_BASE_API}/public/verifyCode`, verifyPhoneNumberDto)
       .then((response) => {
         if (response.data) {
           setIsVerified(true);
@@ -93,13 +84,7 @@ const RegisterUser = () => {
       imageData.append('file', formData.image);
 
       try {
-        const token = localStorage.getItem("accessToken");
-        const uploadResponse = await axios.post(`${process.env.REACT_APP_BASE_API}/image`, imageData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${token}`
-          }
-        });
+        const uploadResponse = await axios.post(`${process.env.REACT_APP_BASE_API}/image`, imageData);
         imageUrl = uploadResponse.data;
       } catch (error) {
         console.error('Error uploading image:', error);
@@ -113,12 +98,7 @@ const RegisterUser = () => {
     };
 
     try {
-      const token = localStorage.getItem("accessToken");
-      const response = await axios.post(`${process.env.REACT_APP_BASE_API}/public/users/register`, userFormData, {
-        headers:{
-          Authorization: `Bearer ${token}`
-        },
-      });
+      const response = await axios.post(`${process.env.REACT_APP_BASE_API}/public/users/register`, userFormData);
       if (response.status === 200) {
         navigate("/login");
       }

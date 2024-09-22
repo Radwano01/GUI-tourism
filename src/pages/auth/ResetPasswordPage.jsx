@@ -27,26 +27,14 @@ function ResetPasswordPage() {
     try {
       const token = localStorage.getItem("accessToken");
       const userIdResponse = await axios.get(
-        `${process.env.REACT_APP_BASE_API}/public/users`,
-        {
-          params: { email },
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        `${process.env.REACT_APP_BASE_API}/public/users`
       );
 
       const userId = userIdResponse.data.userId;
 
       // Reset password using the userId
       const response = await axios.put(
-        `${process.env.REACT_APP_BASE_API}/public/users/${userId}`,
-        {
-          password: newPassword,
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        `${process.env.REACT_APP_BASE_API}/public/users/${userId}`
       );
 
       if (response.status === 200) {
