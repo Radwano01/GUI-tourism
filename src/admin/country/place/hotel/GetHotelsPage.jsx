@@ -8,7 +8,7 @@ const GetHotelsPage = () => {
   const navigate = useNavigate();
   const [hotels, setHotels] = useState([]);
   const [page, setPage] = useState(0);
-  const [size, setSize] = useState(10);
+  const [size, setSize] = useState(10); // Number of hotels per page
   const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
@@ -24,9 +24,12 @@ const GetHotelsPage = () => {
             params: { page, size },
           }
         );
-        const hotelsData = response.data.content || []; // Assuming `content` holds the array of hotels
+        const hotelsData = response.data || []; // Assuming the array is directly sent
         setHotels(hotelsData);
-        setTotalPages(response.data.totalPages); // Assuming `totalPages` is returned by the backend
+
+        // Calculate total pages based on the total number of hotels
+        const totalElements = hotelsData.length;
+        setTotalPages(Math.ceil(totalElements / size)); // Calculate total number of pages
       } catch (error) {
         console.error("Error fetching hotels:", error);
       }
