@@ -83,7 +83,7 @@ const GetHotelsPage = () => {
   };
 
   const handleCreateHotel = () => {
-    navigate(`/admin/places/${placeId}/hotels/create`);
+    navigate(`/admin/countries/${countryId}/places/${placeId}/hotels/create`);
   };
 
   return (
