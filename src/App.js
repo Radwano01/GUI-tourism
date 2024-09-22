@@ -408,7 +408,7 @@ function App() {
           />
 
           <Route
-            path="/admin/places/:placeId/hotels/create"
+            path="/admin/countries/:countryId/places/:placeId/hotels/create"
             element={
               <ProtectedRoute>
                 <CreateHotelPage />
