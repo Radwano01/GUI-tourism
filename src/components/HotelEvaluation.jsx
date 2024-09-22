@@ -13,7 +13,7 @@ const HotelEvaluation = ({ hotelId, userId }) => {
 
   const addHotelEvaluation = async (hotelId, userId, comment, rate) => {
     try {
-      await axios.post(`${BASE_URL}/${hotelId}/users/${userId}/comment`, { comment, rate });
+      await axios.post(`${BASE_URL}/public/hotels/${hotelId}/users/${userId}/comment`, { comment, rate });
       await fetchEvaluations(); // Fetch evaluations after adding a comment
       setNewComment("");
       setNewRate(5); // Reset the rate to the default value
@@ -24,7 +24,7 @@ const HotelEvaluation = ({ hotelId, userId }) => {
 
   const fetchEvaluations = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/${hotelId}/users/comments`);
+      const response = await axios.get(`${BASE_URL}/public/hotels//${hotelId}/users/comments`);
       setEvaluations(response.data);
 
       // Check if the user has already commented
@@ -38,7 +38,7 @@ const HotelEvaluation = ({ hotelId, userId }) => {
   const editHotelEvaluation = async (commentId, updatedComment) => {
     try {
       const rate = 5; // Set rate to 5
-      await axios.put(`${BASE_URL}/comments/${commentId}`, { comment: updatedComment, rate });
+      await axios.put(`${BASE_URL}/public/hotels/comments/${commentId}`, { comment: updatedComment, rate });
       await fetchEvaluations();
       setEditCommentId(null);
       setEditComment("");
@@ -49,7 +49,7 @@ const HotelEvaluation = ({ hotelId, userId }) => {
 
   const removeHotelEvaluation = async (commentId) => {
     try {
-      await axios.delete(`${BASE_URL}/comments/${commentId}`);
+      await axios.delete(`${BASE_URL}/public/hotels/comments/${commentId}`);
       await fetchEvaluations();
     } catch (error) {
       console.error("Error deleting comment:", error);

@@ -11,7 +11,7 @@ const PackageEvaluation = ({ packageId, userId }) => {
 
   const fetchEvaluations = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_BASE_API}/packages/${packageId}/comments`);
+      const response = await axios.get(`${process.env.REACT_APP_BASE_API}/public/packages/${packageId}/comments`);
       setEvaluations(response.data);
 
       const userComment = response.data.find(
@@ -25,7 +25,7 @@ const PackageEvaluation = ({ packageId, userId }) => {
 
   const addPackageEvaluation = async () => {
     try {
-      await axios.post(`${process.env.REACT_APP_BASE_API}/packages/${packageId}/users/${userId}/comment`, {
+      await axios.post(`${process.env.REACT_APP_BASE_API}/public/packages/${packageId}/users/${userId}/comment`, {
         comment: newComment,
         rate: newRate,
       });
@@ -41,7 +41,7 @@ const PackageEvaluation = ({ packageId, userId }) => {
 
   const editPackageEvaluation = async (commentId, updatedComment) => {
     try {
-      await axios.put(`${process.env.REACT_APP_BASE_API}/packages/${packageId}/comments/${commentId}`, {
+      await axios.put(`${process.env.REACT_APP_BASE_API}/public/packages/${packageId}/comments/${commentId}`, {
         comment: updatedComment,
         rate: newRate,
       });
@@ -58,7 +58,7 @@ const PackageEvaluation = ({ packageId, userId }) => {
 
   const removePackageEvaluation = async (commentId) => {
     try {
-      await axios.delete(`${process.env.REACT_APP_BASE_API}/packages/${packageId}/comments/${commentId}`);
+      await axios.delete(`${process.env.REACT_APP_BASE_API}/public/packages/${packageId}/comments/${commentId}`);
 
       await fetchEvaluations();
     } catch (error) {
