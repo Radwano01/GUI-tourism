@@ -13,7 +13,16 @@ const HotelEvaluation = ({ hotelId, userId }) => {
 
   const addHotelEvaluation = async (hotelId, userId, comment, rate) => {
     try {
-      await axios.post(`${BASE_URL}/public/hotels/${hotelId}/users/${userId}/comment`, { comment, rate });
+      const token = localStorage.getItem("accessToken");
+      await axios.post(
+        `${BASE_URL}/public/hotels/${hotelId}/users/${userId}/comment`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+        { comment, rate }
+      );
       await fetchEvaluations(); // Fetch evaluations after adding a comment
       setNewComment("");
       setNewRate(5); // Reset the rate to the default value
@@ -24,11 +33,21 @@ const HotelEvaluation = ({ hotelId, userId }) => {
 
   const fetchEvaluations = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/public/hotels//${hotelId}/users/comments`);
+      const token = localStorage.getItem("accessToken");
+      const response = await axios.get(
+        `${BASE_URL}/public/hotels//${hotelId}/users/comments`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setEvaluations(response.data);
 
       // Check if the user has already commented
-      const userComment = response.data.find(evaluation => evaluation.userId === userId);
+      const userComment = response.data.find(
+        (evaluation) => evaluation.userId === userId
+      );
       setUserHasCommented(!!userComment);
     } catch (error) {
       console.error("Error fetching evaluations:", error);
@@ -37,8 +56,17 @@ const HotelEvaluation = ({ hotelId, userId }) => {
 
   const editHotelEvaluation = async (commentId, updatedComment) => {
     try {
+      const token = localStorage.getItem("accessToken");
       const rate = 5; // Set rate to 5
-      await axios.put(`${BASE_URL}/public/hotels/comments/${commentId}`, { comment: updatedComment, rate });
+      await axios.put(
+        `${BASE_URL}/public/hotels/comments/${commentId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+        { comment: updatedComment, rate }
+      );
       await fetchEvaluations();
       setEditCommentId(null);
       setEditComment("");
@@ -49,7 +77,12 @@ const HotelEvaluation = ({ hotelId, userId }) => {
 
   const removeHotelEvaluation = async (commentId) => {
     try {
-      await axios.delete(`${BASE_URL}/public/hotels/comments/${commentId}`);
+      const token = localStorage.getItem("accessToken");
+      await axios.delete(`${BASE_URL}/public/hotels/comments/${commentId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       await fetchEvaluations();
     } catch (error) {
       console.error("Error deleting comment:", error);
@@ -70,7 +103,11 @@ const HotelEvaluation = ({ hotelId, userId }) => {
       <h3 className="text-2xl font-bold mb-4">Hotel Evaluations</h3>
       {!userId && (
         <p className="text-red-500">
-          You have to <span onClick={handleLoginClick} className="cursor-pointer underline">login</span> first to add a comment.
+          You have to{" "}
+          <span onClick={handleLoginClick} className="cursor-pointer underline">
+            login
+          </span>{" "}
+          first to add a comment.
         </p>
       )}
       {userId && !userHasCommented && (
@@ -98,7 +135,9 @@ const HotelEvaluation = ({ hotelId, userId }) => {
             </select>
           </div>
           <button
-            onClick={() => addHotelEvaluation(hotelId, userId, newComment, newRate)}
+            onClick={() =>
+              addHotelEvaluation(hotelId, userId, newComment, newRate)
+            }
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2"
             disabled={!newComment.trim()} // Disable button if newComment is empty
           >
@@ -107,7 +146,9 @@ const HotelEvaluation = ({ hotelId, userId }) => {
         </div>
       )}
       {userId && userHasCommented && (
-        <p className="text-red-500">You have already commented on this hotel.</p>
+        <p className="text-red-500">
+          You have already commented on this hotel.
+        </p>
       )}
       <ul>
         {evaluations.map((evaluation) => (
@@ -152,7 +193,9 @@ const HotelEvaluation = ({ hotelId, userId }) => {
                       className="w-full p-2 border rounded"
                     />
                     <button
-                      onClick={() => editHotelEvaluation(editCommentId, editComment)}
+                      onClick={() =>
+                        editHotelEvaluation(editCommentId, editComment)
+                      }
                       className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-2"
                     >
                       Save

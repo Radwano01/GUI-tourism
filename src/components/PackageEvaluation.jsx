@@ -10,8 +10,16 @@ const PackageEvaluation = ({ packageId, userId }) => {
   const [newRate, setNewRate] = useState(1);
 
   const fetchEvaluations = async () => {
+    const token = localStorage.getItem("accessToken");
     try {
-      const response = await axios.get(`${process.env.REACT_APP_BASE_API}/public/packages/${packageId}/comments`);
+      const response = await axios.get(
+        `${process.env.REACT_APP_BASE_API}/public/packages/${packageId}/comments`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setEvaluations(response.data);
 
       const userComment = response.data.find(
@@ -24,11 +32,20 @@ const PackageEvaluation = ({ packageId, userId }) => {
   };
 
   const addPackageEvaluation = async () => {
+    const token = localStorage.getItem("accessToken");
     try {
-      await axios.post(`${process.env.REACT_APP_BASE_API}/public/packages/${packageId}/users/${userId}/comment`, {
-        comment: newComment,
-        rate: newRate,
-      });
+      await axios.post(
+        `${process.env.REACT_APP_BASE_API}/public/packages/${packageId}/users/${userId}/comment`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+        {
+          comment: newComment,
+          rate: newRate,
+        }
+      );
 
       await fetchEvaluations();
 
@@ -41,10 +58,19 @@ const PackageEvaluation = ({ packageId, userId }) => {
 
   const editPackageEvaluation = async (commentId, updatedComment) => {
     try {
-      await axios.put(`${process.env.REACT_APP_BASE_API}/public/packages/${packageId}/comments/${commentId}`, {
-        comment: updatedComment,
-        rate: newRate,
-      });
+      const token = localStorage.getItem("accessToken");
+      await axios.put(
+        `${process.env.REACT_APP_BASE_API}/public/packages/${packageId}/comments/${commentId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+        {
+          comment: updatedComment,
+          rate: newRate,
+        }
+      );
 
       await fetchEvaluations();
 
@@ -58,7 +84,15 @@ const PackageEvaluation = ({ packageId, userId }) => {
 
   const removePackageEvaluation = async (commentId) => {
     try {
-      await axios.delete(`${process.env.REACT_APP_BASE_API}/public/packages/${packageId}/comments/${commentId}`);
+      const token = localStorage.getItem("accessToken");
+      await axios.delete(
+        `${process.env.REACT_APP_BASE_API}/public/packages/${packageId}/comments/${commentId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       await fetchEvaluations();
     } catch (error) {
@@ -129,7 +163,11 @@ const PackageEvaluation = ({ packageId, userId }) => {
           <li key={evaluation.id} className="mb-4 border rounded p-4">
             <div className="flex items-start">
               <img
-                src={evaluation.userImage != null ? `${process.env.REACT_APP_IMAGES_URL}/${evaluation.userImage}` : process.env.REACT_APP_DEFAULT_USER_IMAGE}
+                src={
+                  evaluation.userImage != null
+                    ? `${process.env.REACT_APP_IMAGES_URL}/${evaluation.userImage}`
+                    : process.env.REACT_APP_DEFAULT_USER_IMAGE
+                }
                 alt="User Avatar"
                 className="h-12 w-12 rounded-full mr-4"
               />
