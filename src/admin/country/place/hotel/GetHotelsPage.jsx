@@ -24,8 +24,9 @@ const GetHotelsPage = () => {
             params: { page, size },
           }
         );
-        setHotels(response.data || []);
-        setTotalPages(response.data.length || 0);
+        const hotelsData = response.data.content || []; // Assuming `content` holds the array of hotels
+        setHotels(hotelsData);
+        setTotalPages(response.data.totalPages); // Assuming `totalPages` is returned by the backend
       } catch (error) {
         console.error("Error fetching hotels:", error);
       }
@@ -83,7 +84,7 @@ const GetHotelsPage = () => {
   };
 
   const handleCreateHotel = () => {
-    navigate(`/admin/countries/${countryId}/places/${placeId}/hotels/create`);
+    navigate(`/admin/places/${placeId}/hotels/create`);
   };
 
   return (
