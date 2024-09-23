@@ -177,6 +177,22 @@ const GetHotelsPage = () => {
                   >
                     Delete
                   </button>
+                  <button
+                    onClick={() =>
+                      navigate(`/admin/countries/${countryId}/places/${placeId}/hotels/${hotel.id}`)
+                    }
+                    className="flex-1 bg-indigo-500 text-white py-2 px-3 rounded-md hover:bg-indigo-600 min-w-[150px]"
+                  >
+                    Add Hotel Features
+                  </button>
+                  <button
+                    onClick={() =>
+                      navigate(`/admin/countries/${countryId}/places/${placeId}/hotels/${hotel.id}`)
+                    }
+                    className="flex-1 bg-teal-500 text-white py-2 px-3 rounded-md hover:bg-teal-600 min-w-[150px]"
+                  >
+                    Add Room Features
+                  </button>
                 </div>
               </div>
             ))

@@ -63,6 +63,8 @@ import EditHotelFeaturePage from "./admin/country/place/hotel/hotelFeatures/Edit
 import GetRoomFeaturesPage from "./admin/country/place/hotel/roomFeatures/GetRoomFeaturePage";
 import NotAuthorized from "./components/NotAuthorized";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ManageHotelFeaturesPage from "./admin/country/place/hotel/manageRelations/ManageHotelFeaturePage";
+import ManageRoomFeaturesPage from "./admin/country/place/hotel/manageRelations/ManageRoomFeaturePage";
 
 function App() {
   return (
@@ -493,6 +495,24 @@ function App() {
             element={
               <ProtectedRoute>
                 <EditHotelFeaturePage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/countries/:countryId/places/:placeId/hotels/:hotelId"
+            element={
+              <ProtectedRoute>
+                <ManageHotelFeaturesPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/countries/:countryId/places/:placeId/hotels/:hotelId"
+            element={
+              <ProtectedRoute>
+                <ManageRoomFeaturesPage />
               </ProtectedRoute>
             }
           />
