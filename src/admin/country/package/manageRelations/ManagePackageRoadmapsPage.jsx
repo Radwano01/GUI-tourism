@@ -15,7 +15,7 @@ const ManagePackageRoadmapsPage = () => {
     const fetchRoadmaps = async () => {
       try {
         const token = localStorage.getItem("accessToken");
-        const response = await axios.get(`${process.env.REACT_APP_BASE_API}/packages/roadmaps`, {
+        const response = await axios.get(`${process.env.REACT_APP_BASE_API}/admin/packages/roadmaps`, {
           headers:{
             Authorization: `Bearer ${token}`
           }
