@@ -12,11 +12,7 @@ const RoomFeaturesListPage = () => {
     const fetchRoomFeatures = async () => {
       try {
         const token = localStorage.getItem("accessToken");
-        const response = await axios.get(`${process.env.REACT_APP_BASE_API}/public/rooms/features`, {
-          headers:{
-            Authorization: `Bearer ${token}`
-          }
-        });
+        const response = await axios.get(`${process.env.REACT_APP_BASE_API}/public/rooms/features`);
         setRoomFeatures(response.data);
       } catch (error) {
         console.error('Error fetching room features:', error);

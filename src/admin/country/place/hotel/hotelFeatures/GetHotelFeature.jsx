@@ -35,8 +35,13 @@ const GetHotelFeaturesPage = () => {
     );
     if (confirmed) {
       try {
+        const token = localStorage.getItem("accessToken");
         await axios.delete(
-          `${process.env.REACT_APP_BASE_API}/admin/hotels/features/${featureId}`
+          `${process.env.REACT_APP_BASE_API}/admin/hotels/features/${featureId}`, {
+            headers:{
+              Authorization: `Bearer ${token}`
+            }
+          }
         );
         setHotelFeatures(
           hotelFeatures.filter((feature) => feature.featureId !== featureId)

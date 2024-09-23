@@ -21,6 +21,7 @@ const PackageEvaluation = ({ packageId, userId }) => {
         }
       );
       setEvaluations(response.data);
+      console.log(response.data);
 
       const userComment = response.data.find(
         (evaluation) => evaluation.userId === userId
@@ -37,13 +38,13 @@ const PackageEvaluation = ({ packageId, userId }) => {
       await axios.post(
         `${process.env.REACT_APP_BASE_API}/public/packages/${packageId}/users/${userId}/comment`,
         {
+          comment: newComment,
+          rate: newRate,
+        },
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        },
-        {
-          comment: newComment,
-          rate: newRate,
         }
       );
 
@@ -57,18 +58,18 @@ const PackageEvaluation = ({ packageId, userId }) => {
   };
 
   const editPackageEvaluation = async (commentId, updatedComment) => {
+    const token = localStorage.getItem("accessToken");
     try {
-      const token = localStorage.getItem("accessToken");
       await axios.put(
         `${process.env.REACT_APP_BASE_API}/public/packages/${packageId}/comments/${commentId}`,
+        {
+          comment: updatedComment,
+          rate: newRate,
+        },
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        },
-        {
-          comment: updatedComment,
-          rate: newRate,
         }
       );
 
@@ -83,8 +84,8 @@ const PackageEvaluation = ({ packageId, userId }) => {
   };
 
   const removePackageEvaluation = async (commentId) => {
+    const token = localStorage.getItem("accessToken");
     try {
-      const token = localStorage.getItem("accessToken");
       await axios.delete(
         `${process.env.REACT_APP_BASE_API}/public/packages/${packageId}/comments/${commentId}`,
         {
@@ -101,8 +102,10 @@ const PackageEvaluation = ({ packageId, userId }) => {
   };
 
   useEffect(() => {
-    fetchEvaluations();
-  }, [packageId]);
+    if (userId) {
+      fetchEvaluations();
+    }
+  }, [packageId, userId]); // Fetch evaluations whenever packageId or userId changes
 
   const handleLoginClick = () => {
     window.location.href = "/login";

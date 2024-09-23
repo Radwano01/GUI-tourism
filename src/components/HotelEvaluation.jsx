@@ -16,12 +16,12 @@ const HotelEvaluation = ({ hotelId, userId }) => {
       const token = localStorage.getItem("accessToken");
       await axios.post(
         `${BASE_URL}/public/hotels/${hotelId}/users/${userId}/comment`,
+        { comment, rate },
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        },
-        { comment, rate }
+        }
       );
       await fetchEvaluations(); // Fetch evaluations after adding a comment
       setNewComment("");
@@ -60,12 +60,12 @@ const HotelEvaluation = ({ hotelId, userId }) => {
       const rate = 5; // Set rate to 5
       await axios.put(
         `${BASE_URL}/public/hotels/comments/${commentId}`,
+        { comment: updatedComment, rate },
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        },
-        { comment: updatedComment, rate }
+        }
       );
       await fetchEvaluations();
       setEditCommentId(null);

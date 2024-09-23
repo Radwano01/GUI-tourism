@@ -14,12 +14,12 @@ const CreateHotelFeaturePage = () => {
     try {
       const token = localStorage.getItem("accessToken");
       await axios.post(
-        `${process.env.REACT_APP_BASE_API}/admin/hotels/feature`, {
+        `${process.env.REACT_APP_BASE_API}/admin/hotels/feature`,
+        { hotelFeature }, {
           headers:{
             Authorization: `Bearer ${token}`
           }
-        },
-        { hotelFeature }
+        }
       );
       navigate(
         `/admin/countries/${countryId}/places/${placeId}/hotels/features`
