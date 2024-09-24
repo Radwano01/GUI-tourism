@@ -46,7 +46,7 @@ const ManageHotelFeaturesPage = () => {
     try {
       const token = localStorage.getItem("accessToken");
       await axios.post(
-        `${process.env.REACT_APP_BASE_API}/admin/hotels/${hotelId}/features/${selectedFeature}`, {
+        `${process.env.REACT_APP_BASE_API}/admin/hotels/${hotelId}/hotel/features/${selectedFeature}`, {
           headers: { Authorization: `Bearer ${token}` }
         }
       );
@@ -61,7 +61,7 @@ const ManageHotelFeaturesPage = () => {
     try {
       const token = localStorage.getItem("accessToken");
       await axios.delete(
-        `${process.env.REACT_APP_BASE_API}/admin/hotels/${hotelId}/features/${featureId}`, {
+        `${process.env.REACT_APP_BASE_API}/admin/hotels/${hotelId}/hotel/features/${featureId}`, {
           headers: { Authorization: `Bearer ${token}` }
         }
       );
