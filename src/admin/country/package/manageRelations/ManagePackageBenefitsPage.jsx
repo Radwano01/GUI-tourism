@@ -16,7 +16,7 @@ const ManagePackageBenefitsPage = () => {
       try {
         const token = localStorage.getItem("accessToken");
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/admin/packages/benefits`,{
+          `${process.env.REACT_APP_BASE_API}/public/packages/benefits`,{
             headers:{
               Authorization: `Bearer ${token}`
             }

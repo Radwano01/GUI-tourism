@@ -14,7 +14,7 @@ const ManageRoomFeaturesPage = () => {
       try {
         const token = localStorage.getItem("accessToken");
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/admin/features`, {
+          `${process.env.REACT_APP_BASE_API}/public/rooms/Features`, {
             headers: { Authorization: `Bearer ${token}` }
           }
         );
@@ -28,7 +28,7 @@ const ManageRoomFeaturesPage = () => {
       try {
         const token = localStorage.getItem("accessToken");
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/admin/hotels/${hotelId}/room/features`, {
+          `${process.env.REACT_APP_BASE_API}/admin/hotels/${hotelId}/rooms/features`, {
             headers: { Authorization: `Bearer ${token}` }
           }
         );
@@ -87,7 +87,7 @@ const ManageRoomFeaturesPage = () => {
           <option value="">Select a room feature</option>
           {features.map((feature) => (
             <option key={feature.id} value={feature.id}>
-              {feature.featureName}
+              {feature.roomFeature}
             </option>
           ))}
         </select>
