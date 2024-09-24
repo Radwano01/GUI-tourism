@@ -16,10 +16,11 @@ const ManagePackageBenefitsPage = () => {
       try {
         const token = localStorage.getItem("accessToken");
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/public/packages/benefits`,{
-            headers:{
-              Authorization: `Bearer ${token}`
-            }
+          `${process.env.REACT_APP_BASE_API}/public/packages/benefits`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
         setBenefits(response.data);
@@ -33,10 +34,11 @@ const ManagePackageBenefitsPage = () => {
       try {
         const token = localStorage.getItem("accessToken");
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/admin/packages/${packageId}/details/benefits`, {
-            headers:{
-              Authorization: `Bearer ${token}`
-            }
+          `${process.env.REACT_APP_BASE_API}/admin/packages/${packageId}/details/benefits`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
         setPackageBenefits(response.data);
@@ -53,12 +55,12 @@ const ManagePackageBenefitsPage = () => {
     try {
       const token = localStorage.getItem("accessToken");
       await axios.post(
-        `${process.env.REACT_APP_BASE_API}/admin/packages/${packageId}/benefits/${selectedBenefit}`, 
-        null, 
+        `${process.env.REACT_APP_BASE_API}/admin/packages/${packageId}/benefits/${selectedBenefit}`,
+        null,
         {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       alert("Benefit added successfully");
@@ -66,29 +68,29 @@ const ManagePackageBenefitsPage = () => {
       const addedBenefit = benefits.find(
         (benefit) => benefit.id.toString() === selectedBenefit
       );
-  
+
       if (addedBenefit) {
         setPackageBenefits([...packageBenefits, addedBenefit]);
       } else {
         console.error("Selected benefit not found in the available benefits.");
       }
-  
+
       setSelectedBenefit("");
     } catch (error) {
       console.error("Error adding benefit:", error);
     }
   };
-  
 
   // Remove a benefit from the package
   const handleRemoveBenefit = async (benefitId) => {
     try {
       const token = localStorage.getItem("accessToken");
       await axios.delete(
-        `${process.env.REACT_APP_BASE_API}/admin/packages/${packageId}/benefits/${benefitId}`, {
-          headers:{
-            Authorization: `Bearer ${token}`
-          }
+        `${process.env.REACT_APP_BASE_API}/admin/packages/${packageId}/benefits/${benefitId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       alert("Benefit removed successfully");
@@ -137,7 +139,7 @@ const ManagePackageBenefitsPage = () => {
           <p>No benefits found for this package.</p>
         ) : (
           packageBenefits.map((benefit) => (
-            <li key={benefit.id} className="mb-2">
+            <li key={`package-benefit-${benefit.id}`} className="mb-2">
               {benefit.benefit}
               <button
                 onClick={() => handleRemoveBenefit(benefit.id)}

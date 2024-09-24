@@ -18,6 +18,7 @@ const ManageHotelFeaturesPage = () => {
             headers: { Authorization: `Bearer ${token}` }
           }
         );
+        console.log(response.data)
         setFeatures(response.data);
       } catch (error) {
         console.error("Error fetching features:", error);
@@ -122,8 +123,8 @@ const ManageHotelFeaturesPage = () => {
           <p>No features found for this hotel.</p>
         ) : (
           hotelFeatures.map((feature) => (
-            <li key={feature.id} className="mb-2">
-              {feature.featureName}
+            <li key={`hotel-feature-${feature.id}`} className="mb-2">
+              {feature.hotelFeature}
               <button
                 onClick={() => handleRemoveFeature(feature.id)}
                 className="ml-4 bg-red-500 text-white py-1 px-2 rounded-md"

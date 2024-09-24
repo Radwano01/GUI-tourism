@@ -123,8 +123,8 @@ const ManageRoomFeaturesPage = () => {
           <p>No features found for rooms in this hotel.</p>
         ) : (
           roomFeatures.map((feature) => (
-            <li key={feature.id} className="mb-2">
-              {feature.featureName}
+            <li key={`room-feature-${feature.id}`} className="mb-2">
+              {feature.roomFeature}
               <button
                 onClick={() => handleRemoveFeature(feature.id)}
                 className="ml-4 bg-red-500 text-white py-1 px-2 rounded-md"
