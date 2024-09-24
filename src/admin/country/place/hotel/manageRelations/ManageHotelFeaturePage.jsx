@@ -28,7 +28,7 @@ const ManageHotelFeaturesPage = () => {
       try {
         const token = localStorage.getItem("accessToken");
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/admin/hotels/${hotelId}/hotels/features`, {
+          `${process.env.REACT_APP_BASE_API}/admin/hotels/${hotelId}/details/hotels/features`, {
             headers: { Authorization: `Bearer ${token}` }
           }
         );
