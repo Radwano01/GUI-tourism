@@ -42,20 +42,36 @@ const ManageHotelFeaturesPage = () => {
     fetchHotelFeatures();
   }, [hotelId]);
 
+  
   const handleAddFeature = async () => {
     try {
       const token = localStorage.getItem("accessToken");
       await axios.post(
-        `${process.env.REACT_APP_BASE_API}/admin/hotels/${hotelId}/hotel/features/${selectedFeature}`, {
+        `${process.env.REACT_APP_BASE_API}/admin/hotels/${hotelId}/hotel/features/${selectedFeature}`, 
+        null, 
+        {
           headers: { Authorization: `Bearer ${token}` }
         }
       );
-      setHotelFeatures([...hotelFeatures, selectedFeature]);
+      
+      const addedFeature = features.find(
+        (feature) => feature.id.toString() === selectedFeature
+      );
+  
+      if (addedFeature) {
+        setHotelFeatures([...hotelFeatures, addedFeature]);
+      } else {
+        console.error("Selected feature not found in the available features.");
+      }
+  
+      setSelectedFeature("");
+      
       alert("Feature added successfully");
     } catch (error) {
       console.error("Error adding feature:", error);
     }
   };
+  
 
   const handleRemoveFeature = async (featureId) => {
     try {

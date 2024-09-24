@@ -1,13 +1,13 @@
 // src/pages/packages/ManagePackageRoadmapsPage.js
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useParams } from 'react-router-dom';
-import BackButton from '../../../../components/BackButton';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import BackButton from "../../../../components/BackButton";
 
 const ManagePackageRoadmapsPage = () => {
   const { countryId, packageId } = useParams();
   const [roadmaps, setRoadmaps] = useState([]);
-  const [selectedRoadmap, setSelectedRoadmap] = useState('');
+  const [selectedRoadmap, setSelectedRoadmap] = useState("");
   const [packageRoadmaps, setPackageRoadmaps] = useState([]); // Roadmaps already in the package
 
   useEffect(() => {
@@ -15,14 +15,18 @@ const ManagePackageRoadmapsPage = () => {
     const fetchRoadmaps = async () => {
       try {
         const token = localStorage.getItem("accessToken");
-        const response = await axios.get(`${process.env.REACT_APP_BASE_API}/public/packages/roadmaps`, {
-          headers:{
-            Authorization: `Bearer ${token}`
+        const response = await axios.get(
+          `${process.env.REACT_APP_BASE_API}/public/packages/roadmaps`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
-        });
+        );
+
         setRoadmaps(response.data);
       } catch (error) {
-        console.error('Error fetching roadmaps:', error);
+        console.error("Error fetching roadmaps:", error);
       }
     };
 
@@ -30,14 +34,17 @@ const ManagePackageRoadmapsPage = () => {
     const fetchPackageRoadmaps = async () => {
       try {
         const token = localStorage.getItem("accessToken");
-        const response = await axios.get(`${process.env.REACT_APP_BASE_API}/admin/packages/${packageId}/details/roadmaps`, {
-          headers:{
-            Authorization: `Bearer ${token}`
+        const response = await axios.get(
+          `${process.env.REACT_APP_BASE_API}/admin/packages/${packageId}/details/roadmaps`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
-        });
+        );
         setPackageRoadmaps(response.data);
       } catch (error) {
-        console.error('Error fetching package roadmaps:', error);
+        console.error("Error fetching package roadmaps:", error);
       }
     };
 
@@ -49,15 +56,26 @@ const ManagePackageRoadmapsPage = () => {
   const handleAddRoadmap = async () => {
     try {
       const token = localStorage.getItem("accessToken");
-      await axios.post(`${process.env.REACT_APP_BASE_API}/admin/packages/${packageId}/roadmaps/${selectedRoadmap}`, {
-        headers:{
-            Authorization: `Bearer ${token}`
-          }
-      });
-      alert('Roadmap added successfully');
-      setPackageRoadmaps([...packageRoadmaps, selectedRoadmap]);
+      await axios.post(
+        `${process.env.REACT_APP_BASE_API}/admin/packages/${packageId}/roadmaps/${selectedRoadmap}`,
+        null,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      alert("Roadmap added successfully");
+
+      const addedRoadmap = roadmaps.find(
+        (roadmap) => roadmap.id.toString() === selectedRoadmap
+      );
+
+      setPackageRoadmaps([...packageRoadmaps, addedRoadmap]);
+
+      setSelectedRoadmap("");
     } catch (error) {
-      alert("Already valid roadmap");
+      console.error("Error adding roadmap:", error);
     }
   };
 
@@ -65,22 +83,27 @@ const ManagePackageRoadmapsPage = () => {
   const handleRemoveRoadmap = async (roadmapId) => {
     try {
       const token = localStorage.getItem("accessToken");
-      await axios.delete(`${process.env.REACT_APP_BASE_API}/admin/packages/${packageId}/roadmaps/${roadmapId}`, {
-        headers:{
-            Authorization: `Bearer ${token}`
-          }
-      });
-      alert('Roadmap removed successfully');
-      setPackageRoadmaps(packageRoadmaps.filter(rm => rm.id !== roadmapId));
+      await axios.delete(
+        `${process.env.REACT_APP_BASE_API}/admin/packages/${packageId}/roadmaps/${roadmapId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      alert("Roadmap removed successfully");
+      setPackageRoadmaps(packageRoadmaps.filter((rm) => rm.id !== roadmapId));
     } catch (error) {
-      console.error('Error removing roadmap:', error);
+      console.error("Error removing roadmap:", error);
     }
   };
 
   return (
     <div className="container mx-auto px-4 py-8">
-        <BackButton direction={`/admin/countries/${countryId}/packages`} />
-      <h1 className="text-3xl font-bold mb-4">Manage Roadmaps for Package {packageId}</h1>
+      <BackButton direction={`/admin/countries/${countryId}/packages`} />
+      <h1 className="text-3xl font-bold mb-4">
+        Manage Roadmaps for Package {packageId}
+      </h1>
 
       {/* Add Roadmap */}
       <div className="mb-8">
@@ -111,7 +134,7 @@ const ManagePackageRoadmapsPage = () => {
         {packageRoadmaps.length === 0 ? (
           <p>No roadmaps found for this package.</p>
         ) : (
-          packageRoadmaps.map(roadmap => (
+          packageRoadmaps.map((roadmap) => (
             <li key={roadmap.id} className="mb-2">
               {roadmap.roadmap}
               <button

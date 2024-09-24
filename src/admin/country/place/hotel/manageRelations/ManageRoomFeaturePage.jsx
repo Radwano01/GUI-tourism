@@ -42,20 +42,37 @@ const ManageRoomFeaturesPage = () => {
     fetchRoomFeatures();
   }, [hotelId]);
 
+  
   const handleAddFeature = async () => {
     try {
       const token = localStorage.getItem("accessToken");
       await axios.post(
-        `${process.env.REACT_APP_BASE_API}/admin/hotels/${hotelId}/room/features/${selectedFeature}`, {
+        `${process.env.REACT_APP_BASE_API}/admin/hotels/${hotelId}/room/features/${selectedFeature}`, 
+        null, 
+        {
           headers: { Authorization: `Bearer ${token}` }
         }
       );
-      setRoomFeatures([...roomFeatures, selectedFeature]);
-      alert("Feature added successfully");
+      
+      const addedFeature = features.find(
+        (feature) => feature.id.toString() === selectedFeature
+      );
+  
+      // Check if the feature is found
+      if (addedFeature) {
+        setRoomFeatures([...roomFeatures, addedFeature]);
+      } else {
+        console.error("Selected feature not found in the available features.");
+      }
+  
+      setSelectedFeature("");
+      
+      alert("Room feature added successfully");
     } catch (error) {
-      console.error("Error adding feature:", error);
+      console.error("Error adding room feature:", error);
     }
   };
+  
 
   const handleRemoveFeature = async (featureId) => {
     try {
