@@ -10,7 +10,7 @@ const GetPackageDetailsPage = () => {
   useEffect(() => {
     const fetchPackageDetails = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BASE_API}/packages/${packageId}/details`);
+        const response = await axios.get(`${process.env.REACT_APP_BASE_API}/public/packages/${packageId}/details`);
         setPackageDetails(response.data);
       } catch (error) {
         console.error('Error fetching package details:', error);
@@ -64,6 +64,30 @@ const GetPackageDetailsPage = () => {
           <p><strong>Description:</strong> {packageDetails.description}</p>
         </div>
       </div>
+
+      {/* Roadmap */}
+      {packageDetails.roadmaps && (
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold mb-4">Roadmap</h2>
+          <ul className="list-disc pl-5">
+            {packageDetails.roadmaps.map((roadmap) => (
+              <li key={roadmap.id}>{roadmap.roadmap}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Benefits */}
+      {packageDetails.benefits && (
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold mb-4">Benefits</h2>
+          <ul className="list-disc pl-5">
+            {packageDetails.benefits.map((benefit) => (
+              <li key={benefit.id}>{benefit.benefit}</li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };
