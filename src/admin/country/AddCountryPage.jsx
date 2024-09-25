@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
 import BackButton from "../../components/BackButton"; // Ensure the path to BackButton is correct
+import { useNavigate } from "react-router-dom";
 
 const AddCountryPage = () => {
+  const navigate = useNavigate();
+
   const [country, setCountry] = useState("");
   const [mainImage, setMainImage] = useState(null);
   const [imageOne, setImageOne] = useState(null);
@@ -37,6 +40,7 @@ const AddCountryPage = () => {
         }
       );
       alert("Country added successfully!");
+      navigate("/admin");
     } catch (error) {
       console.error("There was an error creating the country!", error);
     }

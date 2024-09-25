@@ -199,7 +199,7 @@ const RoomDetailsPage = () => {
             {hotelFeatures.length > 0 ? (
               <ul className="list-disc list-inside text-gray-700">
                 {hotelFeatures.map((feature, index) => (
-                  <li key={index}>{feature.hotelFeatures}</li>
+                  <li key={index}>{feature.hotelFeature}</li>
                 ))}
               </ul>
             ) : (
@@ -212,7 +212,7 @@ const RoomDetailsPage = () => {
             {roomFeatures.length > 0 ? (
               <ul className="list-disc list-inside text-gray-700">
                 {roomFeatures.map((feature, index) => (
-                  <li key={index}>{feature.roomFeatures}</li>
+                  <li key={index}>{feature.roomFeature}</li>
                 ))}
               </ul>
             ) : (

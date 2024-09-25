@@ -16,7 +16,7 @@ const HotelPage = () => {
     const fetchHotels = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/public/hotels/hotel/places/${id}?page=${totalPages}&size=${hotelsPerPage}`
+          `${process.env.REACT_APP_BASE_API}/public/places/${id}/hotels?page=${totalPages}&size=${hotelsPerPage}`
         );
         const hotelData = response.data;
         setHotels(hotelData);
@@ -78,7 +78,8 @@ const HotelPage = () => {
                 />
                 <div className="text-center md:text-left md:w-2/3 md:pl-4">
                   <h3 className="text-xl font-bold">{hotel.hotelName}</h3>
-                  <p className="text-gray-600 mb-4">{hotel.address}</p>
+                  <p className="text-gray-600 mb-4">Address: {hotel.address}</p>
+                  <p className="text-gray-600 mb-4">Description: {hotel.description}</p>
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-lg">{hotel.rate} Stars</span>
                     <button
