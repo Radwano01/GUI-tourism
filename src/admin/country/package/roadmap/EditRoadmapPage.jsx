@@ -14,11 +14,11 @@ const EditRoadmapPage = () => {
     e.preventDefault();
     const token = localStorage.getItem("accessToken");
     try {
-      await axios.put(`${process.env.REACT_APP_BASE_API}/admin/packages/roadmaps/${roadmapId}`, {
+      await axios.put(`${process.env.REACT_APP_BASE_API}/admin/packages/roadmaps/${roadmapId}`, { roadmap }, {
         headers:{
           Authorization: `Bearer ${token}`
         }
-      }, { roadmap });
+      });
       navigate(`/admin/countries/${countryId}/packages/roadmaps`);
     } catch (error) {
       console.error('Error updating roadmap:', error);

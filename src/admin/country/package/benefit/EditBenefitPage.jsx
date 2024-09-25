@@ -12,11 +12,11 @@ const EditBenefitPage = () => {
     e.preventDefault();
     const token = localStorage.getItem("accessToken");
     try {
-      await axios.put(`${process.env.REACT_APP_BASE_API}/admin/packages/benefits/${benefitId}`, {
+      await axios.put(`${process.env.REACT_APP_BASE_API}/admin/packages/benefits/${benefitId}`, { benefit }, {
         headers:{
           Authorization: `Bearer ${token}`
         }
-      }, { benefit });
+      });
       navigate(`/admin/countries/${countryId}/packages/benefits`);
     } catch (error) {
       console.error('Error updating benefit:', error);

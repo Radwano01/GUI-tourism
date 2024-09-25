@@ -12,11 +12,11 @@ const CreateRoadmapPage = () => {
     e.preventDefault();
     const token = localStorage.getItem("accessToken");
     try {
-      await axios.post(`${process.env.REACT_APP_BASE_API}/admin/packages/roadmap`, {
+      await axios.post(`${process.env.REACT_APP_BASE_API}/admin/packages/roadmap`, { roadmap }, {
         headers:{
           Authorization: `Bearer ${token}`
         }
-      }, { roadmap });
+      });
       navigate(`/admin/countries/${countryId}/packages/roadmaps`);
     } catch (error) {
       console.error('Error creating roadmap:', error);

@@ -33,11 +33,11 @@ const CreatePackagePage = () => {
     formData.append('description', description);
 
     try {
-      await axios.post(`${process.env.REACT_APP_BASE_API}/admin/countries/${countryId}/package`, {
+      await axios.post(`${process.env.REACT_APP_BASE_API}/admin/countries/${countryId}/package`, formData, {
         headers:{
           Authorization: `Bearer ${token}`
         }
-      }, formData);
+      });
       navigate(`/admin/countries/${countryId}/packages`);
     } catch (error) {
       console.error('Error creating package:', error);
