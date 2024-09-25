@@ -65,6 +65,7 @@ import NotAuthorized from "./components/NotAuthorized";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ManageHotelFeaturesPage from "./admin/country/place/hotel/manageRelations/ManageHotelFeaturePage";
 import ManageRoomFeaturesPage from "./admin/country/place/hotel/manageRelations/ManageRoomFeaturePage";
+import CreateRoomFeaturePage from "./admin/country/place/hotel/roomFeatures/CreateRoomFeaturePage";
 
 function App() {
   return (
@@ -485,7 +486,7 @@ function App() {
             path="/admin/countries/:countryId/places/:placeId/rooms/features/create"
             element={
               <ProtectedRoute>
-                <CreateHotelFeaturePage />
+                <CreateRoomFeaturePage />
               </ProtectedRoute>
             }
           />
