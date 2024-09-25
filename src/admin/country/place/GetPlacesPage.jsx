@@ -53,8 +53,6 @@ const GetPlacesPage = () => {
     }
   };
 
-  if (places.length === 0) return <p>No places found.</p>;
-
   return (
     <div className="container mx-auto px-4 py-8">
       <BackButton direction={"/admin"} />
@@ -86,9 +84,7 @@ const GetPlacesPage = () => {
                 {/* View Details Button */}
                 <button
                   onClick={() =>
-                    navigate(
-                      `/admin/places/${place.id}/details`
-                    )
+                    navigate(`/admin/places/${place.id}/details`)
                   }
                   className="flex-1 bg-green-500 text-white py-2 px-3 rounded-md hover:bg-green-600 min-w-[150px]"
                 >
@@ -98,9 +94,7 @@ const GetPlacesPage = () => {
                 {/* Edit Details Button */}
                 <button
                   onClick={() =>
-                    navigate(
-                      `/admin/places/${place.id}/details/edit`
-                    )
+                    navigate(`/admin/places/${place.id}/details/edit`)
                   }
                   className="flex-1 bg-green-500 text-white py-2 px-3 rounded-md hover:bg-green-600 min-w-[150px]"
                 >

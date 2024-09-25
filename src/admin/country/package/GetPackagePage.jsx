@@ -19,10 +19,11 @@ const GetPackagesPage = () => {
       const token = localStorage.getItem("accessToken");
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/public/countries/${countryId}/packages`,{
-            headers:{
-              Authorization: `Bearer ${token}`
-            }
+          `${process.env.REACT_APP_BASE_API}/public/countries/${countryId}/packages`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
         setPackages(response.data);
@@ -52,10 +53,11 @@ const GetPackagesPage = () => {
       try {
         const token = localStorage.getItem("accessToken");
         await axios.delete(
-          `${process.env.REACT_APP_BASE_API}/admin/countries/${countryId}/packages/${packageId}`,{
-            headers:{
-              Authorization: `Bearer ${token}`
-            }
+          `${process.env.REACT_APP_BASE_API}/admin/countries/${countryId}/packages/${packageId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
         setPackages(packages.filter((pkg) => pkg.id !== packageId));
@@ -68,8 +70,6 @@ const GetPackagesPage = () => {
   const handleCreatePackage = () => {
     navigate(`/admin/countries/${countryId}/package`);
   };
-
-  if (packages.length === 0) return <p>No packages found.</p>;
 
   return (
     <div className="flex h-screen">
@@ -108,88 +108,96 @@ const GetPackagesPage = () => {
       <div className="w-3/4 p-4 overflow-auto">
         <BackButton direction={`/admin`} />
         <h1 className="text-3xl font-bold mb-4">Packages</h1>
+
+        {/* Create Package Button */}
         <button
           onClick={handleCreatePackage}
           className="mb-4 bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600"
         >
           Create Package
         </button>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {packages.map((pkg) => (
-            <div key={pkg.id} className="bg-white p-4 rounded-lg shadow-md">
-              {pkg.mainImage && (
-                <img
-                  src={`${process.env.REACT_APP_IMAGES_URL}/${pkg.mainImage}`}
-                  alt={pkg.packageName}
-                  className="w-full h-60 object-cover rounded-lg mb-4"
-                />
-              )}
-              <h2 className="text-xl font-bold">{pkg.packageName}</h2>
-              <p className="text-gray-700">${pkg.price}</p>
-              <div className="flex flex-wrap gap-2 mt-4">
-                {/* View Details Button */}
-                <button
-                  onClick={() =>
-                    navigate(
-                      `/admin/countries/${countryId}/packages/${pkg.id}/details`
-                    )
-                  }
-                  className="flex-1 bg-blue-500 text-white py-2 px-3 rounded-md hover:bg-blue-600 min-w-[150px]"
-                >
-                  View Details
-                </button>
 
-                {/* Edit Button */}
-                <button
-                  onClick={() => handleEdit(pkg.id)}
-                  className="flex-1 bg-yellow-500 text-white py-2 px-3 rounded-md hover:bg-yellow-600 min-w-[150px]"
-                >
-                  Edit
-                </button>
+        {/* Check if packages exist */}
+        {packages.length === 0 ? (
+          <p>No packages found.</p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {packages.map((pkg) => (
+              <div key={pkg.id} className="bg-white p-4 rounded-lg shadow-md">
+                {pkg.mainImage && (
+                  <img
+                    src={`${process.env.REACT_APP_IMAGES_URL}/${pkg.mainImage}`}
+                    alt={pkg.packageName}
+                    className="w-full h-60 object-cover rounded-lg mb-4"
+                  />
+                )}
+                <h2 className="text-xl font-bold">{pkg.packageName}</h2>
+                <p className="text-gray-700">${pkg.price}</p>
+                <div className="flex flex-wrap gap-2 mt-4">
+                  {/* View Details Button */}
+                  <button
+                    onClick={() =>
+                      navigate(
+                        `/admin/countries/${countryId}/packages/${pkg.id}/details`
+                      )
+                    }
+                    className="flex-1 bg-blue-500 text-white py-2 px-3 rounded-md hover:bg-blue-600 min-w-[150px]"
+                  >
+                    View Details
+                  </button>
 
-                {/* Edit Details Button */}
-                <button
-                  onClick={() => handleEditDetails(pkg.id)}
-                  className="flex-1 bg-purple-500 text-white py-2 px-3 rounded-md hover:bg-purple-600 min-w-[150px]"
-                >
-                  Edit Details
-                </button>
+                  {/* Edit Button */}
+                  <button
+                    onClick={() => handleEdit(pkg.id)}
+                    className="flex-1 bg-yellow-500 text-white py-2 px-3 rounded-md hover:bg-yellow-600 min-w-[150px]"
+                  >
+                    Edit
+                  </button>
 
-                {/* Delete Button */}
-                <button
-                  onClick={() => handleDelete(pkg.id)}
-                  className="flex-1 bg-red-600 text-white py-2 px-3 rounded-md hover:bg-red-700 min-w-[150px]"
-                >
-                  Delete
-                </button>
+                  {/* Edit Details Button */}
+                  <button
+                    onClick={() => handleEditDetails(pkg.id)}
+                    className="flex-1 bg-purple-500 text-white py-2 px-3 rounded-md hover:bg-purple-600 min-w-[150px]"
+                  >
+                    Edit Details
+                  </button>
 
-                {/* Add Roadmap Button */}
-                <button
-                  onClick={() =>
-                    navigate(
-                      `/admin/countries/${countryId}/packages/${pkg.id}/roadmaps`
-                    )
-                  }
-                  className="flex-1 bg-green-500 text-white py-2 px-3 rounded-md hover:bg-green-600 min-w-[150px]"
-                >
-                  Add Roadmap
-                </button>
+                  {/* Delete Button */}
+                  <button
+                    onClick={() => handleDelete(pkg.id)}
+                    className="flex-1 bg-red-600 text-white py-2 px-3 rounded-md hover:bg-red-700 min-w-[150px]"
+                  >
+                    Delete
+                  </button>
 
-                {/* Add Benefit Button */}
-                <button
-                  onClick={() =>
-                    navigate(
-                      `/admin/countries/${countryId}/packages/${pkg.id}/benefits`
-                    )
-                  }
-                  className="flex-1 bg-teal-500 text-white py-2 px-3 rounded-md hover:bg-teal-600 min-w-[150px]"
-                >
-                  Add Benefit
-                </button>
+                  {/* Add Roadmap Button */}
+                  <button
+                    onClick={() =>
+                      navigate(
+                        `/admin/countries/${countryId}/packages/${pkg.id}/roadmaps`
+                      )
+                    }
+                    className="flex-1 bg-green-500 text-white py-2 px-3 rounded-md hover:bg-green-600 min-w-[150px]"
+                  >
+                    Add Roadmap
+                  </button>
+
+                  {/* Add Benefit Button */}
+                  <button
+                    onClick={() =>
+                      navigate(
+                        `/admin/countries/${countryId}/packages/${pkg.id}/benefits`
+                      )
+                    }
+                    className="flex-1 bg-teal-500 text-white py-2 px-3 rounded-md hover:bg-teal-600 min-w-[150px]"
+                  >
+                    Add Benefit
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

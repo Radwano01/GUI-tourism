@@ -51,6 +51,8 @@ const CountriesListPage = () => {
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-3xl font-bold">Countries</h2>
+
+        {/* "Add New Country" button always displayed */}
         <button
           onClick={() => navigate("/admin/country")}
           className="bg-blue-500 text-white py-2 px-4 rounded-md shadow-md hover:bg-blue-600"
