@@ -18,7 +18,6 @@ const ManageHotelFeaturesPage = () => {
             headers: { Authorization: `Bearer ${token}` }
           }
         );
-        console.log(response.data)
         setFeatures(response.data);
       } catch (error) {
         console.error("Error fetching features:", error);

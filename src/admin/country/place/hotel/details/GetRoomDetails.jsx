@@ -72,14 +72,14 @@ const GetRoomDetailsPage = () => {
         <h3 className="text-xl font-bold mt-4">Hotel Features</h3>
         <ul>
           {roomDetails.hotelFeatures.map((feature) => (
-            <li key={feature.id}>{feature.hotelFeature}</li>
+            <li key={feature.id}>{feature.hotelFeatures}</li>
           ))}
         </ul>
 
         <h3 className="text-xl font-bold mt-4">Room Features</h3>
         <ul>
           {roomDetails.roomFeatures.map((feature) => (
-            <li key={feature.id}>{feature.roomFeature}</li>
+            <li key={feature.id}>{feature.roomFeatures}</li>
           ))}
         </ul>
       </div>
