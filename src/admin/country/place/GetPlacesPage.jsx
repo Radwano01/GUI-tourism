@@ -84,7 +84,7 @@ const GetPlacesPage = () => {
                 {/* View Details Button */}
                 <button
                   onClick={() =>
-                    navigate(`/admin/places/${place.id}/details`)
+                    navigate(`/admin/countries/${countryId}/places/${place.id}/details`)
                   }
                   className="flex-1 bg-green-500 text-white py-2 px-3 rounded-md hover:bg-green-600 min-w-[150px]"
                 >

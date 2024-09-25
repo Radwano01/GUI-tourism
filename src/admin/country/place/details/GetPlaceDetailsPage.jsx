@@ -11,7 +11,7 @@ const GetPlaceDetailsPage = () => {
     const fetchPlaceDetails = async () => {
       try {
         const token = localStorage.getItem("accessToken");
-        const response = await axios.get(`${process.env.REACT_APP_BASE_API}/places/${placeId}/details`,{
+        const response = await axios.get(`${process.env.REACT_APP_BASE_API}/public/places/${placeId}/details`,{
           headers:{
             Authorization: `Bearer ${token}`
           }

@@ -24,11 +24,11 @@ const EditAirportPage = () => {
 
     const token = localStorage.getItem("accessToken");
     axios
-      .put(`${process.env.REACT_APP_BASE_API}/admin/places/${placeId}/airports/${airPortId}`, {
+      .put(`${process.env.REACT_APP_BASE_API}/admin/places/${placeId}/airports/${airPortId}`, updatedAirport, {
         headers:{
           Authorization: `Bearer ${token}`
         }
-      }, updatedAirport)
+      })
       .then(() => {
         navigate(`/admin/countries/${countryId}/places/${placeId}/airports`); // Redirect to the airport list after editing
       })

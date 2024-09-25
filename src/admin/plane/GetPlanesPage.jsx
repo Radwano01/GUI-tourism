@@ -6,7 +6,7 @@ const GetPlanesPage = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_BASE_API}/planes`)
+      .get(`${process.env.REACT_APP_BASE_API}/public/planes`)
       .then((response) => {
         setPlanes(response.data);
       })
@@ -17,8 +17,13 @@ const GetPlanesPage = () => {
 
   const handleDelete = (planeId) => {
     if (window.confirm("Are you sure you want to delete this plane?")) {
+      const token = localStorage.getItem("accessToken");
       axios
-        .delete(`${process.env.REACT_APP_BASE_API}/admin/planes/${planeId}`)
+        .delete(`${process.env.REACT_APP_BASE_API}/admin/planes/${planeId}`, {
+          headers:{
+            Authorization: `Bearer ${token}`
+          }
+        })
         .then(() => {
           setPlanes(planes.filter((plane) => plane.id !== planeId));
         })

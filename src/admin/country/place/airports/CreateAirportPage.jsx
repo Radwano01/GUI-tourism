@@ -19,11 +19,11 @@ const CreateAirportPage = () => {
 
     const token = localStorage.getItem("accessToken");
     axios
-      .post(`${process.env.REACT_APP_BASE_API}/admin/places/${placeId}/airport`, {
+      .post(`${process.env.REACT_APP_BASE_API}/admin/places/${placeId}/airport`, newAirport, {
         headers:{
           Authorization: `Bearer ${token}`
         }
-      }, newAirport)
+      })
       .then(() => {
         navigate(`/admin/countries/${countryId}/places/${placeId}/airports`); // Redirect to the airport list
       })

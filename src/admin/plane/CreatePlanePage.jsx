@@ -15,9 +15,13 @@ const CreatePlanePage = () => {
       planeCompanyName,
       numSeats: parseInt(numSeats),
     };
-
+    const token = localStorage.getItem("accessToken");
     axios
-      .post(`${process.env.REACT_APP_BASE_API}/admin/plane`, newPlane)
+      .post(`${process.env.REACT_APP_BASE_API}/admin/plane`, newPlane, {
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
+      })
       .then(() => {
         navigate("/admin"); // Redirect to the planes list
       })

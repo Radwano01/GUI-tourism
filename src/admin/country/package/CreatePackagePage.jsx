@@ -34,7 +34,8 @@ const CreatePackagePage = () => {
 
     try {
       await axios.post(`${process.env.REACT_APP_BASE_API}/admin/countries/${countryId}/package`, formData, {
-        headers:{
+        headers: {
+          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`
         }
       });
@@ -45,88 +46,103 @@ const CreatePackagePage = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <BackButton direction={`/admin/countries/${countryId}/packages`} />
-      <h1 className="text-3xl font-bold mb-4">Create Package</h1>
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md" encType="multipart/form-data">
-        {/* Form fields */}
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Package Name</label>
-          <input
-            type="text"
-            value={packageName}
-            onChange={(e) => setPackageName(e.target.value)}
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Price</label>
-          <input
-            type="number"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Rate</label>
-          <input
-            type="number"
-            value={rate}
-            onChange={(e) => setRate(e.target.value)}
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Main Image</label>
-          <input
-            type="file"
-            onChange={(e) => handleFileChange(e, setMainImage)}
-            className="mt-1 block w-full"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Image One</label>
-          <input
-            type="file"
-            onChange={(e) => handleFileChange(e, setImageOne)}
-            className="mt-1 block w-full"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Image Two</label>
-          <input
-            type="file"
-            onChange={(e) => handleFileChange(e, setImageTwo)}
-            className="mt-1 block w-full"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Image Three</label>
-          <input
-            type="file"
-            onChange={(e) => handleFileChange(e, setImageThree)}
-            className="mt-1 block w-full"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Description</label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
-            rows="3"
-          />
-        </div>
-        <button
-          type="submit"
-          className="w-full py-2 px-4 bg-indigo-600 text-white rounded-md"
+    <div className="flex flex-col items-center h-screen-max bg-gray-100">
+      <div className="w-full max-w-lg px-4 py-8">
+        <BackButton direction={`/admin/countries/${countryId}/packages`} />
+        <form
+          onSubmit={handleSubmit}
+          encType="multipart/form-data"
+          className="bg-white p-6 rounded-lg shadow-md"
         >
-          Create Package
-        </button>
-      </form>
+          <h2 className="text-2xl font-bold mb-6 text-center">Create New Package</h2>
+
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">Package Name</label>
+            <input
+              type="text"
+              value={packageName}
+              onChange={(e) => setPackageName(e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              required
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">Price</label>
+            <input
+              type="number"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              required
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">Rate</label>
+            <input
+              type="number"
+              value={rate}
+              onChange={(e) => setRate(e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">Main Image</label>
+            <input
+              type="file"
+              onChange={(e) => handleFileChange(e, setMainImage)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              required
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">Image One</label>
+            <input
+              type="file"
+              onChange={(e) => handleFileChange(e, setImageOne)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">Image Two</label>
+            <input
+              type="file"
+              onChange={(e) => handleFileChange(e, setImageTwo)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">Image Three</label>
+            <input
+              type="file"
+              onChange={(e) => handleFileChange(e, setImageThree)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">Description</label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="w-full py-2 px-4 bg-indigo-600 text-white rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
+          >
+            Create Package
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

@@ -13,7 +13,7 @@ const EditPlanePage = () => {
   useEffect(() => {
     // Fetch the plane details
     axios
-      .get(`${process.env.REACT_APP_BASE_API}/planes/${planeId}`)
+      .get(`${process.env.REACT_APP_BASE_API}/public/planes/${planeId}`)
       .then((response) => {
         const { planeCompanyName, numSeats, status } = response.data;
         setPlaneCompanyName(planeCompanyName);
@@ -33,9 +33,13 @@ const EditPlanePage = () => {
       numSeats: parseInt(numSeats),
       status,
     };
-
+    const token = localStorage.getItem("accessToken");
     axios
-      .put(`${process.env.REACT_APP_BASE_API}/admin/planes/${planeId}`, updatedPlane)
+      .put(`${process.env.REACT_APP_BASE_API}/admin/planes/${planeId}`, updatedPlane, {
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
+      })
       .then(() => {
         navigate("/admin"); // Redirect to the planes list
       })
