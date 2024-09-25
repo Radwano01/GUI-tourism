@@ -17,7 +17,7 @@ const EditPackageDetailsPage = () => {
   useEffect(() => {
     const fetchPackageDetails = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BASE_API}/packages/${packageId}/details`);
+        const response = await axios.get(`${process.env.REACT_APP_BASE_API}/public/packages/${packageId}/details`);
         setPackageDetails(response.data);
         setFormData({
           imageOne: null,
@@ -50,7 +50,13 @@ const EditPackageDetailsPage = () => {
     form.append('description', formData.description);
 
     try {
-      await axios.put(`${process.env.REACT_APP_BASE_API}/admin/packages/${packageId}/details`, form);
+      const token = localStorage.getItem("accessToken");
+      await axios.put(`${process.env.REACT_APP_BASE_API}/admin/packages/${packageId}/details`, form, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`
+        },
+      });
       navigate(`/admin/countries/${countryId}/packages/${packageId}/details`);
     } catch (error) {
       console.error('Error updating package details:', error);

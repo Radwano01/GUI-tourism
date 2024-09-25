@@ -11,25 +11,6 @@ const EditPackagePage = () => {
   const [mainImage, setMainImage] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    axios
-      .get(`${process.env.REACT_APP_BASE_API}/public/packages/${packageId}`, {
-        headers:{
-          Authorization: `Bearer ${token}`
-        }
-      })
-      .then((response) => {
-        const { packageName, price, rate } = response.data;
-        setPackageName(packageName);
-        setPrice(price);
-        setRate(rate);
-      })
-      .catch((error) => {
-        console.error("Error fetching package details:", error);
-      });
-  }, [packageId]);
-
   const handleSubmit = (e) => {
     e.preventDefault();
     const token = localStorage.getItem("accessToken");
@@ -44,7 +25,7 @@ const EditPackagePage = () => {
 
     axios
       .put(
-        `${process.env.REACT_APP_BASE_API}/admin/packages/${packageId}`,
+        `${process.env.REACT_APP_BASE_API}/admin/countries/${countryId}/packages/${packageId}`,
         formData,
         {
           headers: {
@@ -81,7 +62,6 @@ const EditPackagePage = () => {
               value={packageName}
               onChange={(e) => setPackageName(e.target.value)}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              required
             />
           </div>
 
@@ -94,7 +74,6 @@ const EditPackagePage = () => {
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              required
             />
           </div>
 
@@ -107,7 +86,6 @@ const EditPackagePage = () => {
               value={rate}
               onChange={(e) => setRate(e.target.value)}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              required
             />
           </div>
 
