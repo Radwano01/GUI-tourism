@@ -501,7 +501,7 @@ function App() {
           />
 
           <Route
-            path="/admin/countries/:countryId/places/:placeId/hotels/:hotelId"
+            path="/admin/countries/:countryId/places/:placeId/hotels/:hotelId/hotel/features"
             element={
               <ProtectedRoute>
                 <ManageHotelFeaturesPage />
@@ -510,7 +510,7 @@ function App() {
           />
 
           <Route
-            path="/admin/countries/:countryId/places/:placeId/hotels/:hotelId"
+            path="/admin/countries/:countryId/places/:placeId/hotels/:hotelId/room/features"
             element={
               <ProtectedRoute>
                 <ManageRoomFeaturesPage />
