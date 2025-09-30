@@ -8,78 +8,79 @@ const ManageHotelFeaturesPage = () => {
   const [features, setFeatures] = useState([]);
   const [selectedFeature, setSelectedFeature] = useState("");
   const [hotelFeatures, setHotelFeatures] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const fetchFeatures = async () => {
+    const fetchFeaturesData = async () => {
+      const token = localStorage.getItem("accessToken");
       try {
-        const token = localStorage.getItem("accessToken");
-        const response = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/public/hotels/features`, {
+        const [featuresResponse, hotelFeaturesResponse] = await Promise.all([
+          axios.get(`${process.env.REACT_APP_BASE_API}/public/hotels/features`, {
             headers: { Authorization: `Bearer ${token}` }
-          }
-        );
-        setFeatures(response.data);
+          }),
+          axios.get(`${process.env.REACT_APP_BASE_API}/admin/hotels/${hotelId}/details/hotels/features`, {
+            headers: { Authorization: `Bearer ${token}` }
+          })
+        ]);
+        setFeatures(featuresResponse.data);
+        setHotelFeatures(hotelFeaturesResponse.data);
       } catch (error) {
         console.error("Error fetching features:", error);
       }
     };
 
-    const fetchHotelFeatures = async () => {
-      try {
-        const token = localStorage.getItem("accessToken");
-        const response = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/admin/hotels/${hotelId}/details/hotels/features`, {
-            headers: { Authorization: `Bearer ${token}` }
-          }
-        );
-        setHotelFeatures(response.data);
-      } catch (error) {
-        console.error("Error fetching hotel features:", error);
-      }
-    };
-
-    fetchFeatures();
-    fetchHotelFeatures();
+    fetchFeaturesData();
   }, [hotelId]);
 
-  
   const handleAddFeature = async () => {
+    if (!selectedFeature) {
+      alert("Please select a feature.");
+      return;
+    }
+
+    const featureExists = hotelFeatures.some(
+      (feature) => feature.id.toString() === selectedFeature
+    );
+
+    if (featureExists) {
+      alert("Feature already added.");
+      return;
+    }
+
+    setIsLoading(true);
     try {
       const token = localStorage.getItem("accessToken");
       await axios.post(
-        `${process.env.REACT_APP_BASE_API}/admin/hotels/${hotelId}/hotel/features/${selectedFeature}`, 
-        null, 
-        {
-          headers: { Authorization: `Bearer ${token}` }
-        }
+        `${process.env.REACT_APP_BASE_API}/admin/hotels/${hotelId}/hotel/features/${selectedFeature}`,
+        null,
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-      
+
       const addedFeature = features.find(
         (feature) => feature.id.toString() === selectedFeature
       );
-  
+
       if (addedFeature) {
         setHotelFeatures([...hotelFeatures, addedFeature]);
+        setSelectedFeature("");
+        alert("Feature added successfully.");
       } else {
-        console.error("Selected feature not found in the available features.");
+        console.error("Feature not found in the available features.");
       }
-  
-      setSelectedFeature("");
-      
-      alert("Feature added successfully");
     } catch (error) {
       console.error("Error adding feature:", error);
+      alert("Error adding feature. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
-  
 
   const handleRemoveFeature = async (featureId) => {
     try {
       const token = localStorage.getItem("accessToken");
       await axios.delete(
-        `${process.env.REACT_APP_BASE_API}/admin/hotels/${hotelId}/hotel/features/${featureId}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        }
+        `${process.env.REACT_APP_BASE_API}/admin/hotels/${hotelId}/hotel/features/${featureId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       setHotelFeatures(hotelFeatures.filter((feature) => feature.id !== featureId));
     } catch (error) {
@@ -109,9 +110,14 @@ const ManageHotelFeaturesPage = () => {
         </select>
         <button
           onClick={handleAddFeature}
-          className="bg-green-500 text-white py-2 px-4 rounded-md ml-4"
+          disabled={isLoading || !selectedFeature}
+          className={`py-2 px-4 rounded-md ml-4 ${
+            isLoading || !selectedFeature
+              ? 'bg-gray-400 cursor-not-allowed text-gray-200'
+              : 'bg-green-500 hover:bg-green-600 text-white'
+          }`}
         >
-          Add Feature
+          {isLoading ? 'Adding Feature...' : 'Add Feature'}
         </button>
       </div>
 

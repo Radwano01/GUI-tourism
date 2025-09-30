@@ -39,7 +39,7 @@ const GetFlightPage = () => {
   const fetchAirports = async (place, isDeparture) => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BASE_API}/places/${place}`
+        `${process.env.REACT_APP_BASE_API}/public/places/${place}`
       );
       if (isDeparture) {
         setDepartureAirports(response.data);
@@ -100,6 +100,8 @@ const GetFlightPage = () => {
     e.preventDefault();
     setError(""); // Clear any existing errors
 
+    const token = localStorage.getItem("accessToken");
+
     // API call to search flights
     axios
       .get(`${process.env.REACT_APP_BASE_API}/admin/flights`, {
@@ -110,6 +112,9 @@ const GetFlightPage = () => {
           destinationAirPortId: destinationAirport || undefined,
           planeCompanyName: planeCompanyName || undefined,
         },
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       })
       .then((response) => {
         const flightData = response.data || {};
@@ -146,7 +151,7 @@ const GetFlightPage = () => {
   return (
     <div className="flex flex-col items-center h-screen bg-gray-100">
       <div className="w-full max-w-2xl px-4 py-8">
-        <BackButton direction="/admin" />
+        <BackButton direction="/admin?section=PLANE" />
         <form
           onSubmit={handleSearchFlights}
           className="bg-white p-6 rounded-lg shadow-md"

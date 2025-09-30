@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
-
-const BASE_URL = `${process.env.REACT_APP_BASE_API}/hotels`;
 
 const HotelEvaluation = ({ hotelId, userId }) => {
   const [evaluations, setEvaluations] = useState([]);
@@ -15,7 +13,7 @@ const HotelEvaluation = ({ hotelId, userId }) => {
     try {
       const token = localStorage.getItem("accessToken");
       await axios.post(
-        `${BASE_URL}/public/hotels/${hotelId}/users/${userId}/comment`,
+        `${process.env.REACT_APP_BASE_API}/public/hotels/${hotelId}/users/${userId}/comment`,
         { comment, rate },
         {
           headers: {
@@ -31,11 +29,11 @@ const HotelEvaluation = ({ hotelId, userId }) => {
     }
   };
 
-  const fetchEvaluations = async () => {
+  const fetchEvaluations = useCallback(async () => {
     try {
       const token = localStorage.getItem("accessToken");
       const response = await axios.get(
-        `${BASE_URL}/public/hotels//${hotelId}/users/comments`,
+        `${process.env.REACT_APP_BASE_API}/public/hotels/${hotelId}/users/comments`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -52,14 +50,14 @@ const HotelEvaluation = ({ hotelId, userId }) => {
     } catch (error) {
       console.error("Error fetching evaluations:", error);
     }
-  };
+  }, [hotelId, userId]);
 
   const editHotelEvaluation = async (commentId, updatedComment) => {
     try {
       const token = localStorage.getItem("accessToken");
       const rate = 5; // Set rate to 5
       await axios.put(
-        `${BASE_URL}/public/hotels/comments/${commentId}`,
+        `${process.env.REACT_APP_BASE_API}/public/hotels/comments/${commentId}`,
         { comment: updatedComment, rate },
         {
           headers: {
@@ -78,7 +76,7 @@ const HotelEvaluation = ({ hotelId, userId }) => {
   const removeHotelEvaluation = async (commentId) => {
     try {
       const token = localStorage.getItem("accessToken");
-      await axios.delete(`${BASE_URL}/public/hotels/comments/${commentId}`, {
+      await axios.delete(`${process.env.REACT_APP_BASE_API}/public/hotels/comments/${commentId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -91,11 +89,18 @@ const HotelEvaluation = ({ hotelId, userId }) => {
 
   useEffect(() => {
     fetchEvaluations();
-  }, [hotelId]);
+  }, [hotelId, fetchEvaluations]);
 
   const handleLoginClick = () => {
     // Navigate to /login when the user clicks on the text
     window.location.href = "/login";
+  };
+
+  const handleCommentChange = (e) => {
+    const comment = e.target.value;
+    if (comment.length <= 255) {
+      setNewComment(comment);
+    }
   };
 
   return (
@@ -114,9 +119,10 @@ const HotelEvaluation = ({ hotelId, userId }) => {
         <div className="mb-4">
           <textarea
             value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            placeholder="Add your comment"
+            onChange={handleCommentChange}
+            placeholder="Add your comment (max 255 characters)"
             className="w-full p-2 border rounded"
+            maxLength={255}
             required
           />
           <div className="mt-2">
@@ -135,9 +141,7 @@ const HotelEvaluation = ({ hotelId, userId }) => {
             </select>
           </div>
           <button
-            onClick={() =>
-              addHotelEvaluation(hotelId, userId, newComment, newRate)
-            }
+            onClick={() => addHotelEvaluation(hotelId, userId, newComment, newRate)}
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2"
             disabled={!newComment.trim()} // Disable button if newComment is empty
           >
@@ -193,9 +197,7 @@ const HotelEvaluation = ({ hotelId, userId }) => {
                       className="w-full p-2 border rounded"
                     />
                     <button
-                      onClick={() =>
-                        editHotelEvaluation(editCommentId, editComment)
-                      }
+                      onClick={() => editHotelEvaluation(editCommentId, editComment)}
                       className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-2"
                     >
                       Save

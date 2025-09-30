@@ -4,10 +4,14 @@ import axios from "axios";
 
 const CountriesListPage = () => {
   const [countries, setCountries] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCountries = async () => {
+      setIsLoading(true);
+      setError(null);
       const token = localStorage.getItem("accessToken");
       try {
         const response = await axios.get(
@@ -21,6 +25,9 @@ const CountriesListPage = () => {
         setCountries(response.data);
       } catch (error) {
         console.error("Error fetching countries:", error);
+        setError("Failed to load countries. Please try again.");
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -43,6 +50,7 @@ const CountriesListPage = () => {
         alert("Country deleted successfully!");
       } catch (error) {
         console.error("Error deleting country:", error);
+        alert("Failed to delete country. Please try again.");
       }
     }
   };
@@ -61,7 +69,24 @@ const CountriesListPage = () => {
         </button>
       </div>
 
-      {countries.length > 0 ? (
+      {isLoading ? (
+        <div className="flex justify-center items-center py-12">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading countries...</p>
+          </div>
+        </div>
+      ) : error ? (
+        <div className="text-center py-12">
+          <div className="text-red-500 text-lg mb-4">{error}</div>
+          <button
+            onClick={() => window.location.reload()}
+            className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
+          >
+            Retry
+          </button>
+        </div>
+      ) : countries.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {countries.map((country) => (
             <div key={country.id} className="bg-white p-4 rounded-lg shadow-md">
@@ -130,7 +155,9 @@ const CountriesListPage = () => {
           ))}
         </div>
       ) : (
-        <p>No countries available.</p>
+        <div className="text-center py-12">
+          <p className="text-gray-600 text-lg">No countries available.</p>
+        </div>
       )}
     </div>
   );

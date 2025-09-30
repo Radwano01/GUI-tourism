@@ -32,6 +32,12 @@ const PlaceDetailsPage = () => {
     });
   };
 
+  const handleNavigateToHotels = () => {
+    navigate(`/hotels/${id}`, {
+      state: { placeId: id, placeName: place.place },
+    });
+  };
+
   if (loading) {
     return <LoadingScreen />;
   }
@@ -42,26 +48,39 @@ const PlaceDetailsPage = () => {
 
   return (
     <div className="bg-gray-100 min-h-screen">
-      <header className="bg-gray-800 text-white p-4">
-        <h1 className="text-3xl">Place Details Page</h1>
-        <Header />
-        <ul className="flex space-x-4">
-          <li>
-            <button
-              onClick={handleNavigateToFlights}
-              className="hover:text-gray-300 focus:outline-none"
-            >
-              Book a Visa
-            </button>
-          </li>
+      {/* Main Header with color */}
+      <Header />
 
-          <li>
-            <a href={`/hotels/${id}`} className="hover:text-gray-300">
-              Book a Room
-            </a>
-          </li>
-        </ul>
-      </header>
+      <div className="bg-gray-800 text-white py-4 shadow-md">
+        <nav className="max-w-screen-xl mx-auto px-4 flex justify-between items-center">
+          <ul className="flex justify-start space-x-4">
+            {/* Your other list items can go here */}
+          </ul>
+
+          {/* Aligning buttons horizontally and ensuring consistent size */}
+          <ul className="flex justify-end space-x-4 items-center">
+            <li>
+              <button
+                onClick={handleNavigateToFlights}
+                className="bg-orange-500 hover:bg-blue-600 text-white w-44 h-12 rounded-md transition-all duration-200 ease-in-out text-center"
+              >
+                Book a Visa
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={handleNavigateToHotels}
+                className="bg-purple-500 hover:bg-green-600 text-white w-44 h-12 rounded-md transition-all duration-200 ease-in-out text-center"
+              >
+                Book a Room
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+
+
 
       <main className="container mx-auto p-4">
         <section className="mb-8">
@@ -72,11 +91,9 @@ const PlaceDetailsPage = () => {
         </section>
 
         <section className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          {[place.imageOne, place.imageTwo, place.imageThree].map(
-            (image, index) => (
-              <GalleryItem key={index} image={image} index={index} />
-            )
-          )}
+          {[place.imageOne, place.imageTwo, place.imageThree].map((image, index) => (
+            <GalleryItem key={index} image={image} />
+          ))}
         </section>
       </main>
     </div>
@@ -96,7 +113,7 @@ const ErrorScreen = () => (
 const PlaceImage = ({ place }) => (
   <img
     src={`${process.env.REACT_APP_IMAGES_URL}/${place.mainImage}`}
-    alt={`${place.place} Skyline`}
+    alt={place.place}
     className="w-full md:w-2/3 h-auto rounded-lg shadow-lg"
     style={{ maxWidth: "1000px", maxHeight: "600px" }}
   />
@@ -109,11 +126,11 @@ const PlaceDescription = ({ place }) => (
   </div>
 );
 
-const GalleryItem = ({ image, index }) => (
+const GalleryItem = ({ image }) => (
   <div className="relative">
     <img
       src={`${process.env.REACT_APP_IMAGES_URL}/${image}`}
-      alt={`Gallery Image ${index + 1}`}
+      alt="Gallery"
       className="w-full h-48 rounded-md shadow-lg object-cover"
     />
   </div>

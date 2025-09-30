@@ -8,6 +8,7 @@ const ManageRoomFeaturesPage = () => {
   const [features, setFeatures] = useState([]);
   const [selectedFeature, setSelectedFeature] = useState("");
   const [roomFeatures, setRoomFeatures] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchFeatures = async () => {
@@ -44,6 +45,21 @@ const ManageRoomFeaturesPage = () => {
 
   
   const handleAddFeature = async () => {
+    if (!selectedFeature) {
+      alert("Please select a feature.");
+      return;
+    }
+
+    const featureExists = roomFeatures.some(
+      (feature) => feature.id.toString() === selectedFeature
+    );
+
+    if (featureExists) {
+      alert("Feature already added.");
+      return;
+    }
+
+    setIsLoading(true);
     try {
       const token = localStorage.getItem("accessToken");
       await axios.post(
@@ -57,19 +73,20 @@ const ManageRoomFeaturesPage = () => {
       const addedFeature = features.find(
         (feature) => feature.id.toString() === selectedFeature
       );
-  
+    
       // Check if the feature is found
       if (addedFeature) {
         setRoomFeatures([...roomFeatures, addedFeature]);
+        setSelectedFeature("");
+        alert("Room feature added successfully");
       } else {
         console.error("Selected feature not found in the available features.");
       }
-  
-      setSelectedFeature("");
-      
-      alert("Room feature added successfully");
     } catch (error) {
       console.error("Error adding room feature:", error);
+      alert("Error adding room feature. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
   
@@ -110,9 +127,14 @@ const ManageRoomFeaturesPage = () => {
         </select>
         <button
           onClick={handleAddFeature}
-          className="bg-green-500 text-white py-2 px-4 rounded-md ml-4"
+          disabled={isLoading || !selectedFeature}
+          className={`py-2 px-4 rounded-md ml-4 ${
+            isLoading || !selectedFeature
+              ? 'bg-gray-400 cursor-not-allowed text-gray-200'
+              : 'bg-green-500 hover:bg-green-600 text-white'
+          }`}
         >
-          Add Room Feature
+          {isLoading ? 'Adding Room Feature...' : 'Add Room Feature'}
         </button>
       </div>
 

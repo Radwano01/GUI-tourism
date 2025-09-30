@@ -9,6 +9,7 @@ const ManagePackageRoadmapsPage = () => {
   const [roadmaps, setRoadmaps] = useState([]);
   const [selectedRoadmap, setSelectedRoadmap] = useState("");
   const [packageRoadmaps, setPackageRoadmaps] = useState([]); // Roadmaps already in the package
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     // Fetch all available roadmaps
@@ -54,6 +55,21 @@ const ManagePackageRoadmapsPage = () => {
 
   // Add a roadmap to the package
   const handleAddRoadmap = async () => {
+    if (!selectedRoadmap) {
+      alert("Please select a roadmap.");
+      return;
+    }
+
+    const roadmapExists = packageRoadmaps.some(
+      (roadmap) => roadmap.id.toString() === selectedRoadmap
+    );
+
+    if (roadmapExists) {
+      alert("Roadmap already added.");
+      return;
+    }
+
+    setIsLoading(true);
     try {
       const token = localStorage.getItem("accessToken");
       await axios.post(
@@ -71,11 +87,17 @@ const ManagePackageRoadmapsPage = () => {
         (roadmap) => roadmap.id.toString() === selectedRoadmap
       );
 
-      setPackageRoadmaps([...packageRoadmaps, addedRoadmap]);
-
-      setSelectedRoadmap("");
+      if (addedRoadmap) {
+        setPackageRoadmaps([...packageRoadmaps, addedRoadmap]);
+        setSelectedRoadmap("");
+      } else {
+        console.error("Selected roadmap not found in the available roadmaps.");
+      }
     } catch (error) {
       console.error("Error adding roadmap:", error);
+      alert("Error adding roadmap. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -122,9 +144,14 @@ const ManagePackageRoadmapsPage = () => {
         </select>
         <button
           onClick={handleAddRoadmap}
-          className="bg-green-500 text-white py-2 px-4 rounded-md ml-4"
+          disabled={isLoading || !selectedRoadmap}
+          className={`py-2 px-4 rounded-md ml-4 ${
+            isLoading || !selectedRoadmap
+              ? 'bg-gray-400 cursor-not-allowed text-gray-200'
+              : 'bg-green-500 hover:bg-green-600 text-white'
+          }`}
         >
-          Add Roadmap
+          {isLoading ? 'Adding Roadmap...' : 'Add Roadmap'}
         </button>
       </div>
 

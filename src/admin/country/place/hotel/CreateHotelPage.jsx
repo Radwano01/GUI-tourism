@@ -19,10 +19,22 @@ const CreateHotelPage = () => {
   const [imageFour, setImageFour] = useState(null);
   const [roomDescription, setRoomDescription] = useState("");
   const [price, setPrice] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (description.length > 100) {
+      alert('Hotel description must be 100 characters or less.');
+      return;
+    }
+
+    if (roomDescription.length > 1000) {
+      alert('Room description must be 1000 characters or less.');
+      return;
+    }
+
+    setIsLoading(true);
     const formData = new FormData();
     formData.append("hotelName", hotelName);
     formData.append("mainImage", mainImage);
@@ -48,13 +60,16 @@ const CreateHotelPage = () => {
       navigate(`/admin/countries/${countryId}/places/${placeId}/hotels`);
     } catch (error) {
       console.error("Error creating hotel:", error);
+      alert("Error creating hotel. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="flex flex-col items-center h-screen-max bg-gray-100">
       <div className="w-full max-w-lg px-4 py-8">
-        <BackButton direction={`/admin/places/${placeId}/hotels`} /> {/* Adjust direction as needed */}
+        <BackButton direction={`/admin/countries/${countryId}/places/${placeId}/hotels`} />
         <form
           onSubmit={handleSubmit}
           encType="multipart/form-data"
@@ -89,8 +104,20 @@ const CreateHotelPage = () => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              rows="3"
+              placeholder="Enter hotel description (maximum 100 characters)"
               required
             />
+            <div className="mt-2 text-sm text-gray-600">
+              <span className={description.length > 100 ? "text-red-600" : "text-green-600"}>
+                {description.length} / 100 characters
+              </span>
+              {description.length > 100 && (
+                <span className="ml-2 text-red-600">
+                  ({description.length - 100} characters over limit)
+                </span>
+              )}
+            </div>
           </div>
 
           <div className="mb-4">
@@ -168,8 +195,20 @@ const CreateHotelPage = () => {
               value={roomDescription}
               onChange={(e) => setRoomDescription(e.target.value)}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              rows="4"
+              placeholder="Enter room description (maximum 1000 characters)"
               required
             />
+            <div className="mt-2 text-sm text-gray-600">
+              <span className={roomDescription.length > 1000 ? "text-red-600" : "text-green-600"}>
+                {roomDescription.length} / 1000 characters
+              </span>
+              {roomDescription.length > 1000 && (
+                <span className="ml-2 text-red-600">
+                  ({roomDescription.length - 1000} characters over limit)
+                </span>
+              )}
+            </div>
           </div>
 
           <div className="mb-4">
@@ -185,9 +224,14 @@ const CreateHotelPage = () => {
 
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-indigo-600 text-white rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
+            disabled={isLoading}
+            className={`w-full py-2 px-4 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 ${
+              isLoading 
+                ? 'bg-gray-400 cursor-not-allowed' 
+                : 'bg-indigo-600 hover:bg-indigo-700'
+            } text-white`}
           >
-            Create Hotel
+            {isLoading ? 'Creating Hotel...' : 'Create Hotel'}
           </button>
         </form>
       </div>

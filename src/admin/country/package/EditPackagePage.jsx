@@ -9,10 +9,12 @@ const EditPackagePage = () => {
   const [price, setPrice] = useState("");
   const [rate, setRate] = useState("");
   const [mainImage, setMainImage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const token = localStorage.getItem("accessToken");
 
     const formData = new FormData();
@@ -23,8 +25,8 @@ const EditPackagePage = () => {
       formData.append("mainImage", mainImage);
     }
 
-    axios
-      .put(
+    try {
+      await axios.put(
         `${process.env.REACT_APP_BASE_API}/admin/countries/${countryId}/packages/${packageId}`,
         formData,
         {
@@ -33,13 +35,14 @@ const EditPackagePage = () => {
             Authorization: `Bearer ${token}`
           },
         }
-      )
-      .then((response) => {
-        navigate(`/admin/countries/${countryId}/packages`); // Redirect to the package list after editing
-      })
-      .catch((error) => {
-        console.error("Error updating package:", error);
-      });
+      );
+      navigate(`/admin/countries/${countryId}/packages`); // Redirect to the package list after editing
+    } catch (error) {
+      console.error("Error updating package:", error);
+      alert("Error updating package. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -102,9 +105,14 @@ const EditPackagePage = () => {
 
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-indigo-600 text-white rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
+            disabled={isLoading}
+            className={`w-full py-2 px-4 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 ${
+              isLoading 
+                ? 'bg-gray-400 cursor-not-allowed' 
+                : 'bg-indigo-600 hover:bg-indigo-700'
+            } text-white`}
           >
-            Save Changes
+            {isLoading ? 'Saving Changes...' : 'Save Changes'}
           </button>
         </form>
       </div>

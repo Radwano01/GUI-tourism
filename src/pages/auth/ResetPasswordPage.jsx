@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -11,12 +11,38 @@ function ResetPasswordPage() {
 
   const navigate = useNavigate();
 
+  // Check if user is already logged in and redirect to main page
+  useEffect(() => {
+    const user = localStorage.getItem('user');
+    const accessToken = localStorage.getItem('accessToken');
+    
+    if (user && accessToken) {
+      navigate('/'); // Redirect to main page (HeroPage)
+    }
+  }, [navigate]);
+
   const handleNavigate = (path) => {
     navigate(path);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validate length of inputs
+    if (email.length > 255) {
+      setError("Email cannot exceed 255 characters.");
+      return;
+    }
+
+    if (newPassword.length > 255) {
+      setError("Password cannot exceed 255 characters.");
+      return;
+    }
+
+    if (confirmPassword.length > 255) {
+      setError("Confirm password cannot exceed 255 characters.");
+      return;
+    }
 
     if (newPassword !== confirmPassword) {
       setError("Passwords do not match");
@@ -25,7 +51,6 @@ function ResetPasswordPage() {
     }
 
     try {
-      const token = localStorage.getItem("accessToken");
       const userIdResponse = await axios.get(
         `${process.env.REACT_APP_BASE_API}/public/users`
       );
@@ -34,7 +59,10 @@ function ResetPasswordPage() {
 
       // Reset password using the userId
       const response = await axios.put(
-        `${process.env.REACT_APP_BASE_API}/public/users/${userId}`
+        `${process.env.REACT_APP_BASE_API}/public/users/${userId}`,
+        {
+          newPassword: newPassword,
+        }
       );
 
       if (response.status === 200) {
@@ -69,6 +97,7 @@ function ResetPasswordPage() {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              maxLength={255}
               className="w-full px-3 py-2 border border-gray-300 rounded-md"
             />
           </div>
@@ -81,6 +110,7 @@ function ResetPasswordPage() {
               id="new-password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
+              maxLength={255}
               className="w-full px-3 py-2 border border-gray-300 rounded-md"
             />
           </div>
@@ -93,6 +123,7 @@ function ResetPasswordPage() {
               id="confirm-password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
+              maxLength={255}
               className="w-full px-3 py-2 border border-gray-300 rounded-md"
             />
           </div>

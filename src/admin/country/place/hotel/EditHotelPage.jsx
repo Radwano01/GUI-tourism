@@ -15,6 +15,7 @@ const EditHotelPage = () => {
     price: "",
     rate: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -26,6 +27,12 @@ const EditHotelPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (hotel.description.length > 100) {
+      alert('Hotel description must be 100 characters or less.');
+      return;
+    }
+
+    setIsLoading(true);
     const formData = new FormData();
     for (const key in hotel) {
       if (hotel[key] !== null) {
@@ -37,16 +44,19 @@ const EditHotelPage = () => {
       const token = localStorage.getItem("accessToken");
       await axios.put(
         `${process.env.REACT_APP_BASE_API}/admin/places/${placeId}/hotels/${hotelId}`,
+        formData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        },
-        formData
+        }
       );
       navigate(`/admin/countries/${countryId}/places/${placeId}/hotels`);
     } catch (error) {
       console.error("Error updating hotel:", error);
+      alert("Error updating hotel. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -158,9 +168,14 @@ const EditHotelPage = () => {
 
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-indigo-600 text-white rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
+            disabled={isLoading}
+            className={`w-full py-2 px-4 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 ${
+              isLoading 
+                ? 'bg-gray-400 cursor-not-allowed' 
+                : 'bg-indigo-600 hover:bg-indigo-700'
+            } text-white`}
           >
-            Update Hotel
+            {isLoading ? 'Updating Hotel...' : 'Update Hotel'}
           </button>
         </form>
       </div>

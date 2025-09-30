@@ -38,6 +38,12 @@ const EditPlaceDetailsPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (description.length > 2000) {
+      alert('Place description must be 2000 characters or less.');
+      return;
+    }
+
     const formData = new FormData();
     formData.append('imageOne', imageOne);
     formData.append('imageTwo', imageTwo);
@@ -96,9 +102,20 @@ const EditPlaceDetailsPage = () => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              rows="3"
-              placeholder="Enter description"
+              rows="6"
+              placeholder="Enter place description (maximum 2000 characters)"
+              maxLength={2000}
             />
+            <div className="mt-2 text-sm text-gray-600">
+              <span className={description.length > 2000 ? "text-red-600" : "text-green-600"}>
+                {description.length} / 2000 characters
+              </span>
+              {description.length > 2000 && (
+                <span className="ml-2 text-red-600">
+                  ({description.length - 2000} characters over limit)
+                </span>
+              )}
+            </div>
           </div>
 
           <button

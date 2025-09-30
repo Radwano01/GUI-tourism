@@ -27,6 +27,12 @@ const EditRoomDetailsPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (formData.description.length > 1000) {
+      alert('Room description must be 1000 characters or less.');
+      return;
+    }
+
     const form = new FormData();
     form.append("imageOne", formData.imageOne);
     form.append("imageTwo", formData.imageTwo);

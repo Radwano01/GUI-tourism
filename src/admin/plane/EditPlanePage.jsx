@@ -8,6 +8,7 @@ const EditPlanePage = () => {
   const [planeCompanyName, setPlaneCompanyName] = useState("");
   const [numSeats, setNumSeats] = useState("");
   const [status, setStatus] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,8 +26,9 @@ const EditPlanePage = () => {
       });
   }, [planeId]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     const updatedPlane = {
       planeCompanyName,
@@ -34,18 +36,20 @@ const EditPlanePage = () => {
       status,
     };
     const token = localStorage.getItem("accessToken");
-    axios
-      .put(`${process.env.REACT_APP_BASE_API}/admin/planes/${planeId}`, updatedPlane, {
+    
+    try {
+      await axios.put(`${process.env.REACT_APP_BASE_API}/admin/planes/${planeId}`, updatedPlane, {
         headers:{
           Authorization: `Bearer ${token}`
         }
-      })
-      .then(() => {
-        navigate("/admin"); // Redirect to the planes list
-      })
-      .catch((error) => {
-        console.error("Error updating plane:", error);
       });
+      navigate("/admin?section=PLANE"); // Redirect to the planes list
+    } catch (error) {
+      console.error("Error updating plane:", error);
+      alert("Error updating plane. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -100,9 +104,14 @@ const EditPlanePage = () => {
 
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-indigo-600 text-white rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
+            disabled={isLoading}
+            className={`w-full py-2 px-4 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 ${
+              isLoading 
+                ? 'bg-gray-400 cursor-not-allowed' 
+                : 'bg-indigo-600 hover:bg-indigo-700'
+            } text-white`}
           >
-            Save Changes
+            {isLoading ? 'Saving Changes...' : 'Save Changes'}
           </button>
         </form>
       </div>

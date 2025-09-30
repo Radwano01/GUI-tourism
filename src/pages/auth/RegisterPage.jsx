@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import PhoneInput from 'react-phone-input-2';
@@ -21,15 +21,30 @@ const RegisterUser = () => {
   const [isVerified, setIsVerified] = useState(false);
   const navigate = useNavigate();
 
+  // Check if user is already logged in and redirect to main page
+  useEffect(() => {
+    const user = localStorage.getItem('user');
+    const accessToken = localStorage.getItem('accessToken');
+    
+    if (user && accessToken) {
+      navigate('/'); // Redirect to main page (HeroPage)
+    }
+  }, [navigate]);
+
   const DEFAULT_USER_IMAGE = `${process.env.REACT_APP_DEFAULT_USER_IMAGE}`;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
+    if (value.length <= 255) {
+      setFormData({
+        ...formData,
+        [name]: value
+      });
+    } else {
+      alert(`${name} cannot exceed 255 characters.`);
+    }
   };
+  
 
   const handlePhoneChange = (value) => {
     setFormData({ ...formData, phoneNumber: value });
@@ -39,7 +54,6 @@ const RegisterUser = () => {
 
   const handleVerification = () => {
     if (formData.phoneNumber) {
-      const token = localStorage.getItem("accessToken");
       axios
         .post(`${process.env.REACT_APP_BASE_API}/public/verify/phoneNumber/${`+${formData.phoneNumber}`}`)
         .then(() => {

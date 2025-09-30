@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../components/UserContext';
@@ -9,8 +9,37 @@ function LoginPage() {
   const { setUser } = useUser();
   const navigate = useNavigate();
 
+  // Check if user is already logged in and redirect to main page
+  useEffect(() => {
+    const user = localStorage.getItem('user');
+    const accessToken = localStorage.getItem('accessToken');
+    
+    if (user && accessToken) {
+      try {
+        const userData = JSON.parse(user);
+        setUser(userData);
+        navigate('/'); // Redirect to main page (HeroPage)
+      } catch (error) {
+        // If there's an error parsing user data, clear localStorage
+        localStorage.removeItem('user');
+        localStorage.removeItem('accessToken');
+        console.error('Error parsing user data:', error);
+      }
+    }
+  }, [setUser, navigate]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (username.length > 255) {
+      alert('Username cannot exceed 255 characters.');
+      return;
+    }
+
+    if (password.length > 255) {
+      alert('Password cannot exceed 255 characters.');
+      return;
+    }
 
     try {
       const response = await axios.post(`${process.env.REACT_APP_BASE_API}/public/users/login`, {
@@ -40,6 +69,7 @@ function LoginPage() {
       }
     } catch (error) {
       console.error('Login failed:', error);
+      alert('Login failed. Please check your username and password.');
     }
   };
 
@@ -56,6 +86,7 @@ function LoginPage() {
               id="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              maxLength={255}
               className="w-full px-3 py-2 border border-gray-300 rounded-md"
             />
           </div>
@@ -66,6 +97,7 @@ function LoginPage() {
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              maxLength={255}
               className="w-full px-3 py-2 border border-gray-300 rounded-md"
             />
           </div>

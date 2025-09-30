@@ -81,13 +81,7 @@ const RoomDetailsPage = () => {
 
   return (
     <div className="bg-gray-100 min-h-screen">
-      <header className="bg-gray-800 text-white p-4">
-        <div className="container mx-auto">
-          <h1 className="text-3xl">{hotelName} Details</h1>
-          <Header />
-        </div>
-      </header>
-
+      <Header />
       <main className="container mx-auto py-8">
         <div className="bg-white rounded-lg shadow-lg p-6 md:p-10">
           <section className="hero relative mb-8">

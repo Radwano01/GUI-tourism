@@ -22,17 +22,13 @@ function EditDetailsPage() {
   const [verificationCode, setVerificationCode] = useState("");
   const [isVerificationSent, setIsVerificationSent] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
-  const [originalPhoneNumber, setOriginalPhoneNumber] = useState("");
 
+  // Fetch user details
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
-        const token = localStorage.getItem("accessToken");
-        const response = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/public/users/${userId}/details`
-        );
+        const response = await axios.get(`${process.env.REACT_APP_BASE_API}/public/users/${userId}/details`);
         setUser(response.data);
-        setOriginalPhoneNumber(response.data.phoneNumber); // Store original phone number
         setLoading(false);
       } catch (error) {
         console.error("Error fetching user details:", error);
@@ -40,17 +36,12 @@ function EditDetailsPage() {
         setLoading(false);
       }
     };
-
     fetchUserDetails();
   }, [userId]);
 
-  const handleChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
-  };
+  const handleChange = (e) => setUser({ ...user, [e.target.name]: e.target.value });
 
-  const handleImageChange = (e) => {
-    setImageFile(e.target.files[0]);
-  };
+  const handleImageChange = (e) => setImageFile(e.target.files[0]);
 
   const handlePhoneChange = (value) => {
     setUser({ ...user, phoneNumber: value });
@@ -58,11 +49,14 @@ function EditDetailsPage() {
     setIsVerified(false);
   };
 
+  // Handle send verification code
   const handleSendVerification = async () => {
+    if (user.phoneNumber.length < 10 || user.phoneNumber.length > 15) {
+      alert("Phone number must be between 10 and 15 characters.");
+      return;
+    }
     try {
-      await axios.post(
-        `${process.env.REACT_APP_BASE_API}/public/verify/phoneNumber/+${user.phoneNumber}`
-      );
+      await axios.post(`${process.env.REACT_APP_BASE_API}/public/verify/phoneNumber/+${user.phoneNumber}`);
       setIsVerificationSent(true);
       alert("Verification code sent to your phone.");
     } catch (error) {
@@ -71,18 +65,11 @@ function EditDetailsPage() {
     }
   };
 
+  // Handle verify code
   const handleVerifyCode = async () => {
-    const verifyPhoneNumberDto = {
-      phoneNumber: "+" + user.phoneNumber,
-      code: verificationCode,
-    };
-
+    const verifyPhoneNumberDto = { phoneNumber: "+" + user.phoneNumber, code: verificationCode };
     try {
-      const token = localStorage.getItem("accessToken");
-      const response = await axios.post(
-        `${process.env.REACT_APP_BASE_API}/public/verifyCode`,
-        verifyPhoneNumberDto
-      );
+      const response = await axios.post(`${process.env.REACT_APP_BASE_API}/public/verifyCode`, verifyPhoneNumberDto);
       if (response.data) {
         setIsVerified(true);
         alert("Phone number verified successfully!");
@@ -95,44 +82,30 @@ function EditDetailsPage() {
     }
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (user.phoneNumber.length < 10 || user.phoneNumber.length > 15) {
+      alert("Phone number must be between 10 and 15 characters.");
+      return;
+    }
 
     const formData = new FormData();
-
-    const formatDate = (date) => {
-      const d = new Date(date);
-      const year = d.getFullYear();
-      const month = `0${d.getMonth() + 1}`.slice(-2); // Months are zero-based
-      const day = `0${d.getDate()}`.slice(-2);
-      return `${year}-${month}-${day}`;
-    };
-
-    const formattedDateOfBirth = formatDate(user.dateOfBirth);
-
     formData.append("fullName", user.fullName);
     formData.append("country", user.country);
     formData.append("address", user.address);
-    formData.append("dateOfBirth", formattedDateOfBirth);
+    formData.append("dateOfBirth", user.dateOfBirth);
     formData.append("phoneNumber", user.phoneNumber);
 
-    // Append the image file if it's selected
-    if (imageFile) {
-      formData.append("image", imageFile);
-    }
+    if (imageFile) formData.append("image", imageFile);
 
     try {
-      const token = localStorage.getItem("accessToken");
-      await axios.put(
-        `${process.env.REACT_APP_BASE_API}/public/users/${userId}/details`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await axios.put(`${process.env.REACT_APP_BASE_API}/public/users/${userId}/details`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      });
 
       alert("User details updated successfully!");
       navigate(`/profile`);
@@ -142,13 +115,8 @@ function EditDetailsPage() {
     }
   };
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return <p>Error: {error.message}</p>;
-  }
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">

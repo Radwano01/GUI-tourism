@@ -9,21 +9,20 @@ const EditCountryPage = () => {
   
   const [country, setCountry] = useState('');
   const [mainImage, setMainImage] = useState(null);
-  const [description, setDescription] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     // Fetch country details by ID
     const fetchCountryDetails = async () => {
       try {
         const token = localStorage.getItem("accessToken");
-        const response = await axios.get(`${process.env.REACT_APP_BASE_API}/admin/countries/${countryId}`,{
-          headers:{
-            Authorization: `Bearer ${token}`
-          }
+        const response = await axios.get(`${process.env.REACT_APP_BASE_API}/admin/countries/${countryId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
-        const { country, description } = response.data;
+        const { country } = response.data;
         setCountry(country);
-        setDescription(description);
       } catch (error) {
         console.error('Error fetching country details:', error);
       }
@@ -38,29 +37,36 @@ const EditCountryPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     
     const formData = new FormData();
     formData.append('country', country);
     if (mainImage) {
       formData.append('mainImage', mainImage);
     }
-    formData.append('description', description);
 
     try {
-      await axios.put(`/admin/countries/${countryId}`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+      const token = localStorage.getItem("accessToken");
+      await axios.put(`${process.env.REACT_APP_BASE_API}/admin/countries/${countryId}`, formData, {
+        headers: { 
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`
+        },
       });
       alert('Country updated successfully!');
-      navigate('/admin/countries');  // Redirect to countries list after edit
+      navigate('/admin'); // Redirect to admin dashboard after edit
     } catch (error) {
       console.error('Error updating country:', error);
+      alert("Error updating country. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="flex flex-col items-center h-screen bg-gray-100">
       <div className="w-full max-w-lg px-4 py-8">
-        <BackButton direction={"/admin"}/>
+        <BackButton direction={"/admin"} />
         <form
           onSubmit={handleSubmit}
           className="bg-white p-6 rounded-lg shadow-md"
@@ -91,24 +97,17 @@ const EditCountryPage = () => {
             />
           </div>
 
-          {/* Description */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">Description</label>
-            <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              rows="3"
-              placeholder="Enter description"
-            />
-          </div>
-
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-indigo-600 text-white rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
+            disabled={isLoading}
+            className={`w-full py-2 px-4 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 ${
+              isLoading 
+                ? 'bg-gray-400 cursor-not-allowed' 
+                : 'bg-indigo-600 hover:bg-indigo-700'
+            } text-white`}
           >
-            Update Country
+            {isLoading ? 'Updating Country...' : 'Update Country'}
           </button>
         </form>
       </div>

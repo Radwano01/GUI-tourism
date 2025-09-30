@@ -12,13 +12,16 @@ function ProfilePage() {
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
+    console.log("Stored user from localStorage:", storedUser);
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
+      console.log("Parsed user from localStorage:", parsedUser);
       axios
         .get(
           `${process.env.REACT_APP_BASE_API}/public/users/${parsedUser.userId}/details`
         )
         .then((response) => {
+          console.log("User data received from API:", response.data);
           setUser(response.data);
           setLoading(false);
         })
@@ -118,6 +121,11 @@ function ProfilePage() {
   };
 
   const formatDate = (date) => {
+    if (Array.isArray(date) && date.length === 3) {
+      // Handle array format [year, month, day] from API
+      const [year, month, day] = date;
+      return new Date(year, month - 1, day).toLocaleDateString();
+    }
     return new Date(date).toLocaleDateString();
   };
 
@@ -194,18 +202,18 @@ function ProfilePage() {
             <span className="font-semibold">Email:</span> {user.email}
           </p>
           <p className="text-gray-600">
-            <span className="font-semibold">Country:</span> {user.country}
+            <span className="font-semibold">Country:</span> {user.country || "Not Provided"}
           </p>
           <p className="text-gray-600">
             <span className="font-semibold">Phone Number:</span>{" "}
             {user.phoneNumber ? `${user.phoneNumber}` : "Not Provided"}
           </p>
           <p className="text-gray-600">
-            <span className="font-semibold">Address:</span> {user.address}
+            <span className="font-semibold">Address:</span> {user.address || "Not Provided"}
           </p>
           <p className="text-gray-600">
             <span className="font-semibold">Date of Birth:</span>{" "}
-            {formatDate(user.dateOfBirth)}
+            {user.dateOfBirth ? formatDate(user.dateOfBirth) : "Not Provided"}
           </p>
           <p className="text-gray-600">
             <span className="font-semibold">Email Verification Status:</span>{" "}

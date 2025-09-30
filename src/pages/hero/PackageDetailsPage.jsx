@@ -8,7 +8,6 @@ const PackageDetailsPage = () => {
   const { id } = useParams();
   const [packageDetails, setPackageDetails] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
   const [userAuthenticated, setUserAuthenticated] = useState(false);
   const [userId, setUserId] = useState(null);
@@ -89,7 +88,7 @@ const PackageDetailsPage = () => {
               <div className="w-2/3">
                 <img
                   src={`${process.env.REACT_APP_IMAGES_URL}/${packageDetails?.imageOne}`}
-                  alt="Package Image One"
+                  alt={packageDetails?.imageOne}
                   className="w-full rounded-md shadow-lg"
                   style={{ height: 400 }}
                 />
@@ -97,13 +96,13 @@ const PackageDetailsPage = () => {
               <div className="flex flex-col w-1/3 gap-4">
                 <img
                   src={`${process.env.REACT_APP_IMAGES_URL}/${packageDetails?.imageTwo}`}
-                  alt="Package Image Two"
+                  alt={packageDetails?.imageTwo}
                   className="w-full rounded-md shadow-lg"
                   style={{ height: 192 }}
                 />
                 <img
                   src={`${process.env.REACT_APP_IMAGES_URL}/${packageDetails?.imageThree}`}
-                  alt="Package Image Three"
+                  alt={packageDetails?.imageThree}
                   className="w-full rounded-md shadow-lg"
                   style={{ height: 192 }}
                 />

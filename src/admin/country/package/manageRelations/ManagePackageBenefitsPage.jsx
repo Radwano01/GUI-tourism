@@ -9,6 +9,7 @@ const ManagePackageBenefitsPage = () => {
   const [benefits, setBenefits] = useState([]);
   const [selectedBenefit, setSelectedBenefit] = useState("");
   const [packageBenefits, setPackageBenefits] = useState([]); // Benefits already in the package
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     // Fetch all available benefits
@@ -52,6 +53,21 @@ const ManagePackageBenefitsPage = () => {
   }, [packageId]);
 
   const handleAddBenefit = async () => {
+    if (!selectedBenefit) {
+      alert("Please select a benefit.");
+      return;
+    }
+
+    const benefitExists = packageBenefits.some(
+      (benefit) => benefit.id.toString() === selectedBenefit
+    );
+
+    if (benefitExists) {
+      alert("Benefit already added.");
+      return;
+    }
+
+    setIsLoading(true);
     try {
       const token = localStorage.getItem("accessToken");
       await axios.post(
@@ -71,13 +87,15 @@ const ManagePackageBenefitsPage = () => {
 
       if (addedBenefit) {
         setPackageBenefits([...packageBenefits, addedBenefit]);
+        setSelectedBenefit("");
       } else {
         console.error("Selected benefit not found in the available benefits.");
       }
-
-      setSelectedBenefit("");
     } catch (error) {
       console.error("Error adding benefit:", error);
+      alert("Error adding benefit. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -126,9 +144,14 @@ const ManagePackageBenefitsPage = () => {
         </select>
         <button
           onClick={handleAddBenefit}
-          className="bg-green-500 text-white py-2 px-4 rounded-md ml-4"
+          disabled={isLoading || !selectedBenefit}
+          className={`py-2 px-4 rounded-md ml-4 ${
+            isLoading || !selectedBenefit
+              ? 'bg-gray-400 cursor-not-allowed text-gray-200'
+              : 'bg-green-500 hover:bg-green-600 text-white'
+          }`}
         >
-          Add Benefit
+          {isLoading ? 'Adding Benefit...' : 'Add Benefit'}
         </button>
       </div>
 

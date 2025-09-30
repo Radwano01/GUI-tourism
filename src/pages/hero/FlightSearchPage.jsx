@@ -224,11 +224,7 @@ const FlightSearchPage = () => {
 
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col">
-      <header className="bg-gray-800 text-white p-4">
-        <h1 className="text-3xl">Flight Page</h1>
-        <Header />
-      </header>
-
+      <Header />
       <main className="p-4 max-w-4xl mx-auto flex-grow">
         <section className="hero relative mb-8">
           <img

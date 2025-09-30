@@ -12,6 +12,7 @@ const AddCountryPage = () => {
   const [imageTwo, setImageTwo] = useState(null);
   const [imageThree, setImageThree] = useState(null);
   const [description, setDescription] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleFileChange = (e, setImage) => {
     setImage(e.target.files[0]);
@@ -19,6 +20,13 @@ const AddCountryPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (description.length > 2000) {
+      alert('Country description must be 2000 characters or less.');
+      return;
+    }
+
+    setIsLoading(true);
     const token = localStorage.getItem("accessToken");
 
     const formData = new FormData();
@@ -43,6 +51,9 @@ const AddCountryPage = () => {
       navigate("/admin");
     } catch (error) {
       console.error("There was an error creating the country!", error);
+      alert("Error creating country. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -131,17 +142,32 @@ const AddCountryPage = () => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              rows="3"
-              placeholder="Enter description"
+              rows="6"
+              placeholder="Enter description (maximum 2000 characters)"
             />
+            <div className="mt-2 text-sm text-gray-600">
+              <span className={description.length > 2000 ? "text-red-600" : "text-green-600"}>
+                {description.length} / 2000 characters
+              </span>
+              {description.length > 2000 && (
+                <span className="ml-2 text-red-600">
+                  ({description.length - 2000} characters over limit)
+                </span>
+              )}
+            </div>
           </div>
 
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-indigo-600 text-white rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
+            disabled={isLoading}
+            className={`w-full py-2 px-4 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 ${
+              isLoading 
+                ? 'bg-gray-400 cursor-not-allowed' 
+                : 'bg-indigo-600 hover:bg-indigo-700'
+            } text-white`}
           >
-            Add Country
+            {isLoading ? 'Creating Country...' : 'Add Country'}
           </button>
         </form>
       </div>

@@ -47,6 +47,12 @@ const EditCountryDetailsPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (formData.description.length > 2000) {
+      alert('Country description must be 2000 characters or less.');
+      return;
+    }
+    
     const form = new FormData();
     form.append('imageOne', formData.imageOne);
     form.append('imageTwo', formData.imageTwo);
@@ -115,9 +121,19 @@ const EditCountryDetailsPage = () => {
               value={formData.description}
               onChange={handleChange}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              rows="3"
-              placeholder="Enter description"
+              rows="6"
+              placeholder="Enter description (maximum 2000 characters)"
             />
+            <div className="mt-2 text-sm text-gray-600">
+              <span className={formData.description.length > 2000 ? "text-red-600" : "text-green-600"}>
+                {formData.description.length} / 2000 characters
+              </span>
+              {formData.description.length > 2000 && (
+                <span className="ml-2 text-red-600">
+                  ({formData.description.length - 2000} characters over limit)
+                </span>
+              )}
+            </div>
           </div>
 
           {/* Submit Button */}

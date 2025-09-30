@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
 const PackageEvaluation = ({ packageId, userId }) => {
@@ -8,8 +8,9 @@ const PackageEvaluation = ({ packageId, userId }) => {
   const [userHasCommented, setUserHasCommented] = useState(false);
   const [newComment, setNewComment] = useState("");
   const [newRate, setNewRate] = useState(1);
+  const [commentError, setCommentError] = useState("");
 
-  const fetchEvaluations = async () => {
+  const fetchEvaluations = useCallback(async () => {
     const token = localStorage.getItem("accessToken");
     try {
       const response = await axios.get(
@@ -21,7 +22,6 @@ const PackageEvaluation = ({ packageId, userId }) => {
         }
       );
       setEvaluations(response.data);
-      console.log(response.data);
 
       const userComment = response.data.find(
         (evaluation) => evaluation.userId === userId
@@ -30,56 +30,41 @@ const PackageEvaluation = ({ packageId, userId }) => {
     } catch (error) {
       console.error("Error fetching evaluations:", error);
     }
-  };
+  }, [packageId, userId]);
 
-  const addPackageEvaluation = async () => {
-    const token = localStorage.getItem("accessToken");
-    try {
-      await axios.post(
-        `${process.env.REACT_APP_BASE_API}/public/packages/${packageId}/users/${userId}/comment`,
-        {
-          comment: newComment,
-          rate: newRate,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      await fetchEvaluations();
-
-      setNewComment("");
-      setNewRate(1);
-    } catch (error) {
-      console.error("Error adding comment:", error);
+  const handleCommentChange = (e) => {
+    const comment = e.target.value;
+    if (comment.length <= 255) {
+      setNewComment(comment);
+      setCommentError("");
+    } else {
+      setCommentError("Comment cannot exceed 255 characters.");
     }
   };
 
-  const editPackageEvaluation = async (commentId, updatedComment) => {
+  const addOrUpdateEvaluation = async (commentId, comment, rate) => {
     const token = localStorage.getItem("accessToken");
     try {
-      await axios.put(
-        `${process.env.REACT_APP_BASE_API}/public/packages/${packageId}/comments/${commentId}`,
-        {
-          comment: updatedComment,
-          rate: newRate,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const url = commentId
+        ? `${process.env.REACT_APP_BASE_API}/public/packages/${packageId}/comments/${commentId}`
+        : `${process.env.REACT_APP_BASE_API}/public/packages/${packageId}/users/${userId}/comment`;
+
+      const method = commentId ? "put" : "post";
+
+      await axios({
+        method,
+        url,
+        data: { comment, rate },
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       await fetchEvaluations();
-
-      // Clear edit comment fields
+      setNewComment("");
+      setNewRate(1);
       setEditCommentId(null);
       setEditComment("");
     } catch (error) {
-      console.error("Error editing comment:", error);
+      console.error("Error handling comment:", error);
     }
   };
 
@@ -94,7 +79,6 @@ const PackageEvaluation = ({ packageId, userId }) => {
           },
         }
       );
-
       await fetchEvaluations();
     } catch (error) {
       console.error("Error deleting comment:", error);
@@ -105,7 +89,7 @@ const PackageEvaluation = ({ packageId, userId }) => {
     if (userId) {
       fetchEvaluations();
     }
-  }, [packageId, userId]); // Fetch evaluations whenever packageId or userId changes
+  }, [fetchEvaluations, packageId, userId]); // Add fetchEvaluations to the dependency array
 
   const handleLoginClick = () => {
     window.location.href = "/login";
@@ -117,7 +101,10 @@ const PackageEvaluation = ({ packageId, userId }) => {
       {!userId && (
         <p className="text-red-500">
           You have to{" "}
-          <span onClick={handleLoginClick} className="cursor-pointer underline">
+          <span
+            onClick={handleLoginClick}
+            className="cursor-pointer underline"
+          >
             login
           </span>{" "}
           first to add a comment.
@@ -127,11 +114,14 @@ const PackageEvaluation = ({ packageId, userId }) => {
         <div className="mb-4">
           <textarea
             value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
+            onChange={handleCommentChange}
             placeholder="Add your comment"
             className="w-full p-2 border rounded"
             required
           />
+          {commentError && (
+            <p className="text-red-500 text-sm">{commentError}</p>
+          )}
           <div className="mt-2">
             <label className="block mb-2 font-bold text-gray-700">Rate:</label>
             <select
@@ -148,18 +138,16 @@ const PackageEvaluation = ({ packageId, userId }) => {
             </select>
           </div>
           <button
-            onClick={addPackageEvaluation}
+            onClick={() => addOrUpdateEvaluation(null, newComment, newRate)}
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2"
-            disabled={!newComment.trim()}
+            disabled={!newComment.trim() || commentError}
           >
             Add Comment
           </button>
         </div>
       )}
       {userId && userHasCommented && (
-        <p className="text-red-500">
-          You have already commented on this package.
-        </p>
+        <p className="text-red-500">You have already commented on this package.</p>
       )}
       <ul>
         {evaluations.map((evaluation) => (
@@ -225,9 +213,7 @@ const PackageEvaluation = ({ packageId, userId }) => {
                       </select>
                     </div>
                     <button
-                      onClick={() =>
-                        editPackageEvaluation(editCommentId, editComment)
-                      }
+                      onClick={() => addOrUpdateEvaluation(editCommentId, editComment, newRate)}
                       className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-2"
                     >
                       Save

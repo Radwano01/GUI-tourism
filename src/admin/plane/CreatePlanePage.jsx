@@ -6,34 +6,38 @@ import BackButton from "../../components/BackButton";
 const CreatePlanePage = () => {
   const [planeCompanyName, setPlaneCompanyName] = useState("");
   const [numSeats, setNumSeats] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setIsLoading(true);
     const newPlane = {
       planeCompanyName,
       numSeats: parseInt(numSeats),
     };
     const token = localStorage.getItem("accessToken");
-    axios
-      .post(`${process.env.REACT_APP_BASE_API}/admin/plane`, newPlane, {
+    
+    try {
+      await axios.post(`${process.env.REACT_APP_BASE_API}/admin/plane`, newPlane, {
         headers:{
           Authorization: `Bearer ${token}`
         }
-      })
-      .then(() => {
-        navigate("/admin"); // Redirect to the planes list
-      })
-      .catch((error) => {
-        console.error("Error creating plane:", error);
       });
+      navigate("/admin?section=PLANE"); // Redirect to the planes list
+    } catch (error) {
+      console.error("Error creating plane:", error);
+      alert("Error creating plane. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className="flex flex-col items-center h-screen bg-gray-100">
       <div className="w-full max-w-lg px-4 py-8">
-        <BackButton direction={"/admin"} />
+        <BackButton direction={"/admin?section=PLANE"} />
         <form
           onSubmit={handleSubmit}
           className="bg-white p-6 rounded-lg shadow-md"
@@ -68,9 +72,14 @@ const CreatePlanePage = () => {
 
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-indigo-600 text-white rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
+            disabled={isLoading}
+            className={`w-full py-2 px-4 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 ${
+              isLoading 
+                ? 'bg-gray-400 cursor-not-allowed' 
+                : 'bg-indigo-600 hover:bg-indigo-700'
+            } text-white`}
           >
-            Create Plane
+            {isLoading ? 'Creating Plane...' : 'Create Plane'}
           </button>
         </form>
       </div>

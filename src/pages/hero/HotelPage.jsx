@@ -8,19 +8,15 @@ const HotelPage = () => {
   const { id } = useParams();
   const [hotels, setHotels] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(0);
-  const hotelsPerPage = 6;
-  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
     const fetchHotels = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/public/places/${id}/hotels?page=${totalPages}&size=${hotelsPerPage}`
+          `${process.env.REACT_APP_BASE_API}/public/places/${id}/hotels?page=0&size=1000`
         );
         const hotelData = response.data;
         setHotels(hotelData);
-        setTotalPages(Math.ceil(hotelData.length / hotelsPerPage));
         setLoading(false);
       } catch (error) {
         console.error("Error fetching hotels:", error);
@@ -31,18 +27,6 @@ const HotelPage = () => {
     fetchHotels();
   }, [id]);
 
-  const handleNextPage = () => {
-    if (currentPage < totalPages - 1) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const handlePreviousPage = () => {
-    if (currentPage > 0) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
   const handleNavigate = (path) => {
     navigate(path);
   };
@@ -51,21 +35,13 @@ const HotelPage = () => {
     return <div>Loading...</div>;
   }
 
-  // Calculate the hotels to display on the current page
-  const startIndex = currentPage * hotelsPerPage;
-  const currentHotels = hotels.slice(startIndex, startIndex + hotelsPerPage);
-
   return (
     <div className="bg-gray-100 min-h-screen">
-      <header className="bg-gray-800 text-white p-4">
-        <h1 className="text-3xl">Hotel Page</h1>
-        <Header />
-      </header>
-
+      <Header />
       <main className="p-4 max-w-4xl mx-auto items-center">
         <section className="results mt-8 mb-8">
-          {currentHotels.length > 0 ? (
-            currentHotels.map((hotel) => (
+          {hotels.length > 0 ? (
+            hotels.map((hotel) => (
               <div
                 key={hotel.id}
                 className="hotel-listing mt-8 flex flex-col md:flex-row justify-between items-center p-4 bg-white rounded-lg shadow-md"
@@ -99,34 +75,8 @@ const HotelPage = () => {
           )}
         </section>
 
-        <nav className="pagination flex justify-center items-center gap-4 mt-8">
-          <button
-            className={`pagination-button bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full ${
-              currentPage === 0 ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-            onClick={handlePreviousPage}
-            disabled={currentPage === 0}
-          >
-            Previous
-          </button>
-          <span className="pagination-button bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-            {currentPage + 1}
-          </span>
-          <button
-            className={`pagination-button bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full ${
-              currentPage === totalPages - 1 ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-            onClick={handleNextPage}
-            disabled={currentPage === totalPages - 1}
-          >
-            Next
-          </button>
-        </nav>
       </main>
 
-      <footer className="bg-gray-800 text-white p-4">
-        <p>Copyright © 2023 Radwan</p>
-      </footer>
     </div>
   );
 };

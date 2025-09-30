@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import CountriesListPage from './country/CountriesListPage';
 import GetPlanesPage from './plane/GetPlanesPage';
 
@@ -8,7 +9,15 @@ const SECTIONS = {
 };
 
 const Dashboard = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [activeSection, setActiveSection] = useState(SECTIONS.COUNTRY);
+
+  useEffect(() => {
+    const section = searchParams.get('section');
+    if (section && Object.values(SECTIONS).includes(section)) {
+      setActiveSection(section);
+    }
+  }, [searchParams]);
 
   const renderContent = () => {
     switch (activeSection) {
@@ -31,7 +40,10 @@ const Dashboard = () => {
             className={`block w-full text-left px-4 py-2 hover:bg-gray-700 ${
               activeSection === SECTIONS.COUNTRY ? 'bg-gray-700' : ''
             }`}
-            onClick={() => setActiveSection(SECTIONS.COUNTRY)}
+            onClick={() => {
+              setActiveSection(SECTIONS.COUNTRY);
+              setSearchParams({ section: SECTIONS.COUNTRY });
+            }}
           >
             Country
           </button>
@@ -39,7 +51,10 @@ const Dashboard = () => {
             className={`block w-full text-left px-4 py-2 hover:bg-gray-700 ${
               activeSection === SECTIONS.PLANE ? 'bg-gray-700' : ''
             }`}
-            onClick={() => setActiveSection(SECTIONS.PLANE)}
+            onClick={() => {
+              setActiveSection(SECTIONS.PLANE);
+              setSearchParams({ section: SECTIONS.PLANE });
+            }}
           >
             Plane
           </button>

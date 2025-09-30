@@ -8,6 +8,7 @@ const EditPlacePage = () => {
   const navigate = useNavigate();
   const [place, setPlace] = useState('');
   const [mainImage, setMainImage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchPlaceDetails = async () => {
@@ -34,20 +35,24 @@ const EditPlacePage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const formData = new FormData();
     formData.append('place', place);
     formData.append('mainImage', mainImage);
 
     try {
       const token = localStorage.getItem("accessToken");
-      await axios.put(`${process.env.REACT_APP_BASE_API}/admin/countries/${countryId}/places/${placeId}`, {
+      await axios.put(`${process.env.REACT_APP_BASE_API}/admin/countries/${countryId}/places/${placeId}`, formData, {
         headers:{
           Authorization: `Bearer ${token}`
         }
-      }, formData);
+      });
       navigate(`/admin/countries/${countryId}/places`); // Redirect after success
     } catch (error) {
       console.error('Error updating place:', error);
+      alert("Error updating place. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -80,9 +85,14 @@ const EditPlacePage = () => {
 
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-indigo-600 text-white rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
+            disabled={isLoading}
+            className={`w-full py-2 px-4 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 ${
+              isLoading 
+                ? 'bg-gray-400 cursor-not-allowed' 
+                : 'bg-indigo-600 hover:bg-indigo-700'
+            } text-white`}
           >
-            Update Place
+            {isLoading ? 'Updating Place...' : 'Update Place'}
           </button>
         </form>
       </div>

@@ -66,11 +66,7 @@ const CountryDetailsPage = () => {
 
   return (
     <div className="country-details-page">
-      <header className="bg-gray-800 text-white p-4">
-        <h1 className="text-3xl">Country Details Page</h1>
-        <Header />
-      </header>
-
+      <Header />
       <main className="p-4 max-w-5xl mx-auto">
         <section className="hero mb-8 relative">
           <img

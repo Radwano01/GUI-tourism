@@ -43,6 +43,12 @@ const EditPackageDetailsPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (formData.description.length > 2000) {
+      alert('Package description must be 2000 characters or less.');
+      return;
+    }
+
     const form = new FormData();
     if (formData.imageOne) form.append('imageOne', formData.imageOne);
     if (formData.imageTwo) form.append('imageTwo', formData.imageTwo);

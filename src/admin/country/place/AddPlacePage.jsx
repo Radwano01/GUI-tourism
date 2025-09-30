@@ -11,6 +11,7 @@ const AddPlacePage = () => {
   const [imageTwo, setImageTwo] = useState(null);
   const [imageThree, setImageThree] = useState(null);
   const [description, setDescription] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleFileChange = (e, setter) => {
@@ -19,6 +20,13 @@ const AddPlacePage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (description.length > 2000) {
+      alert('Place description must be 2000 characters or less.');
+      return;
+    }
+    
+    setIsLoading(true);
     const formData = new FormData();
     formData.append("place", place);
     formData.append("mainImage", mainImage);
@@ -39,13 +47,16 @@ const AddPlacePage = () => {
       navigate(`/admin/countries/${countryId}/places`);
     } catch (error) {
       console.error("Error creating place:", error);
+      alert("Error creating place. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="flex flex-col h-screen bg-gray-100 p-4 items-center">
       <div className="w-full max-w-lg px-4 py-8">
-        <BackButton direction={`/admin`}/>
+        <BackButton direction={`/admin/countries/${countryId}/places`}/>
         <div className="w-full max-w-lg mx-auto items-center">
           <h2 className="text-2xl font-bold mb-6">Add Place</h2>
           <form
@@ -101,16 +112,32 @@ const AddPlacePage = () => {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                rows="3"
-                placeholder="Enter description"
+                rows="6"
+                placeholder="Enter place description (maximum 2000 characters)"
+                maxLength={2000}
               />
+              <div className="mt-2 text-sm text-gray-600">
+                <span className={description.length > 2000 ? "text-red-600" : "text-green-600"}>
+                  {description.length} / 2000 characters
+                </span>
+                {description.length > 2000 && (
+                  <span className="ml-2 text-red-600">
+                    ({description.length - 2000} characters over limit)
+                  </span>
+                )}
+              </div>
             </div>
 
             <button
               type="submit"
-              className="w-full py-2 px-4 bg-indigo-600 text-white rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
+              disabled={isLoading}
+              className={`w-full py-2 px-4 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 ${
+                isLoading 
+                  ? 'bg-gray-400 cursor-not-allowed' 
+                  : 'bg-indigo-600 hover:bg-indigo-700'
+              } text-white`}
             >
-              Add Place
+              {isLoading ? 'Creating Place...' : 'Add Place'}
             </button>
           </form>
         </div>

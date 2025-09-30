@@ -17,6 +17,9 @@ const AddFlightPage = () => {
   const [debouncedDeparturePlace, setDebouncedDeparturePlace] = useState('');
   const [debouncedDestinationPlace, setDebouncedDestinationPlace] = useState('');
   const [error, setError] = useState(''); // State for error message
+  const [isLoadingDeparture, setIsLoadingDeparture] = useState(false);
+  const [isLoadingDestination, setIsLoadingDestination] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const navigate = useNavigate();
 
@@ -31,8 +34,15 @@ const AddFlightPage = () => {
 
   // Debounced API call function
   const fetchAirports = async (place, isDeparture) => {
+    // Set loading state
+    if (isDeparture) {
+      setIsLoadingDeparture(true);
+    } else {
+      setIsLoadingDestination(true);
+    }
+
     try {
-      const response = await axios.get(`${process.env.REACT_APP_BASE_API}/places/${place}`);
+      const response = await axios.get(`${process.env.REACT_APP_BASE_API}/public/places/${place}`);
       if (isDeparture) {
         setDepartureAirports(response.data);
       } else {
@@ -40,6 +50,19 @@ const AddFlightPage = () => {
       }
     } catch (error) {
       console.error("Error fetching airports:", error);
+      // Clear airports if API call fails
+      if (isDeparture) {
+        setDepartureAirports([]);
+      } else {
+        setDestinationAirports([]);
+      }
+    } finally {
+      // Clear loading state
+      if (isDeparture) {
+        setIsLoadingDeparture(false);
+      } else {
+        setIsLoadingDestination(false);
+      }
     }
   };
 
@@ -80,7 +103,7 @@ const AddFlightPage = () => {
     setDebouncedDestinationPlace(destinationPlace);
   }, [destinationPlace]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Check if departure and destination airports are the same
@@ -90,26 +113,35 @@ const AddFlightPage = () => {
     }
 
     setError(''); // Clear any existing errors
+    setIsSubmitting(true);
 
     const flightData = {
       price,
       departureTime,
       arrivalTime,
     };
-    axios
-      .post(`${process.env.REACT_APP_BASE_API}/admin/flights/flight/planes/${planeId}/departures/${departureAirport}/destinations/${destinationAirport}`, flightData)
-      .then(() => {
-        navigate('/admin'); // Redirect after successful submission
-      })
-      .catch((error) => {
-        console.error("Error creating flight:", error);
+
+    const token = localStorage.getItem("accessToken");
+
+    try {
+      await axios.post(`${process.env.REACT_APP_BASE_API}/admin/flights/flight/planes/${planeId}/departures/${departureAirport}/destinations/${destinationAirport}`, flightData, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       });
+      navigate('/admin?section=PLANE'); // Redirect to planes section after successful submission
+    } catch (error) {
+      console.error("Error creating flight:", error);
+      setError("Error creating flight. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <div className="flex flex-col items-center h-screen bg-gray-100">
       <div className="w-full max-w-2xl px-4 py-8">
-        <BackButton direction="/admin" />
+        <BackButton direction="/admin?section=PLANE" />
         <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-2xl font-bold mb-6">Add Flight</h2>
 
@@ -127,11 +159,18 @@ const AddFlightPage = () => {
               required
             />
             <label htmlFor="departureAirport" className="block text-sm font-medium text-gray-700 mt-4">Departure Airport</label>
+            {isLoadingDeparture && (
+              <div className="mt-2 text-sm text-blue-600 flex items-center">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                Loading airports...
+              </div>
+            )}
             <select
               id="departureAirport"
               value={departureAirport}
               onChange={(e) => setDepartureAirport(e.target.value)}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              disabled={isLoadingDeparture}
               required
             >
               <option value="">Select Departure Airport</option>
@@ -154,11 +193,18 @@ const AddFlightPage = () => {
               required
             />
             <label htmlFor="destinationAirport" className="block text-sm font-medium text-gray-700 mt-4">Destination Airport</label>
+            {isLoadingDestination && (
+              <div className="mt-2 text-sm text-blue-600 flex items-center">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                Loading airports...
+              </div>
+            )}
             <select
               id="destinationAirport"
               value={destinationAirport}
               onChange={(e) => setDestinationAirport(e.target.value)}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              disabled={isLoadingDestination}
               required
             >
               <option value="">Select Destination Airport</option>
@@ -208,9 +254,14 @@ const AddFlightPage = () => {
 
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-indigo-600 text-white rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
+            disabled={isSubmitting}
+            className={`w-full py-2 px-4 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 ${
+              isSubmitting
+                ? 'bg-gray-400 cursor-not-allowed'
+                : 'bg-indigo-600 hover:bg-indigo-700'
+            } text-white`}
           >
-            Add Flight
+            {isSubmitting ? 'Adding Flight...' : 'Add Flight'}
           </button>
         </form>
       </div>

@@ -12,10 +12,14 @@ const GetPackagesPage = () => {
   const { countryId } = useParams();
   const [packages, setPackages] = useState([]);
   const [activeSection, setActiveSection] = useState(null); // State to track the active section
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPackages = async () => {
+      setIsLoading(true);
+      setError(null);
       const token = localStorage.getItem("accessToken");
       try {
         const response = await axios.get(
@@ -29,6 +33,9 @@ const GetPackagesPage = () => {
         setPackages(response.data);
       } catch (error) {
         console.error("Error fetching packages:", error);
+        setError("Failed to load packages. Please try again.");
+      } finally {
+        setIsLoading(false);
       }
     };
 
