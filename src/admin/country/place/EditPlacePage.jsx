@@ -14,7 +14,7 @@ const EditPlacePage = () => {
     const fetchPlaceDetails = async () => {
       try {
         const token = localStorage.getItem("accessToken");
-        const response = await axios.get(`${process.env.REACT_APP_BASE_API}/countries/${countryId}/places/${placeId}`, {
+        const response = await axios.get(`${process.env.REACT_APP_BASE_API}/public/countries/${countryId}/places/${placeId}`, {
           headers:{
             Authorization: `Bearer ${token}`
           }

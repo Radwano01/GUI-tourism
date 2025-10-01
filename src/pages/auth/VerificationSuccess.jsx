@@ -8,7 +8,7 @@ function VerificationSuccess() {
 
   useEffect(() => {
     if (email && token) {
-      const verificationUrl = `${process.env.REACT_APP_BASE_API}/verification/users/${email}/${token}`;
+      const verificationUrl = `${process.env.REACT_APP_BASE_API}/public/verification/users/${email}/${token}`;
 
       axios
         .post(verificationUrl, {

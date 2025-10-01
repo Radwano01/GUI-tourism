@@ -57,7 +57,7 @@ const HotelEvaluation = ({ hotelId, userId }) => {
       const token = localStorage.getItem("accessToken");
       const rate = 5; // Set rate to 5
       await axios.put(
-        `${process.env.REACT_APP_BASE_API}/public/hotels/comments/${commentId}`,
+        `${process.env.REACT_APP_BASE_API}/public/hotels/${hotelId}/comments/${commentId}`,
         { comment: updatedComment, rate },
         {
           headers: {
@@ -76,7 +76,7 @@ const HotelEvaluation = ({ hotelId, userId }) => {
   const removeHotelEvaluation = async (commentId) => {
     try {
       const token = localStorage.getItem("accessToken");
-      await axios.delete(`${process.env.REACT_APP_BASE_API}/public/hotels/comments/${commentId}`, {
+      await axios.delete(`${process.env.REACT_APP_BASE_API}/public/hotels/${hotelId}/comments/${commentId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

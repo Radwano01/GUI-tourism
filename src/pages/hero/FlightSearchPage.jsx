@@ -31,7 +31,7 @@ const FlightSearchPage = () => {
     const fetchImmediately = async (place) => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_API}/public/places/place?place=${place}`
+          `${process.env.REACT_APP_BASE_API}/public/places/${place}`
         );
         setGoingToAvailableAirports(response.data);
 
@@ -53,7 +53,7 @@ const FlightSearchPage = () => {
   const fetchPlaceId = async (placeName) => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BASE_API}/public/places/place?place=${placeName}`
+        `${process.env.REACT_APP_BASE_API}/public/places/${placeName}`
       );
       if (response.data && response.data.length > 0) {
         const place = response.data[0];
