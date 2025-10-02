@@ -1,73 +1,34 @@
-import { createApiRequest } from './axiosConfig';
+import axios from 'axios';
 
-// API Service class to handle all API calls with CORS fallback
+// Simple API Service class for direct API calls
 class ApiService {
   constructor() {
     this.baseURL = process.env.REACT_APP_BASE_API;
     this.imagesURL = process.env.REACT_APP_IMAGES_URL;
-    this.isProduction = process.env.NODE_ENV === 'production';
-    this.useNetlifyFunction = process.env.REACT_APP_USE_NETLIFY_FUNCTION === 'true';
-    this.netlifyFunctionURL = '/.netlify/functions/api-proxy';
     
-    // Debug logging
-    console.log('API Service initialized:', {
-      isProduction: this.isProduction,
-      useNetlifyFunction: this.useNetlifyFunction,
-      baseURL: this.baseURL,
-      netlifyFunctionURL: this.netlifyFunctionURL
-    });
+    // Configure axios defaults
+    axios.defaults.headers.common['ngrok-skip-browser-warning'] = 'true';
   }
 
-  // Generic method to make API requests with CORS handling
+  // Generic method to make API requests
   async makeRequest(endpoint, options = {}) {
-    // Always use Netlify function in production, or if explicitly enabled
-    if (this.isProduction || this.useNetlifyFunction) {
-      console.log('Using Netlify function for API request:', endpoint);
-      return this.makeRequestViaNetlifyFunction(endpoint, options);
-    }
-    
-    // In development, try direct request with CORS proxy fallback
     const url = `${this.baseURL}${endpoint}`;
     
     try {
-      const response = await createApiRequest(url, {
-        method: 'GET',
-        ...options,
+      const response = await axios({
+        url,
+        method: options.method || 'GET',
         headers: {
-          'ngrok-skip-browser-warning': 'true',
           'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'true',
           ...options.headers,
         },
+        data: options.body,
+        ...options
       });
       return response;
     } catch (error) {
       console.error(`API Request failed for ${endpoint}:`, error);
-      throw error;
-    }
-  }
-
-  // Make request via Netlify function (production)
-  async makeRequestViaNetlifyFunction(endpoint, options = {}) {
-    try {
-      const url = `${this.netlifyFunctionURL}?path=${endpoint.replace(/^\//, '')}`;
-      
-      const response = await fetch(url, {
-        method: options.method || 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          ...options.headers,
-        },
-        body: options.body ? JSON.stringify(options.body) : undefined,
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      return { data };
-    } catch (error) {
-      console.error(`Netlify function request failed for ${endpoint}:`, error);
       throw error;
     }
   }
