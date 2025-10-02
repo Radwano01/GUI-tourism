@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import apiService from '../../api/apiService';
 
 function HeroPage() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -13,9 +13,11 @@ function HeroPage() {
     setLoading(true);
     setError(null);
     
-    axios.get(`${process.env.REACT_APP_BASE_API}/public/countries`)
-      .then(response => {
+    const fetchCountries = async () => {
+      try {
+        const response = await apiService.getCountries();
         console.log('API Response:', response.data); // Debug log
+        
         // Check if response.data is an array
         const data = Array.isArray(response.data) ? response.data : response.data.content || response.data.data || [];
         
@@ -30,15 +32,16 @@ function HeroPage() {
         }));
         setImages(formattedData);
         setError(null);
-      })
-      .catch(error => {
+      } catch (error) {
         console.error('Error fetching data:', error);
         setError('Failed to load countries. Please try again.');
         setImages([]); // Set empty array on error
-      })
-      .finally(() => {
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+
+    fetchCountries();
   }, []);
 
   const handleNavigate = (id) => {
@@ -93,7 +96,7 @@ function HeroPage() {
             key={image.id}
             className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ${currentIndex === index ? 'opacity-100' : 'opacity-0'}`}
           >
-            <img src={`${process.env.REACT_APP_IMAGES_URL}/${image.url}`} alt={`Slide ${image.id}`} className="w-full h-full object-cover" />
+            <img src={apiService.getImageUrl(image.url)} alt={`Slide ${image.id}`} className="w-full h-full object-cover" />
           </div>
         ))}
       </div>
