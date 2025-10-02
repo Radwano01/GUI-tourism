@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import apiService from "../../api/apiService";
 
 function ProfilePage() {
   const [user, setUser] = useState(null);
@@ -16,10 +16,8 @@ function ProfilePage() {
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
       console.log("Parsed user from localStorage:", parsedUser);
-      axios
-        .get(
-          `${process.env.REACT_APP_BASE_API}/public/users/${parsedUser.userId}/details`
-        )
+      apiService
+        .getUserDetails(parsedUser.userId)
         .then((response) => {
           console.log("User data received from API:", response.data);
           setUser(response.data);
@@ -39,10 +37,8 @@ function ProfilePage() {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
-      axios
-        .post(
-          `${process.env.REACT_APP_BASE_API}/public/users/verification/users/${parsedUser.userId}/${parsedUser.accessToken}`
-        )
+      apiService
+        .verifyUserEmail(parsedUser.userId, parsedUser.accessToken)
         .then(() => {
           const updatedUser = { ...parsedUser, verificationStatus: true };
           localStorage.setItem("user", JSON.stringify(updatedUser));
@@ -61,10 +57,8 @@ function ProfilePage() {
       const storedUser = localStorage.getItem("user");
       if (storedUser) {
         const parsedUser = JSON.parse(storedUser);
-        axios
-          .delete(
-            `${process.env.REACT_APP_BASE_API}/public/users/${parsedUser.userId}`
-          )
+        apiService
+          .deleteUser(parsedUser.userId)
           .then(() => {
             localStorage.removeItem("user");
             navigate("/login");
@@ -100,11 +94,8 @@ function ProfilePage() {
       const storedUser = localStorage.getItem("user");
       if (storedUser) {
         const parsedUser = JSON.parse(storedUser);
-        axios
-          .put(
-            `${process.env.REACT_APP_BASE_API}/public/users/${parsedUser.userId}/phone`,
-            { phoneNumber: newPhoneNumber }
-          )
+        apiService
+          .updateUserPhone(parsedUser.userId, newPhoneNumber)
           .then((response) => {
             setUser({ ...user, phoneNumber: newPhoneNumber });
             setIsAddingPhone(false);

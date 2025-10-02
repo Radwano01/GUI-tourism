@@ -8,12 +8,21 @@ class ApiService {
     this.isProduction = process.env.NODE_ENV === 'production';
     this.useNetlifyFunction = process.env.REACT_APP_USE_NETLIFY_FUNCTION === 'true';
     this.netlifyFunctionURL = '/.netlify/functions/api-proxy';
+    
+    // Debug logging
+    console.log('API Service initialized:', {
+      isProduction: this.isProduction,
+      useNetlifyFunction: this.useNetlifyFunction,
+      baseURL: this.baseURL,
+      netlifyFunctionURL: this.netlifyFunctionURL
+    });
   }
 
   // Generic method to make API requests with CORS handling
   async makeRequest(endpoint, options = {}) {
-    // Use Netlify function if enabled or in production
-    if (this.useNetlifyFunction || this.isProduction) {
+    // Always use Netlify function in production, or if explicitly enabled
+    if (this.isProduction || this.useNetlifyFunction) {
+      console.log('Using Netlify function for API request:', endpoint);
       return this.makeRequestViaNetlifyFunction(endpoint, options);
     }
     
@@ -99,6 +108,44 @@ class ApiService {
   async getFlights(searchParams) {
     const queryString = new URLSearchParams(searchParams).toString();
     return this.makeRequest(`/public/flights?${queryString}`);
+  }
+
+  // User-related API methods
+  async getUserDetails(userId) {
+    return this.makeRequest(`/public/users/${userId}/details`);
+  }
+
+  async verifyUserEmail(userId, accessToken) {
+    return this.makeRequest(`/public/users/verification/users/${userId}/${accessToken}`, {
+      method: 'POST'
+    });
+  }
+
+  async addPhoneNumber(userId, phoneNumber) {
+    return this.makeRequest(`/public/users/${userId}/phone`, {
+      method: 'POST',
+      body: { phoneNumber }
+    });
+  }
+
+  async updateUserDetails(userId, userData) {
+    return this.makeRequest(`/public/users/${userId}`, {
+      method: 'PUT',
+      body: userData
+    });
+  }
+
+  async deleteUser(userId) {
+    return this.makeRequest(`/public/users/${userId}`, {
+      method: 'DELETE'
+    });
+  }
+
+  async updateUserPhone(userId, phoneNumber) {
+    return this.makeRequest(`/public/users/${userId}/phone`, {
+      method: 'PUT',
+      body: { phoneNumber }
+    });
   }
 
   // Helper method to get full image URL
