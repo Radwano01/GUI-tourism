@@ -44,23 +44,49 @@ apiClient.interceptors.response.use(
   }
 );
 
-// Function to create API request with CORS proxy fallback
+// Function to create API request with multiple CORS proxy fallbacks
 export const createApiRequest = async (url, options = {}) => {
   try {
     // Try direct request first
     return await apiClient(url, options);
   } catch (error) {
-    // If CORS error, try with CORS proxy
+    // If CORS error, try with multiple CORS proxies
     if (error.code === 'ERR_NETWORK' || error.message.includes('CORS')) {
       console.log('Attempting request with CORS proxy...');
-      const proxyUrl = `https://cors-anywhere.herokuapp.com/${url}`;
-      return await apiClient(proxyUrl, {
-        ...options,
-        headers: {
-          ...options.headers,
-          'X-Requested-With': 'XMLHttpRequest',
+      
+      // List of CORS proxy alternatives
+      const corsProxies = [
+        'https://api.allorigins.win/raw?url=',
+        'https://corsproxy.io/?',
+        'https://thingproxy.freeboard.io/fetch/',
+        'https://cors-anywhere.herokuapp.com/'
+      ];
+      
+      for (const proxy of corsProxies) {
+        try {
+          console.log(`Trying proxy: ${proxy}`);
+          const proxyUrl = proxy === 'https://api.allorigins.win/raw?url=' 
+            ? `${proxy}${encodeURIComponent(url)}`
+            : `${proxy}${url}`;
+            
+          const response = await apiClient(proxyUrl, {
+            ...options,
+            headers: {
+              ...options.headers,
+              'X-Requested-With': 'XMLHttpRequest',
+            }
+          });
+          
+          console.log(`Success with proxy: ${proxy}`);
+          return response;
+        } catch (proxyError) {
+          console.warn(`Proxy ${proxy} failed:`, proxyError.message);
+          continue;
         }
-      });
+      }
+      
+      // If all proxies fail, throw the original error
+      throw new Error('All CORS proxies failed. Please check your backend server CORS configuration.');
     }
     throw error;
   }

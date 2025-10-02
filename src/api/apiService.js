@@ -5,10 +5,19 @@ class ApiService {
   constructor() {
     this.baseURL = process.env.REACT_APP_BASE_API;
     this.imagesURL = process.env.REACT_APP_IMAGES_URL;
+    this.isProduction = process.env.NODE_ENV === 'production';
+    this.useNetlifyFunction = process.env.REACT_APP_USE_NETLIFY_FUNCTION === 'true';
+    this.netlifyFunctionURL = '/.netlify/functions/api-proxy';
   }
 
   // Generic method to make API requests with CORS handling
   async makeRequest(endpoint, options = {}) {
+    // Use Netlify function if enabled or in production
+    if (this.useNetlifyFunction || this.isProduction) {
+      return this.makeRequestViaNetlifyFunction(endpoint, options);
+    }
+    
+    // In development, try direct request with CORS proxy fallback
     const url = `${this.baseURL}${endpoint}`;
     
     try {
@@ -24,6 +33,32 @@ class ApiService {
       return response;
     } catch (error) {
       console.error(`API Request failed for ${endpoint}:`, error);
+      throw error;
+    }
+  }
+
+  // Make request via Netlify function (production)
+  async makeRequestViaNetlifyFunction(endpoint, options = {}) {
+    try {
+      const url = `${this.netlifyFunctionURL}?path=${endpoint.replace(/^\//, '')}`;
+      
+      const response = await fetch(url, {
+        method: options.method || 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          ...options.headers,
+        },
+        body: options.body ? JSON.stringify(options.body) : undefined,
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return { data };
+    } catch (error) {
+      console.error(`Netlify function request failed for ${endpoint}:`, error);
       throw error;
     }
   }
