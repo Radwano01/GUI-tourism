@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import apiService from '../../api/apiService';
-import ApiTest from '../../components/ApiTest';
 
 function HeroPage() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -91,9 +90,6 @@ function HeroPage() {
 
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-gray-100 overflow-hidden">
-      {/* Temporary API Test Component */}
-      <ApiTest />
-      
       <div className="absolute inset-0 w-full h-full">
         {images.map((image, index) => (
           <div
