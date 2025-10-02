@@ -17,8 +17,7 @@ const DeletePackagePage = () => {
       });
       navigate(`/admin/countries/${countryId}/packages`);
     } catch (error) {
-      console.error('Error deleting package:', error);
-    }
+      }
   };
 
   return (

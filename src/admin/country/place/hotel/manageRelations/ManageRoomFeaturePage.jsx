@@ -21,8 +21,7 @@ const ManageRoomFeaturesPage = () => {
         );
         setFeatures(response.data);
       } catch (error) {
-        console.error("Error fetching features:", error);
-      }
+        }
     };
 
     const fetchRoomFeatures = async () => {
@@ -35,15 +34,13 @@ const ManageRoomFeaturesPage = () => {
         );
         setRoomFeatures(response.data);
       } catch (error) {
-        console.error("Error fetching room features:", error);
-      }
+        }
     };
 
     fetchFeatures();
     fetchRoomFeatures();
   }, [hotelId]);
 
-  
   const handleAddFeature = async () => {
     if (!selectedFeature) {
       alert("Please select a feature.");
@@ -80,16 +77,13 @@ const ManageRoomFeaturesPage = () => {
         setSelectedFeature("");
         alert("Room feature added successfully");
       } else {
-        console.error("Selected feature not found in the available features.");
-      }
+        }
     } catch (error) {
-      console.error("Error adding room feature:", error);
       alert("Error adding room feature. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
-  
 
   const handleRemoveFeature = async (featureId) => {
     try {
@@ -101,8 +95,7 @@ const ManageRoomFeaturesPage = () => {
       );
       setRoomFeatures(roomFeatures.filter((feature) => feature.id !== featureId));
     } catch (error) {
-      console.error("Error removing feature:", error);
-    }
+      }
   };
 
   return (

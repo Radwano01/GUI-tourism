@@ -26,8 +26,7 @@ const ManagePackageBenefitsPage = () => {
         );
         setBenefits(response.data);
       } catch (error) {
-        console.error("Error fetching benefits:", error);
-      }
+        }
     };
 
     // Fetch benefits associated with the package
@@ -89,10 +88,8 @@ const ManagePackageBenefitsPage = () => {
         setPackageBenefits([...packageBenefits, addedBenefit]);
         setSelectedBenefit("");
       } else {
-        console.error("Selected benefit not found in the available benefits.");
-      }
+        }
     } catch (error) {
-      console.error("Error adding benefit:", error);
       alert("Error adding benefit. Please try again.");
     } finally {
       setIsLoading(false);
@@ -116,8 +113,7 @@ const ManagePackageBenefitsPage = () => {
         packageBenefits.filter((benefit) => benefit.id !== benefitId)
       );
     } catch (error) {
-      console.error("Error removing benefit:", error);
-    }
+      }
   };
 
   return (

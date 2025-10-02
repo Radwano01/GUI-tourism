@@ -26,8 +26,7 @@ const EditPackageDetailsPage = () => {
           description: response.data.description,
         });
       } catch (error) {
-        console.error('Error fetching package details:', error);
-      }
+        }
     };
 
     fetchPackageDetails();
@@ -65,8 +64,7 @@ const EditPackageDetailsPage = () => {
       });
       navigate(`/admin/countries/${countryId}/packages/${packageId}/details`);
     } catch (error) {
-      console.error('Error updating package details:', error);
-    }
+      }
   };
 
   if (!packageDetails) return <p>Loading...</p>;

@@ -31,7 +31,6 @@ function EditDetailsPage() {
         setUser(response.data);
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching user details:", error);
         setError(error);
         setLoading(false);
       }
@@ -60,7 +59,6 @@ function EditDetailsPage() {
       setIsVerificationSent(true);
       alert("Verification code sent to your phone.");
     } catch (error) {
-      console.error("Error sending verification code:", error);
       alert("Failed to send verification code. Please try again later.");
     }
   };
@@ -77,7 +75,6 @@ function EditDetailsPage() {
         alert("Verification failed. Please check the code and try again.");
       }
     } catch (error) {
-      console.error("Error verifying code:", error);
       alert("Failed to verify code. Please try again.");
     }
   };
@@ -110,7 +107,6 @@ function EditDetailsPage() {
       alert("User details updated successfully!");
       navigate(`/profile`);
     } catch (error) {
-      console.error("Error updating user details:", error);
       alert("Failed to update user details. Please try again later.");
     }
   };

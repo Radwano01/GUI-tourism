@@ -14,7 +14,6 @@ const GetPlanesPage = () => {
         const response = await axios.get(`${process.env.REACT_APP_BASE_API}/public/planes`);
         setPlanes(response.data);
       } catch (error) {
-        console.error("Error fetching planes:", error);
         setError("Failed to load planes. Please try again.");
       } finally {
         setIsLoading(false);
@@ -36,7 +35,6 @@ const GetPlanesPage = () => {
         setPlanes(planes.filter((plane) => plane.id !== planeId));
         alert("Plane deleted successfully!");
       } catch (error) {
-        console.error("Error deleting plane:", error);
         alert("Failed to delete plane. Please try again.");
       }
     }

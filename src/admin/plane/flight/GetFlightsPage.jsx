@@ -55,8 +55,7 @@ const GetFlightPage = () => {
         }));
       }
     } catch (error) {
-      console.error("Error fetching airports:", error);
-    }
+      }
   };
 
   // Set up debounced fetch for departure place
@@ -125,8 +124,7 @@ const GetFlightPage = () => {
         setHasMoreFlights(true);
       })
       .catch((error) => {
-        console.error("Error fetching flights:", error);
-      });
+        });
   };
 
   const handlePreviousPage = () => {

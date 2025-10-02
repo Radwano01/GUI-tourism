@@ -41,7 +41,6 @@ const FlightSearchPage = () => {
         );
         setToAirportId(airportsResponse.data[0]?.airPortId); // Assuming there's one airport for simplicity
       } catch (error) {
-        console.error("Error fetching airports:", error);
         setSearchError("Error fetching airports. Please try again later.");
       }
     };
@@ -62,7 +61,6 @@ const FlightSearchPage = () => {
         throw new Error("No place found for the given name");
       }
     } catch (error) {
-      console.error("Error fetching place ID:", error);
       throw new Error("Error fetching place ID");
     }
   };
@@ -75,7 +73,6 @@ const FlightSearchPage = () => {
       );
       return response.data;
     } catch (error) {
-      console.error("Error fetching airports:", error);
       throw new Error("Error fetching airports");
     }
   };
@@ -93,7 +90,6 @@ const FlightSearchPage = () => {
       );
       return response.data;
     } catch (error) {
-      console.error("Error fetching flights:", error);
       throw new Error("Error fetching flights");
     }
   };
@@ -113,8 +109,7 @@ const FlightSearchPage = () => {
         setTotalPages(totalPages);
       }
     } catch (error) {
-      console.error("Error fetching flights:", error);
-    }
+      }
   };
 
   // Function to handle delayed fetch for "Going From" airport
@@ -132,7 +127,6 @@ const FlightSearchPage = () => {
         setGoingFromAvailableAirports(airports);
         setFromAirportId(""); // Reset selected airport ID when place changes
       } catch (error) {
-        console.error("Error fetching airports:", error);
         setGoingFromAvailableAirports([]);
       }
     }, 1000); // Delay of 1 second (adjust as needed)
@@ -148,7 +142,6 @@ const FlightSearchPage = () => {
       setGoingToAvailableAirports(airports);
       setToAirportId(""); // Reset selected airport ID when place changes
     } catch (error) {
-      console.error("Error fetching airports:", error);
       setGoingToAvailableAirports([]);
     }
   };

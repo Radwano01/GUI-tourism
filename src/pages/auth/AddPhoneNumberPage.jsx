@@ -31,7 +31,6 @@ const AddPhoneNumberPage = () => {
         })
         .catch((error) => {
           setLoading(false);
-          console.error("Error adding phone number:", error);
           setError("Failed to add phone number. Please try again later.");
         });
     } else {
@@ -65,7 +64,6 @@ const AddPhoneNumberPage = () => {
       })
       .catch((error) => {
         setIsVerifying(false);
-        console.error("Error verifying code:", error);
         alert("Failed to verify code. Please try again.");
       })
       .finally(() => {

@@ -44,7 +44,6 @@ const RegisterUser = () => {
       alert(`${name} cannot exceed 255 characters.`);
     }
   };
-  
 
   const handlePhoneChange = (value) => {
     setFormData({ ...formData, phoneNumber: value });
@@ -61,7 +60,6 @@ const RegisterUser = () => {
           alert("Verification code sent to your phone.");
         })
         .catch((error) => {
-          console.error("Error sending verification code:", error);
           alert("Failed to send verification code. Please try again later.");
         });
     }
@@ -83,7 +81,6 @@ const RegisterUser = () => {
         }
       })
       .catch((error) => {
-        console.error("Error verifying code:", error);
         alert("Failed to verify code. Please try again.");
       });
   };
@@ -101,7 +98,6 @@ const RegisterUser = () => {
         const uploadResponse = await axios.post(`${process.env.REACT_APP_BASE_API}/image`, imageData);
         imageUrl = uploadResponse.data;
       } catch (error) {
-        console.error('Error uploading image:', error);
         return;
       }
     }
@@ -117,7 +113,6 @@ const RegisterUser = () => {
         navigate("/login");
       }
     } catch (error) {
-      console.error('Error registering user:', error);
       alert("Failed to register user. Please try again later.");
     }
   };

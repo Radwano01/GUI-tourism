@@ -31,8 +31,7 @@ const GetHotelsPage = () => {
         const totalElements = hotelsData.length;
         setTotalPages(Math.ceil(totalElements / size)); // Calculate total number of pages
       } catch (error) {
-        console.error("Error fetching hotels:", error);
-      }
+        }
     };
 
     fetchHotels();
@@ -55,8 +54,7 @@ const GetHotelsPage = () => {
         );
         setHotels(hotels.filter((hotel) => hotel.id !== hotelId));
       } catch (error) {
-        console.error("Error deleting hotel:", error);
-      }
+        }
     }
   };
 

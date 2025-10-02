@@ -20,7 +20,6 @@ axios.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.error('API Error:', error);
     return Promise.reject(error);
   }
 );

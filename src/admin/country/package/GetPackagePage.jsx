@@ -32,7 +32,6 @@ const GetPackagesPage = () => {
         );
         setPackages(response.data);
       } catch (error) {
-        console.error("Error fetching packages:", error);
         setError("Failed to load packages. Please try again.");
       } finally {
         setIsLoading(false);
@@ -69,8 +68,7 @@ const GetPackagesPage = () => {
         );
         setPackages(packages.filter((pkg) => pkg.id !== packageId));
       } catch (error) {
-        console.error("Error deleting package:", error);
-      }
+        }
     }
   };
 

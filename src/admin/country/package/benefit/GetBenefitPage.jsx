@@ -19,8 +19,7 @@ const GetBenefitsPage = () => {
         });
         setBenefits(response.data);
       } catch (error) {
-        console.error('Error fetching benefits:', error);
-      }
+        }
     };
 
     fetchBenefits();
@@ -42,8 +41,7 @@ const GetBenefitsPage = () => {
         });
         setBenefits(benefits.filter(b => b.id !== benefitId));
       } catch (error) {
-        console.error('Error deleting benefit:', error);
-      }
+        }
     }
   };
 

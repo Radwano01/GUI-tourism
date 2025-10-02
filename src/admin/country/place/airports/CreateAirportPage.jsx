@@ -28,8 +28,7 @@ const CreateAirportPage = () => {
         navigate(`/admin/countries/${countryId}/places/${placeId}/airports`); // Redirect to the airport list
       })
       .catch((error) => {
-        console.error("Error creating airport:", error);
-      });
+        });
   };
 
   return (

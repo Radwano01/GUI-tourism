@@ -38,7 +38,6 @@ const EditPackagePage = () => {
       );
       navigate(`/admin/countries/${countryId}/packages`); // Redirect to the package list after editing
     } catch (error) {
-      console.error("Error updating package:", error);
       alert("Error updating package. Please try again.");
     } finally {
       setIsLoading(false);

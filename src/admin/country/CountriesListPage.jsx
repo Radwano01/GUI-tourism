@@ -24,7 +24,6 @@ const CountriesListPage = () => {
         );
         setCountries(response.data);
       } catch (error) {
-        console.error("Error fetching countries:", error);
         setError("Failed to load countries. Please try again.");
       } finally {
         setIsLoading(false);
@@ -49,7 +48,6 @@ const CountriesListPage = () => {
         setCountries(countries.filter((country) => country.id !== countryId));
         alert("Country deleted successfully!");
       } catch (error) {
-        console.error("Error deleting country:", error);
         alert("Failed to delete country. Please try again.");
       }
     }

@@ -19,8 +19,7 @@ const EditBenefitPage = () => {
       });
       navigate(`/admin/countries/${countryId}/packages/benefits`);
     } catch (error) {
-      console.error('Error updating benefit:', error);
-    }
+      }
   };
 
   return (

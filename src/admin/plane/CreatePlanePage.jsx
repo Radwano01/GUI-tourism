@@ -27,7 +27,6 @@ const CreatePlanePage = () => {
       });
       navigate("/admin?section=PLANE"); // Redirect to the planes list
     } catch (error) {
-      console.error("Error creating plane:", error);
       alert("Error creating plane. Please try again.");
     } finally {
       setIsLoading(false);

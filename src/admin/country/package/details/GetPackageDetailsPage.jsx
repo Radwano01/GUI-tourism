@@ -13,8 +13,7 @@ const GetPackageDetailsPage = () => {
         const response = await axios.get(`${process.env.REACT_APP_BASE_API}/public/packages/${packageId}/details`);
         setPackageDetails(response.data);
       } catch (error) {
-        console.error('Error fetching package details:', error);
-      }
+        }
     };
 
     fetchPackageDetails();

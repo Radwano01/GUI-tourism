@@ -25,8 +25,7 @@ const ManageHotelFeaturesPage = () => {
         setFeatures(featuresResponse.data);
         setHotelFeatures(hotelFeaturesResponse.data);
       } catch (error) {
-        console.error("Error fetching features:", error);
-      }
+        }
     };
 
     fetchFeaturesData();
@@ -65,10 +64,8 @@ const ManageHotelFeaturesPage = () => {
         setSelectedFeature("");
         alert("Feature added successfully.");
       } else {
-        console.error("Feature not found in the available features.");
-      }
+        }
     } catch (error) {
-      console.error("Error adding feature:", error);
       alert("Error adding feature. Please try again.");
     } finally {
       setIsLoading(false);
@@ -84,8 +81,7 @@ const ManageHotelFeaturesPage = () => {
       );
       setHotelFeatures(hotelFeatures.filter((feature) => feature.id !== featureId));
     } catch (error) {
-      console.error("Error removing feature:", error);
-    }
+      }
   };
 
   return (

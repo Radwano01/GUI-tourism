@@ -18,8 +18,7 @@ const GetCountryDetailsPage = () => {
         );
         setCountryDetails(response.data);
       } catch (error) {
-        console.error('Error fetching country details:', error);
-      }
+        }
     };
 
     fetchCountryDetails();

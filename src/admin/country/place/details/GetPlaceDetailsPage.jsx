@@ -18,8 +18,7 @@ const GetPlaceDetailsPage = () => {
         });
         setPlaceDetails(response.data);
       } catch (error) {
-        console.error('Error fetching place details:', error);
-      }
+        }
     };
 
     fetchPlaceDetails();

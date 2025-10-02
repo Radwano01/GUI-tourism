@@ -62,7 +62,6 @@ const CheckoutForm = ({ flightId, userId }) => {
       );
       navigate("/payment-success")
     } catch (error) {
-      console.error("Error processing payment:", error);
       setErrorMessage("Error processing payment. Please try again later.");
     } finally {
       setLoading(false);

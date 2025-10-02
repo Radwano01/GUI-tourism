@@ -62,7 +62,6 @@ const CreatePackagePage = () => {
       );
       navigate(`/admin/countries/${countryId}/packages`);
     } catch (error) {
-      console.error('Error creating package:', error);
       alert("Error creating package. Please try again.");
     } finally {
       setIsLoading(false);

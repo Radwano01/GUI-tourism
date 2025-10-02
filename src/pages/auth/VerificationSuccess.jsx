@@ -20,11 +20,9 @@ function VerificationSuccess() {
           updateLocalStorage(response.data);
         })
         .catch((error) => {
-          console.error("Error verifying user:", error);
-        });
+          });
     } else {
-      console.error("Email or token not found for verification.");
-    }
+      }
   }, [email, token, navigate]);
 
   const updateLocalStorage = (userData) => {

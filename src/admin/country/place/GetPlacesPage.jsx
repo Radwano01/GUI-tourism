@@ -25,7 +25,6 @@ const GetPlacesPage = () => {
         );
         setPlaces(response.data);
       } catch (error) {
-        console.error("Error fetching places:", error);
         setError("Failed to load places. Please try again.");
       } finally {
         setIsLoading(false);
@@ -55,8 +54,7 @@ const GetPlacesPage = () => {
         );
         setPlaces(places.filter((place) => place.id !== placeId));
       } catch (error) {
-        console.error("Error deleting place:", error);
-      }
+        }
     }
   };
 

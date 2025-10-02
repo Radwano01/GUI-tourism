@@ -16,8 +16,7 @@ const EditRoomFeaturePage = () => {
         );
         setRoomFeature(response.data.roomFeature);
       } catch (error) {
-        console.error("Error fetching room feature:", error);
-      }
+        }
     };
     fetchRoomFeature();
   }, [featureId]);
@@ -41,8 +40,7 @@ const EditRoomFeaturePage = () => {
         `/admin/countries/${countryId}/places/${placeId}/rooms/features`
       ); // Redirect to the room features list
     } catch (error) {
-      console.error("Error updating room feature:", error);
-    }
+      }
   };
 
   return (

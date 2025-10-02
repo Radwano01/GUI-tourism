@@ -49,7 +49,6 @@ const AddFlightPage = () => {
         setDestinationAirports(response.data);
       }
     } catch (error) {
-      console.error("Error fetching airports:", error);
       // Clear airports if API call fails
       if (isDeparture) {
         setDepartureAirports([]);
@@ -131,7 +130,6 @@ const AddFlightPage = () => {
       });
       navigate('/admin?section=PLANE'); // Redirect to planes section after successful submission
     } catch (error) {
-      console.error("Error creating flight:", error);
       setError("Error creating flight. Please try again.");
     } finally {
       setIsSubmitting(false);

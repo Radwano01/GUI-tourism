@@ -24,8 +24,7 @@ const EditCountryPage = () => {
         const { country } = response.data;
         setCountry(country);
       } catch (error) {
-        console.error('Error fetching country details:', error);
-      }
+        }
     };
 
     fetchCountryDetails();
@@ -56,7 +55,6 @@ const EditCountryPage = () => {
       alert('Country updated successfully!');
       navigate('/admin'); // Redirect to admin dashboard after edit
     } catch (error) {
-      console.error('Error updating country:', error);
       alert("Error updating country. Please try again.");
     } finally {
       setIsLoading(false);

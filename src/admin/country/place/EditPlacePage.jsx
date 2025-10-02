@@ -22,8 +22,7 @@ const EditPlacePage = () => {
         setPlace(response.data.place);
         setMainImage(response.data.mainImage);
       } catch (error) {
-        console.error('Error fetching place details:', error);
-      }
+        }
     };
 
     fetchPlaceDetails();
@@ -49,7 +48,6 @@ const EditPlacePage = () => {
       });
       navigate(`/admin/countries/${countryId}/places`); // Redirect after success
     } catch (error) {
-      console.error('Error updating place:', error);
       alert("Error updating place. Please try again.");
     } finally {
       setIsLoading(false);

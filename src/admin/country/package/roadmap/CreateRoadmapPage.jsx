@@ -19,8 +19,7 @@ const CreateRoadmapPage = () => {
       });
       navigate(`/admin/countries/${countryId}/packages/roadmaps`);
     } catch (error) {
-      console.error('Error creating roadmap:', error);
-    }
+      }
   };
 
   return (

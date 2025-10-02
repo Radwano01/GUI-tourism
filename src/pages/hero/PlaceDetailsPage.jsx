@@ -17,8 +17,7 @@ const PlaceDetailsPage = () => {
         );
         setPlace(response.data);
       } catch (error) {
-        console.error("Error fetching place details:", error);
-      } finally {
+        } finally {
         setLoading(false);
       }
     };
@@ -78,9 +77,6 @@ const PlaceDetailsPage = () => {
           </ul>
         </nav>
       </div>
-
-
-
 
       <main className="container mx-auto p-4">
         <section className="mb-8">

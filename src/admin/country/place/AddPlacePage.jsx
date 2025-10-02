@@ -46,7 +46,6 @@ const AddPlacePage = () => {
       );
       navigate(`/admin/countries/${countryId}/places`);
     } catch (error) {
-      console.error("Error creating place:", error);
       alert("Error creating place. Please try again.");
     } finally {
       setIsLoading(false);

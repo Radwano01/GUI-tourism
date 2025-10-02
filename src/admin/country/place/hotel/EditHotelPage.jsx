@@ -53,7 +53,6 @@ const EditHotelPage = () => {
       );
       navigate(`/admin/countries/${countryId}/places/${placeId}/hotels`);
     } catch (error) {
-      console.error("Error updating hotel:", error);
       alert("Error updating hotel. Please try again.");
     } finally {
       setIsLoading(false);

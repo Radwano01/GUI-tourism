@@ -25,8 +25,7 @@ const CreateHotelFeaturePage = () => {
         `/admin/countries/${countryId}/places/${placeId}/hotels/features`
       );
     } catch (error) {
-      console.error("Error creating hotel feature:", error);
-    }
+      }
   };
 
   return (

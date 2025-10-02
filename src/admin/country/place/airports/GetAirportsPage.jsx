@@ -20,8 +20,7 @@ const GetAirportsPage = () => {
         setAirports(response.data);
       })
       .catch((error) => {
-        console.error("Error fetching airports:", error);
-      });
+        });
   }, [placeId]);
 
   const handleDelete = (airPortId) => {
@@ -43,7 +42,6 @@ const GetAirportsPage = () => {
           alert("Airport deleted successfully");
         })
         .catch((error) => {
-          console.error("Error deleting airport:", error);
           alert("Failed to delete airport");
         });
     }

@@ -50,7 +50,6 @@ const AddCountryPage = () => {
       alert("Country added successfully!");
       navigate("/admin");
     } catch (error) {
-      console.error("There was an error creating the country!", error);
       alert("Error creating country. Please try again.");
     } finally {
       setIsLoading(false);

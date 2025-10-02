@@ -56,7 +56,6 @@ const EditRoomDetailsPage = () => {
         navigate(`/hotels/${hotelId}/rooms/details`);
       })
       .catch((error) => {
-        console.error("Error updating room details:", error);
         alert("Failed to update room details");
       });
   };

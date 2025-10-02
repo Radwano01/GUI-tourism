@@ -16,8 +16,7 @@ const GetHotelFeaturesPage = () => {
         );
         setHotelFeatures(response.data || []);
       } catch (error) {
-        console.error("Error fetching hotel features:", error);
-      }
+        }
     };
 
     fetchHotelFeatures();
@@ -48,8 +47,7 @@ const GetHotelFeaturesPage = () => {
         );
         window.location.reload();
       } catch (error) {
-        console.error("Error deleting feature:", error);
-      }
+        }
     }
   };
 

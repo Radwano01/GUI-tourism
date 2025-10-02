@@ -19,8 +19,7 @@ const GetRoadmapsPage = () => {
         });
         setRoadmaps(response.data);
       } catch (error) {
-        console.error('Error fetching roadmaps:', error);
-      }
+        }
     };
 
     fetchRoadmaps();
@@ -42,8 +41,7 @@ const GetRoadmapsPage = () => {
         });
         setRoadmaps(roadmaps.filter(r => r.id !== roadmapId));
       } catch (error) {
-        console.error('Error deleting roadmap:', error);
-      }
+        }
     }
   };
 

@@ -12,19 +12,15 @@ function ProfilePage() {
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
-    console.log("Stored user from localStorage:", storedUser);
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
-      console.log("Parsed user from localStorage:", parsedUser);
       apiService
         .getUserDetails(parsedUser.userId)
         .then((response) => {
-          console.log("User data received from API:", response.data);
           setUser(response.data);
           setLoading(false);
         })
         .catch((error) => {
-          console.error("Error fetching user details:", error);
           setError(error);
           setLoading(false);
         });
@@ -46,7 +42,6 @@ function ProfilePage() {
           alert("Email verified successfully!");
         })
         .catch((error) => {
-          console.error("Error verifying email:", error);
           alert("Failed to verify email. Please try again later.");
         });
     }
@@ -64,7 +59,6 @@ function ProfilePage() {
             navigate("/login");
           })
           .catch((error) => {
-            console.error("Error deleting user:", error);
             alert("Failed to delete profile. Please try again later.");
           });
       }
@@ -102,7 +96,6 @@ function ProfilePage() {
             alert("Phone number added successfully!");
           })
           .catch((error) => {
-            console.error("Error adding phone number:", error);
             alert("Failed to add phone number. Please try again later.");
           });
       }

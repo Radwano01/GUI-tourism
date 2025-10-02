@@ -9,7 +9,6 @@ const EditHotelFeaturePage = () => {
   const [hotelFeature, setHotelFeature] = useState("");
   const navigate = useNavigate();
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -24,8 +23,7 @@ const EditHotelFeaturePage = () => {
       );
       navigate("/admin/hotels/features");
     } catch (error) {
-      console.error("Error editing hotel feature:", error);
-    }
+      }
   };
 
   return (

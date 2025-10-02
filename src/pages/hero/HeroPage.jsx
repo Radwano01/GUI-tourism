@@ -16,7 +16,6 @@ function HeroPage() {
     const fetchCountries = async () => {
       try {
         const response = await apiService.getCountries();
-        console.log('API Response:', response.data); // Debug log
         
         // Check if response.data is an array
         const data = Array.isArray(response.data) ? response.data : response.data.content || response.data.data || [];
@@ -33,7 +32,6 @@ function HeroPage() {
         setImages(formattedData);
         setError(null);
       } catch (error) {
-        console.error('Error fetching data:', error);
         setError('Failed to load countries. Please try again.');
         setImages([]); // Set empty array on error
       } finally {

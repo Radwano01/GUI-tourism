@@ -26,8 +26,7 @@ const CreateRoomFeaturePage = () => {
         `/admin/countries/${countryId}/places/${placeId}/rooms/features`
       ); // Redirect to the room features list
     } catch (error) {
-      console.error("Error creating room feature:", error);
-    }
+      }
   };
 
   return (

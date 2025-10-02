@@ -34,7 +34,6 @@ const RoomDetailsPage = () => {
         setRoomDetails(response.data);
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching room details:", error);
         setLoading(false);
       }
     };

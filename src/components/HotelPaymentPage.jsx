@@ -78,7 +78,6 @@ const CheckoutForm = ({ hotelId, userId, startTime, endTime, price }) => {
       );
       navigate("/payment-success")
     } catch (error) {
-      console.error("Error processing payment:", error);
       setErrorMessage("Error processing payment. Please try again later.");
     } finally {
       setLoading(false);

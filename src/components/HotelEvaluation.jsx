@@ -25,8 +25,7 @@ const HotelEvaluation = ({ hotelId, userId }) => {
       setNewComment("");
       setNewRate(5); // Reset the rate to the default value
     } catch (error) {
-      console.error("Error adding comment:", error);
-    }
+      }
   };
 
   const fetchEvaluations = useCallback(async () => {
@@ -48,8 +47,7 @@ const HotelEvaluation = ({ hotelId, userId }) => {
       );
       setUserHasCommented(!!userComment);
     } catch (error) {
-      console.error("Error fetching evaluations:", error);
-    }
+      }
   }, [hotelId, userId]);
 
   const editHotelEvaluation = async (commentId, updatedComment) => {
@@ -69,8 +67,7 @@ const HotelEvaluation = ({ hotelId, userId }) => {
       setEditCommentId(null);
       setEditComment("");
     } catch (error) {
-      console.error("Error editing comment:", error);
-    }
+      }
   };
 
   const removeHotelEvaluation = async (commentId) => {
@@ -83,8 +80,7 @@ const HotelEvaluation = ({ hotelId, userId }) => {
       });
       await fetchEvaluations();
     } catch (error) {
-      console.error("Error deleting comment:", error);
-    }
+      }
   };
 
   useEffect(() => {

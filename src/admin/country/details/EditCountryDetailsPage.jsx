@@ -30,8 +30,7 @@ const EditCountryDetailsPage = () => {
           description: response.data.description,
         });
       } catch (error) {
-        console.error('Error fetching country details:', error);
-      }
+        }
     };
 
     fetchCountryDetails();
@@ -63,8 +62,7 @@ const EditCountryDetailsPage = () => {
       await axios.put(`${process.env.REACT_APP_BASE_API}/admin/countries/${countryId}/details`, form);
       alert('Country details updated successfully!');
     } catch (error) {
-      console.error('Error updating country details:', error);
-    }
+      }
   };
 
   if (!countryDetails) return <p>Loading...</p>;

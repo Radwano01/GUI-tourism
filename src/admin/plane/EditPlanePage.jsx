@@ -22,8 +22,7 @@ const EditPlanePage = () => {
         setStatus(status);
       })
       .catch((error) => {
-        console.error("Error fetching plane details:", error);
-      });
+        });
   }, [planeId]);
 
   const handleSubmit = async (e) => {
@@ -45,7 +44,6 @@ const EditPlanePage = () => {
       });
       navigate("/admin?section=PLANE"); // Redirect to the planes list
     } catch (error) {
-      console.error("Error updating plane:", error);
       alert("Error updating plane. Please try again.");
     } finally {
       setIsLoading(false);

@@ -15,8 +15,7 @@ const RoomFeaturesListPage = () => {
         const response = await axios.get(`${process.env.REACT_APP_BASE_API}/public/rooms/features`);
         setRoomFeatures(response.data);
       } catch (error) {
-        console.error('Error fetching room features:', error);
-      }
+        }
     };
     fetchRoomFeatures();
   }, []);
@@ -40,8 +39,7 @@ const RoomFeaturesListPage = () => {
       setRoomFeatures(roomFeatures.filter((feature) => feature.id !== featureId));
       window.location.reload();
     } catch (error) {
-      console.error('Error deleting room feature:', error);
-    }
+      }
   };
 
   return (

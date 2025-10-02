@@ -20,7 +20,6 @@ const CountryDetailsPage = () => {
         setCountry(countryResponse.data);
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching country details:", error);
         setLoading(false);
       }
     };
@@ -32,8 +31,7 @@ const CountryDetailsPage = () => {
         );
         setPlaces(placesResponse.data);
       } catch (error) {
-        console.error("Error fetching places:", error);
-      }
+        }
     };
 
     const fetchPackages = async () => {
@@ -43,8 +41,7 @@ const CountryDetailsPage = () => {
         );
         setPackages(packagesResponse.data);
       } catch (error) {
-        console.error("Error fetching packages:", error);
-      }
+        }
     };
 
     fetchCountryDetails();

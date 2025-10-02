@@ -59,7 +59,6 @@ const CreateHotelPage = () => {
       });
       navigate(`/admin/countries/${countryId}/places/${placeId}/hotels`);
     } catch (error) {
-      console.error("Error creating hotel:", error);
       alert("Error creating hotel. Please try again.");
     } finally {
       setIsLoading(false);

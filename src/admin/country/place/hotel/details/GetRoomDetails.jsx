@@ -19,8 +19,7 @@ const GetRoomDetailsPage = () => {
         setRoomDetails(response.data);
       })
       .catch((error) => {
-        console.error("Error fetching room details:", error);
-      });
+        });
   }, [hotelId]);
 
   if (!roomDetails) return <p>Loading...</p>;

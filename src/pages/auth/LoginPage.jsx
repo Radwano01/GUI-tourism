@@ -23,8 +23,7 @@ function LoginPage() {
         // If there's an error parsing user data, clear localStorage
         localStorage.removeItem('user');
         localStorage.removeItem('accessToken');
-        console.error('Error parsing user data:', error);
-      }
+        }
     }
   }, [setUser, navigate]);
 
@@ -68,7 +67,6 @@ function LoginPage() {
         navigate('/profile');
       }
     } catch (error) {
-      console.error('Login failed:', error);
       alert('Login failed. Please check your username and password.');
     }
   };

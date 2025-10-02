@@ -23,8 +23,7 @@ const CreateBenefitPage = () => {
       );
       navigate(`/admin/countries/${countryId}/packages/benefits`);
     } catch (error) {
-      console.error("Error creating benefit:", error);
-    }
+      }
   };
 
   return (

@@ -28,8 +28,7 @@ const PackageEvaluation = ({ packageId, userId }) => {
       );
       setUserHasCommented(!!userComment);
     } catch (error) {
-      console.error("Error fetching evaluations:", error);
-    }
+      }
   }, [packageId, userId]);
 
   const handleCommentChange = (e) => {
@@ -64,8 +63,7 @@ const PackageEvaluation = ({ packageId, userId }) => {
       setEditCommentId(null);
       setEditComment("");
     } catch (error) {
-      console.error("Error handling comment:", error);
-    }
+      }
   };
 
   const removePackageEvaluation = async (commentId) => {
@@ -81,8 +79,7 @@ const PackageEvaluation = ({ packageId, userId }) => {
       );
       await fetchEvaluations();
     } catch (error) {
-      console.error("Error deleting comment:", error);
-    }
+      }
   };
 
   useEffect(() => {

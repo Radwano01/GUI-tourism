@@ -27,8 +27,7 @@ const ManagePackageRoadmapsPage = () => {
 
         setRoadmaps(response.data);
       } catch (error) {
-        console.error("Error fetching roadmaps:", error);
-      }
+        }
     };
 
     // Fetch roadmaps associated with the package
@@ -45,8 +44,7 @@ const ManagePackageRoadmapsPage = () => {
         );
         setPackageRoadmaps(response.data);
       } catch (error) {
-        console.error("Error fetching package roadmaps:", error);
-      }
+        }
     };
 
     fetchRoadmaps();
@@ -91,10 +89,8 @@ const ManagePackageRoadmapsPage = () => {
         setPackageRoadmaps([...packageRoadmaps, addedRoadmap]);
         setSelectedRoadmap("");
       } else {
-        console.error("Selected roadmap not found in the available roadmaps.");
-      }
+        }
     } catch (error) {
-      console.error("Error adding roadmap:", error);
       alert("Error adding roadmap. Please try again.");
     } finally {
       setIsLoading(false);
@@ -116,8 +112,7 @@ const ManagePackageRoadmapsPage = () => {
       alert("Roadmap removed successfully");
       setPackageRoadmaps(packageRoadmaps.filter((rm) => rm.id !== roadmapId));
     } catch (error) {
-      console.error("Error removing roadmap:", error);
-    }
+      }
   };
 
   return (

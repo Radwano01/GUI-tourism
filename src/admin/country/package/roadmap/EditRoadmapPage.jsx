@@ -8,8 +8,6 @@ const EditRoadmapPage = () => {
   const [roadmap, setRoadmap] = useState('');
   const navigate = useNavigate();
 
-
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("accessToken");
@@ -21,8 +19,7 @@ const EditRoadmapPage = () => {
       });
       navigate(`/admin/countries/${countryId}/packages/roadmaps`);
     } catch (error) {
-      console.error('Error updating roadmap:', error);
-    }
+      }
   };
 
   return (

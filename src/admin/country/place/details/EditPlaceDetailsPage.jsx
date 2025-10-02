@@ -25,8 +25,7 @@ const EditPlaceDetailsPage = () => {
         setImageThree(response.data.imageThree);
         setDescription(response.data.description);
       } catch (error) {
-        console.error('Error fetching place details:', error);
-      }
+        }
     };
 
     fetchPlaceDetails();
@@ -59,8 +58,7 @@ const EditPlaceDetailsPage = () => {
       }, formData);
       navigate(`/admin/countries/${countryId}/places/${placeId}`);
     } catch (error) {
-      console.error('Error updating place details:', error);
-    }
+      }
   };
 
   return (

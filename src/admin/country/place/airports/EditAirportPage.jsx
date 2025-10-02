@@ -33,8 +33,7 @@ const EditAirportPage = () => {
         navigate(`/admin/countries/${countryId}/places/${placeId}/airports`); // Redirect to the airport list after editing
       })
       .catch((error) => {
-        console.error("Error updating airport:", error);
-      });
+        });
   };
 
   return (

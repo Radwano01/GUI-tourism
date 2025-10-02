@@ -31,7 +31,6 @@ const PackageDetailsPage = () => {
         setPackageDetails(response.data);
         setComments(response.data.comments || []);
       } catch (error) {
-        console.error("Error fetching package details:", error);
         alert("Error fetching package details. Please try again later.");
       } finally {
         setLoading(false);
@@ -50,7 +49,6 @@ const PackageDetailsPage = () => {
 
       navigate(`/payment/packages/${id}/users/${userId}`);
     } catch (error) {
-      console.error("Error navigating to payment:", error);
       alert("Error navigating to payment. Please try again later.");
     }
   };
